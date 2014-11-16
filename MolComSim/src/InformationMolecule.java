@@ -10,21 +10,20 @@ public class InformationMolecule extends Molecule{
 	private ArrayList<NanoMachine> destinations;
 
 	public void move() {
-		/*setPosition(getMovementController().getNextPosition(this, getSimulation());
-	if(reachedDestination())
-	{
-		destination.receiveMolecule(this);
-	}*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		setPosition(getMovementController().getNextPosition(this, getSimulation()));
+		if(reachedDestination() != null)
+		{
+			reachedDestination().receiveMolecule(this);
+		}
 	}
 
-	private boolean reachedDestination() {
+	private NanoMachine reachedDestination() {
 		for(NanoMachine dest : destinations){
 			if(haveOverlap(dest)){
-				return true;
+				return dest;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public InformationMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {

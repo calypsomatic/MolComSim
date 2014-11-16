@@ -5,6 +5,7 @@ import java.util.*;
 
 public class MolComSim {
 
+	private FileReader paramsFile;
 	private int simStep;
 	private boolean lastMsgCompleted;
 	private ArrayList<Molecule> molecules;
@@ -17,20 +18,18 @@ public class MolComSim {
 	private ArrayList<NanoMachine> receivers;
 
 	public static void main(String[] args) {
-		/*molComSim = createInstance();
-		molComSim.run(args);*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		MolComSim molComSim = createInstance(); //does this mean that molcomsim has an instance of itself?
+		molComSim.run(args);
 	}
 
 	private void startSim(String[] args) {
-		/*simStep = 0;
+		simStep = 0;
 		lastMsgCompleted = false;
 		simParams = new SimulationParams(args);
 		createMedium();
 		createNanoMachines();
-		createMicroTubules();*/
+		createMicrotubules();		
 		// Note: it is the job of the medium and NanoMachines to create molecules
-		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	public static MolComSim createInstance() {
@@ -43,28 +42,25 @@ public class MolComSim {
 	}
 
 	private void run(String[] args) {
-		/*startSim(args);
+		startSim(args);
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
-			for(each NanoMachine nm)
-			{
+			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
-			for(each Molecule m)
-			{	
+			for(Molecule m : molecules){	
 				m.move();
 			}
 		}
-		endSim();*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		endSim();
 	}
 
 	public int getSimStep() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return simStep;
 	}
 
 	public boolean isLastMsgCompleted() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return lastMsgCompleted;
 	}
 
 	private void createMedium() {
@@ -105,7 +101,7 @@ public class MolComSim {
 
 	//add molecules to molecules list field
 	public void addMolecules(ArrayList<Molecule> mols) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		this.molecules.addAll(mols);
 	}
 
 	public void completedMessage(int msgNum) {
@@ -118,35 +114,45 @@ public class MolComSim {
 	}
 
 	public int getMessagesCompleted() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return messagesCompleted;
 	}
 
 	public SimulationParams getSimParams() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return simParams;
 	}
 
 	public ArrayList<Molecule> getMolecules() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return molecules;
 	}
 
 	public ArrayList<Microtubule> getMicrotubules() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return microtubules;
 	}
 
 	public ArrayList<NanoMachine> getNanoMachines() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return nanoMachines;
 	}
 
 	public Medium getMedium() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return medium;
 	}
 
 	public ArrayList<NanoMachine> getReceivers() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return receivers;
 	}
 
 	public ArrayList<NanoMachine> getTransmitters() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return transmitters;
+	}
+
+	public boolean isUsingAcknowledgements() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getMaxRetransmissions() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

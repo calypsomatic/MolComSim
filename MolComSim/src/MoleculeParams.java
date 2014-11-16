@@ -1,8 +1,5 @@
 //package MComSim.MoleculeParams;
 
-import java.io.*;
-import java.util.*;
-
 public class MoleculeParams {
 
 	private int numMolecules;

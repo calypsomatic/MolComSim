@@ -5,6 +5,7 @@ public class Microtubule {
 	private double radius;
 	private Position plusEndCenter;
 	private Position minusEndCenter;
+	private MolComSim simulation;
 
 	public double getRadius() {
 		return radius;

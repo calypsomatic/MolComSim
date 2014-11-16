@@ -3,7 +3,7 @@
 import java.io.*;
 import java.util.*;
 
-public class OnTubuleCollisionHandler {
+public class OnTubuleCollisionHandler extends CollisionHandler{
 
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
 		/*if(nextPosition not occupied)

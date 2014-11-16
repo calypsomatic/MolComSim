@@ -14,7 +14,7 @@ public class Transmitter {
 	public Transmitter(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 		this.nanoMachine = nm;
 		this.simulation = sim;
-		this.moleculeCreator = new MoleculeCreator(this.nanoMachine.getPosition(), mpl, this.simulation);
+		this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine);
 		this.currMsgId = 0;
 		this.retransmissionsLeft =  this.simulation.getMaxRetransmissions();
 	}

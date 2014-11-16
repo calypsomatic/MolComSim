@@ -5,7 +5,7 @@ import java.util.*;
 
 public class MoleculeCreator {
 
-	private MoleculeParams molParams;
+	private ArrayList<MoleculeParams> molParams;
 	private MolComSim simulation;
 	private NanoMachine source;
 	private Position position;
@@ -27,7 +27,7 @@ public class MoleculeCreator {
 		this.simulation = sim;
 	}
 
-	public MoleculeCreator(NanoMachine src, ArrayList<MoleculeParams> mParams, MolComSim sim) {
+	public MoleculeCreator(ArrayList<MoleculeParams> mParams, MolComSim sim, NanoMachine src) {
 		this.molParams = mParams;
 		this.simulation = sim;
 		this.source = src;

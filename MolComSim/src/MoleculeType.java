@@ -1,7 +1,4 @@
-package MComSim.MoleculeType;
-
-import java.io.*;
-import java.util.*;
+//package MComSim.MoleculeType;
 
 public enum MoleculeType {
 

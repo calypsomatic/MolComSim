@@ -16,7 +16,7 @@ public class Receiver {
 		this.simulation = sim;
 		if(this.simulation.isUsingAcknowledgements())
 		{
-			this.moleculeCreator = new MoleculeCreator(nanoMachine, mpl, simulation);
+			this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine);
 			currMsgId = 0;
 			retransmissionsLeft =  this.simulation.getMaxRetransmissions();
 		}

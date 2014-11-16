@@ -1,8 +1,5 @@
 //package MComSim.Position;
 
-import java.io.*;
-import java.util.*;
-
 public class Position {
 
 	private double x;

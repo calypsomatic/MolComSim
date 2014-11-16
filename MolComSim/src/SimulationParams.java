@@ -1,6 +1,5 @@
-package MComSim.SimulationParams;
+//package MComSim.SimulationParams;
 
-import java.io.*;
 import java.util.*;
 
 public class SimulationParams {
@@ -39,9 +38,8 @@ public class SimulationParams {
 	}
 
 	public SimulationParams(String[] args) {
-		/*parseArgs(args);
-	readParamsFile(paramsFileName);*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		parseArgs(args);
+		readParamsFile(paramsFileName);
 	}
 
 	private void parseArgs(String[] args) {

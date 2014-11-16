@@ -1,8 +1,5 @@
 //package MComSim.NullMovementController;
 
-import java.io.*;
-import java.util.*;
-
 public class NullMovementController extends MovementController{
 
 	protected Position decideNextPosition(Molecule molecule) {

@@ -5,7 +5,7 @@ import java.util.*;
 
 public class DiffusiveRandomMovementController extends MovementController{
 
-	protected Position decideNextPosition() {
+	protected Position decideNextPosition(Molecule molecule) {
 		/*Randomly decide the next position based on current position + some delta.  
 	use getMolecule().getPosition() for base and use getSimulation().getSimParams().getMolRandMove<X|Y|Z>() and  random number generator for the delta, as in current code
 	if (getMolecule.getMovementType() == MoleculeMovementType.ACTIVE)

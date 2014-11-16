@@ -1,7 +1,4 @@
-package MComSim.MoleculeMovementType;
-
-import java.io.*;
-import java.util.*;
+//package MComSim.MoleculeMovementType;
 
 public enum MoleculeMovementType {
 
