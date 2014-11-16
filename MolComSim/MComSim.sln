@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{}") = "Molecule-context", "", "{}"
+EndProject
+Project("{}") = "MovementController-context", "", "{}"
+EndProject
+Project("{}") = "CollisionHandler-context", "", "{}"
+EndProject
+Project("{}") = "SimulationParams-context", "", "{}"
+EndProject
+Project("{}") = "MolComSim-context", "", "{}"
+EndProject
+Project("{}") = "MoleculeCreator-context", "", "{}"
+EndProject
+Project("{}") = "Position-context", "", "{}"
+EndProject
+Project("{}") = "MoleculeMovement-context", "", "{}"
+EndProject
+Project("{}") = "NanoMachine-context", "", "{}"
+EndProject
+Project("{}") = "SimulationParams", "", "{}"
+EndProject
+Project("{}") = "MolComSim", "", "{}"
+EndProject
+Project("{}") = "Medium", "", "{}"
+EndProject
+Project("{}") = "NoiseMoleculeCreator", "", "{}"
+EndProject
+Project("{}") = "NanoMachine", "", "{}"
+EndProject
+Project("{}") = "Transmitter", "", "{}"
+EndProject
+Project("{}") = "Receiver", "", "{}"
+EndProject
+Project("{}") = "MoleculeCreator", "", "{}"
+EndProject
+Project("{}") = "Molecule", "", "{}"
+EndProject
+Project("{}") = "NoiseMolecule", "", "{}"
+EndProject
+Project("{}") = "InformationMolecule", "", "{}"
+EndProject
+Project("{}") = "AcknowledgementMolecule", "", "{}"
+EndProject
+Project("{}") = "MovementController", "", "{}"
+EndProject
+Project("{}") = "NullMovementController", "", "{}"
+EndProject
+Project("{}") = "DiffusiveRandomMovementController", "", "{}"
+EndProject
+Project("{}") = "OnMicrotubuleMovementController", "", "{}"
+EndProject
+Project("{}") = "CollisionHandler", "", "{}"
+EndProject
+Project("{}") = "NullCollisionHandler", "", "{}"
+EndProject
+Project("{}") = "StandardCollisionHandler", "", "{}"
+EndProject
+Project("{}") = "DecomposingCollisionHandler", "", "{}"
+EndProject
+Project("{}") = "OnTubuleCollisionHandler", "", "{}"
+EndProject
+Project("{}") = "Microtubule", "", "{}"
+EndProject
+Project("{}") = "Position", "", "{}"
+EndProject
+Project("{}") = "MoleculeParams", "", "{}"
+EndProject
+Project("{}") = "MoleculeType", "", "{}"
+EndProject
+Project("{}") = "MoleculeMovementType", "", "{}"
+EndProject
