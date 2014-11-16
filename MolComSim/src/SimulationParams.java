@@ -17,7 +17,7 @@ public class SimulationParams {
 	private double intermediateNodeRadius;
 	private ArrayList<Position> microtubulePlusEndPoints;
 	private ArrayList<Position> microtubuleMinusEndPoints;
-	private ArrayList<double> microtubuleRadii;
+	private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
 	private int maxNumSteps;
 	private int numRetransmissions;
@@ -39,27 +39,39 @@ public class SimulationParams {
 	}
 
 	public SimulationParams(String[] args) {
+		/*parseArgs(args);
+	readParamsFile(paramsFileName);*/
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	private void parseArgs(String[] args) {
+		/*parses command line arguments, stores them in fields
+	args can include type of movement for acknowledgement, information, and noise molecules (passive = default for info and ack, stationary = default for noise).  Indicated with: -(tx|rx|no): (active|passive|stationary) (where no stands for noise)
+	args can include type of Automatic Repeat Request scheme used (currently none is default, for no acknowledgement molecules, change to sw11 later).  Indicated with: arq: (sw)(1..n),(1..m) , where sw means stop-and-wait (might implement 
+	other ARQ schemes later, the next integer value represents the number of information molecules to send (minimum 1), and the next integer value represents the number of acknowledgement molecules to send.
+	args can include input file location/name (default: params.dat).  Indicated with: pfile:<string>.  paramsFile must be set up in parseArgs, but not opened for reading.*/
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	private void readParamsFile(String fName) {
+		/*open params file for reading
+	Reads params from paramsFile (field), each param type is identified by the first string starting a line, although its values may extend over multiple lines (for example, to make it easier to view arrays of things).  Stores each param’s value(s) in a
+ 	private field.  Alternatively, we could do this with a hashmap of key, value pairs, where the key is the String representing the name of the parameter and the value is of Object type so it can be anything we want.  Not sure which is the better way
+ 	to go.  
+	close param file for reading*/
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	public double getMediumLength() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return mediumLength;
 	}
 
 	public double getMediumWidth() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return mediumWidth;
 	}
 
 	public double getMediumHeight() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return mediumHeight;
 	}
 
 	public ArrayList<MoleculeParams> getAllMoleculeParams() {
@@ -110,7 +122,7 @@ public class SimulationParams {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
-	public ArrayList<double> getMicrotubuleRadii() {
+	public ArrayList<Double> getMicrotubuleRadii() {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 

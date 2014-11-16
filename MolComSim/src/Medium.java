@@ -1,6 +1,5 @@
-package MComSim.Medium;
+//package MComSim.Medium;
 
-import java.io.*;
 import java.util.*;
 
 public class Medium {
@@ -24,11 +23,15 @@ public class Medium {
 	}
 
 	public Medium(double l, double h, double w, ArrayList<MoleculeParams> noiseMoleculeParams, MolComSim sim) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		this.length = l;
+		this.height = h;
+		this.width = w;
+		this.simulation = sim;
+		this.mCreator = new NoiseMoleculeCreator(noiseMoleculeParams, this.simulation);
 	}
 
 	public void createMolecules() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		mCreator.createMolecules();
 	}
 
 	public MolComSim getSimulation() {

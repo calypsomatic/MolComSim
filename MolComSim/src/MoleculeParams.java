@@ -1,4 +1,4 @@
-package MComSim.MoleculeParams;
+//package MComSim.MoleculeParams;
 
 import java.io.*;
 import java.util.*;

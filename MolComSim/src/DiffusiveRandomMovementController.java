@@ -1,16 +1,30 @@
-package MComSim.DiffusiveRandomMovementController;
+//package MComSim.DiffusiveRandomMovementController;
 
 import java.io.*;
 import java.util.*;
 
-public class DiffusiveRandomMovementController {
+public class DiffusiveRandomMovementController extends MovementController{
 
 	protected Position decideNextPosition() {
+		/*Randomly decide the next position based on current position + some delta.  
+	use getMolecule().getPosition() for base and use getSimulation().getSimParams().getMolRandMove<X|Y|Z>() and  random number generator for the delta, as in current code
+	if (getMolecule.getMovementType() == MoleculeMovementType.ACTIVE)
+		for(each microtubule in getSimulation().getMicrotubules())
+		{
+			if(molecule touches the microtubule at new position) //  use current code to determine
+			{
+				MovementController tubuleMovement = new OnMicroTubuleMovementController(new OnTubuleCollisionHandler(), getSimulation(), getMolecule(), currentMicrotubule);
+				molecule.setMoleculeMovementController(tubuleMovement)
+				break;
+			}
+		}
+	}
+	Return the next position*/
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		super(collHandle, sim, mol);
 	}
 
 }

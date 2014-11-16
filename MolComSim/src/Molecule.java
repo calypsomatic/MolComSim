@@ -1,7 +1,4 @@
-package MComSim.Molecule;
-
-import java.io.*;
-import java.util.*;
+//package MComSim.Molecule;
 
 public abstract class Molecule {
 
@@ -26,7 +23,11 @@ public abstract class Molecule {
 	}
 
 	protected Molecule(MovementController mc, Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		this.movementController = mc;
+		this.position = psn;
+		this.radius = r;
+		this.simulation = sim;
+		this.moleculeMovementType = molMvType;
 	}
 
 	public MolComSim getSimulation() {
