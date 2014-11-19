@@ -22,7 +22,7 @@ public class SimulationParams {
 	private int numRetransmissions;
 	private int retransmitWaitTime;
 	private boolean useCollisions;
-	private MoleculeParams moleculeParams;
+	private ArrayList<MoleculeParams> moleculeParams;
 	private double molRandMoveX;
 	private double molRandMoveY;
 	private double molRandMoveZ;
@@ -30,11 +30,11 @@ public class SimulationParams {
 	private double probDRail;
 
 	public int getMaxNumSteps() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return maxNumSteps;
 	}
 
 	public int getNumMessages() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return numMessages;
 	}
 
 	public SimulationParams(String[] args) {
@@ -73,19 +73,38 @@ public class SimulationParams {
 	}
 
 	public ArrayList<MoleculeParams> getAllMoleculeParams() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return moleculeParams;
 	}
 
+	//am I understanding these getParams methods correctly?
 	public ArrayList<MoleculeParams> getNoiseMoleculeParams() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		ArrayList<MoleculeParams> noiseMParams = new ArrayList<MoleculeParams>();
+		for (MoleculeParams mp : moleculeParams){
+			if (mp.getMoleculeType().equals(MoleculeType.NOISE)){
+				noiseMParams.add(mp);
+			}
+		}
+		return noiseMParams;
 	}
 
 	public ArrayList<MoleculeParams> getInformationMoleculeParams() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		ArrayList<MoleculeParams> infoMParams = new ArrayList<MoleculeParams>();
+		for (MoleculeParams mp : moleculeParams){
+			if (mp.getMoleculeType().equals(MoleculeType.INFO)){
+				infoMParams.add(mp);
+			}
+		}
+		return infoMParams;
 	}
 
 	public ArrayList<MoleculeParams> getAcknowledgmentMoleculeParams() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		ArrayList<MoleculeParams> ackMParams = new ArrayList<MoleculeParams>();
+		for (MoleculeParams mp : moleculeParams){
+			if (mp.getMoleculeType().equals(MoleculeType.ACK)){
+				ackMParams.add(mp);
+			}
+		}
+		return ackMParams;
 	}
 
 	public ArrayList<Position> getTransmitterPositions() {
@@ -109,31 +128,31 @@ public class SimulationParams {
 	}
 
 	public double getTransmitterRadius() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return transmitterRadius;
 	}
 
 	public double getReceiverRadius() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return receiverRadius;
 	}
 
 	public double getIntermediateNodeRadius() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return intermediateNodeRadius;
 	}
 
 	public ArrayList<Double> getMicrotubuleRadii() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return microtubuleRadii;
 	}
 
 	public int getNumRetransmissions() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return numRetransmissions;
 	}
 
 	public int getRetransmitWaitTime() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return retransmitWaitTime;
 	}
 
 	public boolean isUsingCollisions() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return useCollisions;
 	}
 
 	public boolean isUsingAcknowledgements() {
@@ -153,11 +172,11 @@ public class SimulationParams {
 	}
 
 	public double getVelRail() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return velRail;
 	}
 
 	public double getProbDRail() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return probDRail;
 	}
 
 }
