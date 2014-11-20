@@ -1,5 +1,12 @@
-//package MComSim.SimulationParams;
+/**
+ * Stores all the parameters needed to define
+ * a particular simulation instance
+ * 
+ */
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class SimulationParams {
@@ -14,8 +21,7 @@ public class SimulationParams {
 	private double receiverRadius;
 	private ArrayList<Position> intermediateNodePositions;
 	private double intermediateNodeRadius;
-	private ArrayList<Position> microtubulePlusEndPoints;
-	private ArrayList<Position> microtubuleMinusEndPoints;
+	private ArrayList<MicrotubulePosition> microtubuleEndPoints;
 	private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
 	private int maxNumSteps;
@@ -39,7 +45,12 @@ public class SimulationParams {
 
 	public SimulationParams(String[] args) {
 		parseArgs(args);
-		readParamsFile(paramsFileName);
+		try {
+			readParamsFile(paramsFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void parseArgs(String[] args) {
@@ -51,13 +62,56 @@ public class SimulationParams {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
-	private void readParamsFile(String fName) {
+	/** UNFINISHED METHOD*/
+	private void readParamsFile(String fName) throws IOException{
 		/*open params file for reading
 	Reads params from paramsFile (field), each param type is identified by the first string starting a line, although its values may extend over multiple lines (for example, to make it easier to view arrays of things).  Stores each param’s value(s) in a
  	private field.  Alternatively, we could do this with a hashmap of key, value pairs, where the key is the String representing the name of the parameter and the value is of Object type so it can be anything we want.  Not sure which is the better way
  	to go.  
 	close param file for reading*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		/*LEGACY CODE*/
+		//TODO: Can this be improved?
+		//TODO: Make sure all parameters are accounted for and line up between file and this method
+		boolean flag = true;
+		
+		String line;
+		BufferedReader br = new BufferedReader(new FileReader(fName));
+		while((line = br.readLine())!=null){
+			String param = "";
+			if(!line.equals(""))
+				param = line.substring(line.indexOf(" ")+1).trim();
+			if(line.startsWith("stepLengthX")){
+				molRandMoveX = Double.parseDouble(param);
+			}
+			else if(line.startsWith("stepLengthY")){
+				molRandMoveY = Double.parseDouble(param);
+			}
+			else if(line.startsWith("stepLengthZ")){
+				molRandMoveZ = Double.parseDouble(param);
+			}
+			else if(line.startsWith("mediumDimensionX")){
+				mediumLength = Double.parseDouble(param);
+			}
+			else if(line.startsWith("mediumDimensionY")){
+				mediumWidth = Double.parseDouble(param);				
+			}
+			else if(line.startsWith("mediumDimensionZ")){
+				mediumHeight = Double.parseDouble(param);
+			}		
+			else if (line.startsWith("maxSimulationStep")){
+				maxNumSteps = Integer.parseInt(param);
+			}
+			else if(line.startsWith("receiverRadius")){
+				receiverRadius = Double.parseDouble(param);				
+			}
+			else if(line.startsWith("velRail")){
+				velRail = Double.parseDouble(param);				
+			}
+			else if(line.startsWith("probDRail")){
+				probDRail = Double.parseDouble(param);				
+			}
+		}
+		br.close();
 	}
 
 	public double getMediumLength() {

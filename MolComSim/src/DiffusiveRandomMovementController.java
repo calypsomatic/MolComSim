@@ -1,7 +1,21 @@
-//package MComSim.DiffusiveRandomMovementController;
+/**
+ * Moves molecules according to passive transport,
+ * using a random walk
+ *
+ */
 
 public class DiffusiveRandomMovementController extends MovementController{
 
+	
+	public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol) {
+		super(collHandle, sim, mol);
+	}
+	
+	/** Randomly selects where to move molecule based on simulation step length parameters
+	 *  @param molecule The molecule to move
+	 *  @return the position to move to
+	 * 
+	 */
 	protected Position decideNextPosition(Molecule molecule) {
 		//Randomly decide the next position based on current position + some delta.
 		Position currentPosition = molecule.getPosition();
@@ -19,10 +33,6 @@ public class DiffusiveRandomMovementController extends MovementController{
 			}
 		}
 		return nextPosition;
-	}
-	
-	public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol) {
-		super(collHandle, sim, mol);
 	}
 
 }

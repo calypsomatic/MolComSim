@@ -1,4 +1,7 @@
-//package MComSim.MoleculeParams;
+/** Stores the parameters needed
+ * to create a particular type of molecule
+ *
+ */
 
 public class MoleculeParams {
 
@@ -7,12 +10,15 @@ public class MoleculeParams {
 	private MoleculeType moleculeType;
 	private MoleculeMovementType moleculeMovementType;
 
-	public double getRadius() {
-		return radius;
+	public MoleculeParams(MoleculeType mType, MoleculeMovementType mMovementType, int numMols, double r) {
+		this.numMolecules = numMols;
+		this.moleculeMovementType = mMovementType;
+		this.moleculeType = mType;
+		this.radius = r;
 	}
 
-	public MoleculeParams(MoleculeType mType, MoleculeMovementType mMovementType, int numMols) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+	public double getRadius() {
+		return radius;
 	}
 
 	public int getNumMolecules() {
