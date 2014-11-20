@@ -1,20 +1,20 @@
-package MComSim.Microtubule;
-
-import java.io.*;
-import java.util.*;
+//package MComSim.Microtubule;
 
 public class Microtubule {
 
 	private double radius;
 	private Position plusEndCenter;
 	private Position minusEndCenter;
+	private MolComSim simulation;
 
 	public double getRadius() {
 		return radius;
 	}
 
 	public Microtubule(Position pEndCntr, Position mEndCntr, double r) {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		this.plusEndCenter = pEndCntr;
+		this.minusEndCenter = mEndCntr;
+		this.radius = r;
 	}
 
 	public Position getPlusEndCenter() {

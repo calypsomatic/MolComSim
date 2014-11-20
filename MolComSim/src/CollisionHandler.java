@@ -1,7 +1,4 @@
-package MComSim.CollisionHandler;
-
-import java.io.*;
-import java.util.*;
+//package MComSim.CollisionHandler;
 
 public abstract class CollisionHandler {
 
