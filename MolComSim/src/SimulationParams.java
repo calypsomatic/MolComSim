@@ -214,15 +214,15 @@ public class SimulationParams {
 	}
 
 	public double getMolRandMoveX() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return molRandMoveX;
 	}
 
 	public double getMolRandMoveY() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return molRandMoveY;
 	}
 
 	public double getMolRandMoveZ() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return molRandMoveZ;
 	}
 
 	public double getVelRail() {

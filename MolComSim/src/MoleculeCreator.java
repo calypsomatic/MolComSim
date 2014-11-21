@@ -26,33 +26,57 @@ public class MoleculeCreator {
 	}
 	
 	public void createMolecules() {
+		/*ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
-			for (int i = 0; i < mp.getNumMolecules(); i++){
-				//source is not set for a molecule?
-				//How do we set movement controller type?
-				/*Molecule tempMol = new Molecule(new MovementController(mp.getMoleculeMovementControllerType()),
-				position, mp.getRadius(), simulation, mp.getMoleculeMovementType());
-				*/
+			MoleculeType molType = mp.getMoleculeType();
+			double rad = mp.getRadius();
+			MoleculeMovementType molMoveType = mp.getMoleculeMovementType();
+			MovementController mover;
+			CollisionHandler collH;
+			if (simulation.isUsingCollisions()){
+				if (onmicrotubule){
+					collH = new OnTubuleCollisionHandler();
+				}
+				
 			}
-/*		 * basing the type to be created on moleculeParam.getMoleculeType() 
-		set msgId using source.getCurrentMsgId().  The molecules 
-		need to be given a movement controller based on the 
-		getMolecule().getMoleculeMovementType().
-		If this is none, then install null movement controller.  If this 
-		is passive, then install DiffusiveRandomMovementController.  
-		If this is active we need to check if there are
-		any microtubules close enough to the starting position, and, if 
-		there are, install the onMicrotubuleMovementController.  If not, 
-		install the random movement one.
-
-		We need to install the appropriate collision handler into the 
-		movement controller as well.  This is based on whether or not 
-		we want to handle collisions at all (should be a parameter, 
-			just use null collision handler if no), whether or not we 
-			are on a tubule (should auto-derail if get collision), 
-			whether or not we want decomposing collsions (params file), etc.  
-	sim.addMolecules(the molecules created);*/
+			else {
+				collH = new NullCollisionHandler();
+			}
+			if (molMoveType.equals(MoleculeMovementType.ACTIVE)){
+				if (nearby microtubules){
+					mover = new OnMicroTubuleMovementController();
+				}
+				else{
+					mover = new DiffusiveRandomMovementController();
+				}
+			}
+			else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
+				mover = new DiffusiveRandomMovementController();
+			}
+			else if (molMoveType.equals(MoleculeMovementType.NONE)){
+				new NullMovementController();
+			}
+			//TODO: make adding movement type work
+			//also current message id
+			for (int i = 0; i < mp.getNumMolecules(); i++){
+				if (molType.equals(MoleculeType.ACK)){
+					Molecule tempMol = new AcknowledgementMolecule(new MovementController(molMoveType),
+							position, rad, simulation, source, source.getCurrentMsgID(),molMoveType);
+				}
+				else if (molType.equals(MoleculeType.INFO)){
+					Molecule tempMol = new InformationMolecule(new MovementController(molMoveType),
+							position, rad, simulation, source, source.getCurrentMsgID(), molMoveType);
+				}
+				else if (molType.equals(MoleculeType.NOISE)){
+					Molecule tempMol = new NoiseMolecule(new MovementController(molMoveType),
+							position, rad, simulation, molMoveType);
+				}
+				else {
+					//TODO: Error management?					
+				}
+				newMols.add(tempMol);
+			}
+			simulation.addMolecules(newMols);*/
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
-}
 }

@@ -78,7 +78,7 @@ public class MolComSim {
 	private void run(String[] args) {
 		startSim(args);
 		//As long as we have not run for too long and have not
-		//yet finished sending our messages, move the simluation forward
+		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
 			for(NanoMachine nm : nanoMachines){
@@ -97,6 +97,10 @@ public class MolComSim {
 
 	public boolean isLastMsgCompleted() {
 		return lastMsgCompleted;
+	}
+	
+	public int getNumMessages(){
+		return simParams.getNumMessages();
 	}
 
 	/** Creates the medium in which the simulation takes place
@@ -208,8 +212,12 @@ public class MolComSim {
 	}
 
 	public int getMaxRetransmissions() {
-		// TODO Auto-generated method stub
-		return 0;
+		// Is this the correct number?
+		return simParams.getNumRetransmissions();
+	}
+	
+	public boolean isUsingCollisions() {
+		return simParams.isUsingCollisions();
 	}
 
 }

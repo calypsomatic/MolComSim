@@ -13,6 +13,8 @@ public abstract class Molecule {
 	private MovementController movementController;
 	private MolComSim simulation;
 	private MoleculeMovementType moleculeMovementType;
+	//Id of the message a molecule carries - null for noise molecules
+	protected Integer msgId;
 
 	protected Molecule(MovementController mc, Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {
 		this.movementController = mc;
@@ -51,6 +53,10 @@ public abstract class Molecule {
 
 	public MoleculeMovementType getMoleculeMovementType() {
 		return moleculeMovementType;
+	}
+	
+	public Integer getMsgId(){
+		return this.msgId;
 	}
 
 }
