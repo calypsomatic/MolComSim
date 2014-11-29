@@ -14,6 +14,13 @@ public abstract class MovementController {
 		simulation = sim;
 		molecule = mol;
 	}
+	
+	//TODO: Does a movementcontroller need a molecule at all?
+	protected MovementController(CollisionHandler collHandle, MolComSim sim) {
+		collisionHandler = collHandle;
+		simulation = sim;
+		molecule = null;
+	}
 
 	/**
 	 * 

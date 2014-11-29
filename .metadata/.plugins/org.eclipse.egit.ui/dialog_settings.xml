@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="/home/bria/git/MolComSim/.git" key="GitSelectRepositoryPage.lastRepository"/>
+	<item value="1" key="org.eclipse.egit.ui.internal.clone.GitSelectWizardPageWizardSel"/>
+	<list key="RepositorySelectionPage.UsedUris">
+		<item value="https://github.com/calypsomatic/MolComSim.git"/>
+	</list>
+	<section name="GitImportWizard">
+	</section>
+</section>

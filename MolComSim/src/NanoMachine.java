@@ -6,7 +6,6 @@
  * 
  */
 
-import java.io.*;
 import java.util.*;
 
 public class NanoMachine {
@@ -116,6 +115,24 @@ public class NanoMachine {
 		return simulation;
 	}
 	
+	//TODO: How do we decide if there are both? 
+	public int getCurrMsgId(){
+		if (tx != null){
+			if (rx != null){
+				return 0; //which one do we look at??
+			}
+			else {
+				return tx.getCurrMsgId();
+			}
+		}
+		else if (rx != null){
+			return rx.getCurrMsgId();
+		}
+		else {
+			return 0;
+		}
+	}
+	
 
 	/**
 	 * Inner class that enables NanoMachine to transmit
@@ -136,25 +153,24 @@ public class NanoMachine {
 			this.simulation = sim;
 			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine);
 			this.currMsgId = 0;
-			this.retransmissionsLeft =  this.simulation.getMaxRetransmissions();
+			this.retransmissionsLeft =  this.simulation.getNumRetransmissions();
 		}
 
 		/**
 		 *  Creates molecules for this transmitter
 		 */
 		public void createMolecules() {
-			//pseudo-code wants us to pass in currMsgId
-			//but design for MoleculeCreater takes in no parameters
+			//TODO: Pseudo-code suggests we pass in currMsgId : but what do we do with this?
+			//Need to change molecule params or mCreator.createMolecules to deal with it
 			moleculeCreator.createMolecules();
-			//Is this the correct value?
-			countdown = simulation.getMaxRetransmissions();
+			countdown = simulation.getRetransmitWaitTime();
 		}
 
 		/**
 		 * Creates molecules if time hasn't run out
 		 */
 		public void nextStep() {
-			if((countdown-- > 0) && (retransmissionsLeft > 0)) {
+			if((countdown-- <= 0) && (retransmissionsLeft > 0)) {
 				createMolecules();
 				retransmissionsLeft--;
 			} 
@@ -172,7 +188,7 @@ public class NanoMachine {
 			//Should this instead be if !simulation.lastMsgCompleted()?
 			if(currMsgId < simulation.getNumMessages()) {
 				createMolecules();
-				retransmissionsLeft =  simulation.getMaxRetransmissions();
+				retransmissionsLeft =  simulation.getNumRetransmissions();
 			}
 			else if (retransmissionsLeft > 0) {
 				createMolecules();
@@ -210,7 +226,7 @@ public class NanoMachine {
 			{
 				this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine);
 				currMsgId = 0;
-				retransmissionsLeft =  this.simulation.getMaxRetransmissions();
+				retransmissionsLeft =  this.simulation.getNumRetransmissions();
 			}
 		}
 
@@ -221,8 +237,7 @@ public class NanoMachine {
 			//pseudo-code wants us to pass in currMsgId
 			//but design for MoleculeCreater takes in no parameters
 			moleculeCreator.createMolecules();
-			//Is this the correct value?
-			countdown = simulation.getMaxRetransmissions();
+			countdown = simulation.getRetransmitWaitTime();
 		}
 		
 		/**
@@ -231,7 +246,7 @@ public class NanoMachine {
 		 */
 		public void nextStep() {
 			if(simulation.isUsingAcknowledgements() && 
-			((countdown-- > 0) && (retransmissionsLeft > 0))){
+			((countdown-- <= 0) && (retransmissionsLeft > 0))){
 				createMolecules();
 				retransmissionsLeft--;
 			} 
@@ -248,7 +263,7 @@ public class NanoMachine {
 				currMsgId++;		
 				if(simulation.isUsingAcknowledgements()) {
 					createMolecules();
-					retransmissionsLeft =  simulation.getMaxRetransmissions();
+					retransmissionsLeft =  simulation.getNumRetransmissions();
 				} 
 				else {
 					simulation.completedMessage(currMsgId);

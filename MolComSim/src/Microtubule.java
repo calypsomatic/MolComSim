@@ -13,10 +13,11 @@ public class Microtubule {
 	private MolComSim simulation;
 
 	
-	public Microtubule(Position pEndCntr, Position mEndCntr, double r) {
+	public Microtubule(Position pEndCntr, Position mEndCntr, double r, MolComSim sim) {
 		this.plusEndCenter = pEndCntr;
 		this.minusEndCenter = mEndCntr;
 		this.radius = r;
+		this.simulation = sim;
 	}
 	
 	public double getRadius() {
@@ -29,6 +30,10 @@ public class Microtubule {
 
 	public Position getMinusEndCenter() {
 		return minusEndCenter;
+	}
+	
+	public MolComSim getSimulation(){
+		return simulation;
 	}
 
 }

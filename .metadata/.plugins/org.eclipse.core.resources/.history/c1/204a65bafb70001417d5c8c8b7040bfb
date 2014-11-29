@@ -1,0 +1,44 @@
+//package MComSim.Position;
+
+public class Position {
+
+	private double x;
+	private double y;
+	private double z;
+
+	public Position(double x0, double y0, double z0) {
+		this.x = x0;
+		this.y = y0;
+		this.z = z0;
+	}
+	
+	public double getDistance(Position other) {
+		return Math.sqrt(Math.pow(x-other.getX(), 2) + Math.pow(y-other.getY(),2) 
+				+ Math.pow(z-other.getZ(),2));
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public double getZ() {
+		return z;
+	}
+	
+	public boolean isOccupied(MolComSim simulation){
+		for(Molecule m : simulation.getMolecules()){
+			 //TODO: Should we implement our own equals for molecule?
+		 	//if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
+		 	if(m.getPosition().getDistance(this)<(m.getRadius()+mol.getRadius())){
+		 		return true;
+		 		}
+		 	}
+		return false;
+		 }
+	}
+
+}

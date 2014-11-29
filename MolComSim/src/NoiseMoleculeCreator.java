@@ -1,4 +1,7 @@
-//package MComSim.NoiseMoleculeCreator;
+/**
+ * NoiseMoleculeCreator is a MoleculeCreator that creates
+ * sedentary noise molecules randomly throughout the medium
+ */
 
 import java.util.*;
 
@@ -8,10 +11,23 @@ public class NoiseMoleculeCreator extends MoleculeCreator{
 		super(noiseMoleculeParams, sim);
 	}
 
+	/**
+	 * Create molecules and populate them through the medium
+	 */
 	public void createMolecules() {
-		/*create molecules using noise molecule params with positions randomly distributed throughout the medium (simulation.getMedium().getlength()…)
-	sim.addMolecules(the molecules created);*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		ArrayList<Molecule> noiseMolecules = new ArrayList<Molecule>();
+		//TODO: check these values to make sure they're not occupied
+		double x = Math.random()*simulation.getSimParams().getMediumHeight();
+		double y = Math.random()*simulation.getSimParams().getMediumLength();
+		double z = Math.random()*simulation.getSimParams().getMediumWidth();
+		for (MoleculeParams nmp : molParams){
+			Position randomPos = new Position(x, y, z);
+			NoiseMolecule tempmol = new NoiseMolecule(new NullMovementController(new NullCollisionHandler(), simulation),
+					randomPos, nmp.getRadius(), simulation, nmp.getMoleculeMovementType());
+			noiseMolecules.add(tempmol);
+		}
+		//create molecules using noise molecule params with positions randomly distributed throughout the medium (simulation.getMedium().getlength()…)
+		simulation.addMolecules(noiseMolecules);
 	}
 
 }

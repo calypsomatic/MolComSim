@@ -3,7 +3,6 @@
  * that is sent out by a transmitter to 
  * communicate a message
  */
-import java.io.*;
 import java.util.*;
 
 public class InformationMolecule extends Molecule{

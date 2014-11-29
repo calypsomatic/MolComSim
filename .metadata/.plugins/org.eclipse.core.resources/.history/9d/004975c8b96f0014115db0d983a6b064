@@ -1,0 +1,9 @@
+import java.util.ArrayList;
+
+
+public class MicrotubuleParams {
+
+	Position PlusEndPoint;
+	Position MinusEndPoint;
+	Double Radii;
+}

@@ -1,4 +1,3 @@
-//package MComSim.MolComSim;
 
 import java.io.*;
 import java.util.*;
@@ -26,6 +25,7 @@ public class MolComSim {
 	//to identify when simulation completed 
 	private int messagesCompleted;
 	private boolean lastMsgCompleted;
+	private int numMessages;
 
 	//This instance of the Molecular Communication Simulation
 	static MolComSim molComSim;
@@ -143,14 +143,15 @@ public class MolComSim {
 	}
 
 	private void createMicrotubules() {
-		//Should probably maybe have an ArrayList of pairs of plus/minus ends
-		/*for(each MicroTubule specified by simParams)
-	{
-		get microtubule params from simParams
-		construct a temporary microtubule, passing it the microtubule params and this simulation object
-		microTubuleList.add(tempMicroTubule);
-	}*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		//		get microtubule params from simParams
+		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
+			Position end1 = mtps.getMinusEndPoint();
+			Position end2 = mtps.getPlusEndPoint();
+			double radius = mtps.getRadius();
+			
+			Microtubule tempMT = new Microtubule(end1, end2, radius, this);
+			microtubules.add(tempMT);
+		}
 	}
 
 	//any cleanup tasks, including printing simulation results to monitor or file.
@@ -167,12 +168,10 @@ public class MolComSim {
 	}
 
 	public void completedMessage(int msgNum) {
-		/*possibly print results to file and/or monitor
-	if(msgId >= numMsgs – 1)
-	{
-		lastMsgCompleted = true;
-	}*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		//TODO: possibly print results to file and/or monitor
+		if(msgNum >= numMessages - 1){
+			lastMsgCompleted = true;
+		}
 	}
 
 	public int getMessagesCompleted() {
@@ -211,13 +210,17 @@ public class MolComSim {
 		return simParams.isUsingAcknowledgements();
 	}
 
-	public int getMaxRetransmissions() {
+	public int getNumRetransmissions() {
 		// Is this the correct number?
 		return simParams.getNumRetransmissions();
 	}
 	
 	public boolean isUsingCollisions() {
 		return simParams.isUsingCollisions();
+	}
+	
+	public int getRetransmitWaitTime(){
+		return simParams.getRetransmitWaitTime();
 	}
 
 }

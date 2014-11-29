@@ -9,6 +9,11 @@ public class NullMovementController extends MovementController{
 		super(collHandle, sim, mol);
 	}
 	
+	//TODO: Does this need a molecule at all?
+	public NullMovementController(CollisionHandler collHandle, MolComSim sim) {
+		super(collHandle, sim);
+	}
+	
 	protected Position decideNextPosition(Molecule molecule) {
 		return getMolecule().getPosition();
 	}

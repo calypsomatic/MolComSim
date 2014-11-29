@@ -11,6 +11,11 @@ public class DiffusiveRandomMovementController extends MovementController{
 		super(collHandle, sim, mol);
 	}
 	
+	//TODO: Do we need a molecule at all?
+	public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim) {
+		super(collHandle, sim);
+	}
+	
 	/** Randomly selects where to move molecule based on simulation step length parameters
 	 *  @param molecule The molecule to move
 	 *  @return the position to move to
@@ -22,6 +27,7 @@ public class DiffusiveRandomMovementController extends MovementController{
 		double currentX = currentPosition.getX();
 		double currentY = currentPosition.getY();
 		double currentZ = currentPosition.getZ();
+		//TODO: This is not actually random, need to multiply the delta by 0, 1, or -1 randomly
 		double nextX = currentX + getSimulation().getSimParams().getMolRandMoveX();
 		double nextY = currentY + getSimulation().getSimParams().getMolRandMoveY();
 		double nextZ = currentZ + getSimulation().getSimParams().getMolRandMoveZ();

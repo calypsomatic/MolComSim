@@ -1,0 +1,19 @@
+//package MComSim.OnTubuleCollisionHandler;
+
+import java.io.*;
+import java.util.*;
+
+public class OnTubuleCollisionHandler extends CollisionHandler{
+
+	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
+		if(!nextPosition.isOccupied(simulation)){
+			return nextPosition;
+		}
+		else {
+			mol.setMovementController(new DiffusiveRandomMovementController(new StandardCollisionHandler(), mol, simulation)));
+			return mol.getPosition();
+		}
+		throw new UnsupportedOperationException("The method is not implemented yet.");
+	}
+
+}

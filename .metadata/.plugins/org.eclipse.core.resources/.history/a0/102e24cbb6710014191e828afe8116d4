@@ -1,0 +1,243 @@
+/**
+ * The NanoMachine class represents a molecular machine
+ * that can transmit information molecules and receive
+ * acknowledgement molecules, transmit acknowledgement
+ * molecules and receive information molecules, or both.
+ * 
+ */
+
+import java.io.*;
+import java.util.*;
+
+public class NanoMachine {
+	
+	private Position position;
+	private double radius;
+	private MolComSim simulation;
+	private Receiver rx;
+	private Transmitter tx;
+
+	private NanoMachine(Position psn, double r) {
+		this.position = psn;
+		this.radius = r;
+	}
+
+	/** Make this NanoMachine a Transmitter only
+	 * 
+	 * @param position Where the NanoMachine is located
+	 * @param radius The radius of the NanoMachine
+	 * @param mpl The parameters for the molecules the Nanomachine will transmit
+	 * @param sim The simulation in which this is taking place
+	 * @return The resulting transmitter-only nanomachine
+	 */
+	public static NanoMachine createTransmitter(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+		NanoMachine retVal = new NanoMachine(position, radius);
+		retVal.tx = new Transmitter(retVal, mpl, sim);
+		retVal.rx = null;
+		return retVal;
+	}
+
+	/** Make this NanoMachine a Receiver only
+	 * 
+	 * @param position Where the NanoMachine is located
+	 * @param radius The radius of the NanoMachine
+	 * @param mpl The parameters for the molecules the Nanomachine will receive
+	 * @param sim The simulation in which this is taking place
+	 * @return The resulting receiver-only nanomachine
+	 */
+	public static NanoMachine createReceiver(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+		NanoMachine retVal = new NanoMachine(position, radius);
+		retVal.rx = new Receiver(retVal, mpl, sim);
+		retVal.tx = null;
+		return retVal;
+	}
+
+	/** Make this NanoMachine a Transmitter and Receiver
+	 * 
+	 * @param position Where the NanoMachine is located
+	 * @param radius The radius of the NanoMachine
+	 * @param mpl The parameters for the molecules the Nanomachine will transmit and receive
+	 * @param sim The simulation in which this is taking place
+	 * @return The resulting transmitter-receiver nanomachine
+	 */
+	public static NanoMachine createIntermediateNode(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+		NanoMachine retVal = new NanoMachine(position, radius);
+		retVal.rx = new Receiver(retVal, mpl, sim);
+		retVal.tx = new Transmitter(retVal, mpl, sim);
+		return retVal;	
+	}
+
+	public void createInfoMolecules() {
+		if(tx != null) {
+			tx.createMolecules();
+		}
+	}
+
+	public void nextStep() {
+		if(tx != null) {
+		tx.nextStep();
+		}
+		if(rx != null) {
+			rx.nextStep();
+		}
+	}
+
+	public void receiveMolecule(Molecule m) {
+		if(m instanceof InformationMolecule && rx != null) {
+			rx.receiveMolecule(m);
+		} 
+		else if(m instanceof AcknowledgementMolecule && tx != null) {
+			tx.receiveMolecule(m);
+		}
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public MolComSim getSimulation() {
+		return simulation;
+	}
+	
+
+	public static class Transmitter {
+
+		private MolComSim simulation;
+		private int currMsgId = 0;
+		private int retransmissionsLeft;
+		private MoleculeCreator moleculeCreator;
+		private NanoMachine nanoMachine;
+		private int countdown;
+
+		public Transmitter(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+			this.nanoMachine = nm;
+			this.simulation = sim;
+			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine);
+			this.currMsgId = 0;
+			this.retransmissionsLeft =  this.simulation.getMaxRetransmissions();
+		}
+
+		public void createMolecules() {
+			//pseudo-code wants us to pass in currMsgId
+			//but design for MoleculeCreater takes in no parameters
+			moleculeCreator.createMolecules();
+			//Is this the correct value?
+			countdown = simulation.getMaxRetransmissions();
+		}
+
+		public void nextStep() {
+			if((countdown-- > 0) && (retransmissionsLeft > 0)) {
+				createMolecules();
+				retransmissionsLeft--;
+			} 
+		}
+
+		public void receiveMolecule(Molecule m) {
+			//Molecule has no MsgId field??
+			if(m.getMsgId() == currMsgId)
+				simulation.completedMessage(currMsgId++);
+			//Should this instead be if !simulation.lastMsgCompleted()?
+			if(currMsgId < simulation.getNumMessages()) {
+				createMolecules();
+				retransmissionsLeft =  simulation.getMaxRetransmissions();
+			}
+			else if (retransmissionsLeft > 0) {
+				createMolecules();
+				retransmissionsLeft--;
+			}
+		}
+
+		public NanoMachine getNanoMachine() {
+			return nanoMachine;
+		}
+
+		public MolComSim getSimulation() {
+			return simulation;
+		}
+
+		public int getCurrMsgId() {
+			return currMsgId;
+		}
+
+	}
+
+	public static class Receiver {
+
+		private MolComSim simulation;
+		private int currMsgId;
+		private int retransmissionsLeft;
+		private MoleculeCreator moleculeCreator;
+		private NanoMachine nanoMachine;
+		private int countdown;
+
+		public Receiver(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+			this.nanoMachine = nm;
+			this.simulation = sim;
+			if(this.simulation.isUsingAcknowledgements())
+			{
+				this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine);
+				currMsgId = 0;
+				retransmissionsLeft =  this.simulation.getMaxRetransmissions();
+			}
+			throw new UnsupportedOperationException("The method is not implemented yet.");
+		}
+
+		public void createMolecules() {
+			/*moleculeCreator.createMoreMolecules(currMsgId);
+		countdown = sim.getRetransmissionWaitTime();*/
+			throw new UnsupportedOperationException("The method is not implemented yet.");
+		}
+
+		public void nextStep() {
+			/*if(sim.isUsingAcknowledgements() && 
+			((countdown-- > 0) && (retransmissionsLeft > 0)))
+		{
+			createMolecules();
+			retransmissionsLeft--;
+		} */
+			throw new UnsupportedOperationException("The method is not implemented yet.");
+		}
+
+		public void receiveMolecule(Molecule m) {
+			/*if(molecule.getMsgId() == currMsgId + 1)
+		{
+			currMsgId++;		
+			if(sim.isUsingAcknowledgements())
+			{
+				createMolecules();
+				retransmissionsLeft =  sim.getMaxRetransmissions();
+			} 
+			else
+			{
+				sim.completedMessage(currMsgId);
+			}
+		}
+		else if (sim.isUsingAcknowledgements() && (retransmissionsLeft > 0))
+		{
+			createMolecules();
+			retransmissionsLeft--;
+		}*/
+			throw new UnsupportedOperationException("The method is not implemented yet.");
+		}
+
+		public NanoMachine getNanoMachine() {
+			return nanoMachine;
+		}
+
+		public MolComSim getSimulation() {
+			return simulation;
+		}
+
+		public int getCurrMsgId() {
+			return currMsgId;
+		}
+
+	}
+
+
+
+}

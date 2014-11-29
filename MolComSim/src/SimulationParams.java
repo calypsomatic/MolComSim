@@ -21,29 +21,25 @@ public class SimulationParams {
 	private double receiverRadius;
 	private ArrayList<Position> intermediateNodePositions;
 	private double intermediateNodeRadius;
-	private ArrayList<MicrotubulePosition> microtubuleEndPoints;
-	private ArrayList<Double> microtubuleRadii;
+	private ArrayList<MicrotubuleParams> microtubuleParams;
+	//private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
 	private int maxNumSteps;
 	private int numRetransmissions;
 	private int retransmitWaitTime;
 	private boolean useCollisions;
+	private boolean useAcknowledgements;
 	private ArrayList<MoleculeParams> moleculeParams;
 	private double molRandMoveX;
 	private double molRandMoveY;
 	private double molRandMoveZ;
 	private double velRail;
 	private double probDRail;
-
-	public int getMaxNumSteps() {
-		return maxNumSteps;
-	}
-
-	public int getNumMessages() {
-		return numMessages;
-	}
+	
+	private HashMap<String, Object> allParams;
 
 	public SimulationParams(String[] args) {
+		allParams = new HashMap<String, Object>();
 		parseArgs(args);
 		try {
 			readParamsFile(paramsFileName);
@@ -55,11 +51,25 @@ public class SimulationParams {
 
 	private void parseArgs(String[] args) {
 		/*parses command line arguments, stores them in fields
-	args can include type of movement for acknowledgement, information, and noise molecules (passive = default for info and ack, stationary = default for noise).  Indicated with: -(tx|rx|no): (active|passive|stationary) (where no stands for noise)
-	args can include type of Automatic Repeat Request scheme used (currently none is default, for no acknowledgement molecules, change to sw11 later).  Indicated with: arq: (sw)(1..n),(1..m) , where sw means stop-and-wait (might implement 
-	other ARQ schemes later, the next integer value represents the number of information molecules to send (minimum 1), and the next integer value represents the number of acknowledgement molecules to send.
-	args can include input file location/name (default: params.dat).  Indicated with: pfile:<string>.  paramsFile must be set up in parseArgs, but not opened for reading.*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+	args can include type of movement for acknowledgement, information, 
+	and noise molecules (passive = default for info and ack, 
+	stationary = default for noise).  
+	Indicated with: -(tx|rx|no): (active|passive|stationary) 
+	(where no stands for noise)
+	args can include type of Automatic Repeat Request scheme used 
+	(currently none is default, for no acknowledgement molecules, 
+	change to sw11 later).  Indicated with: arq: (sw)(1..n),(1..m) , 
+	where sw means stop-and-wait (might implement 
+	other ARQ schemes later, the next integer value represents the 
+	number of information molecules to send (minimum 1), and the next 
+	integer value represents the number of acknowledgement molecules to send.
+	args can include input file location/name (default: params.dat).  
+	Indicated with: pfile:<string>.  
+	paramsFile must be set up in parseArgs, but not opened for reading.*/
+		//throw new UnsupportedOperationException("The method is not implemented yet.");
+		if (args.length == 0){
+			paramsFileName = "input0.dat";
+		}
 	}
 
 	/** UNFINISHED METHOD*/
@@ -73,6 +83,11 @@ public class SimulationParams {
 		//TODO: Can this be improved?
 		//TODO: Make sure all parameters are accounted for and line up between file and this method
 		boolean flag = true;
+		
+		/* Something like, while next, if next in allParams, 
+		 * then add the one after that as value for that key in allParams
+		 * Will need a lot of error checking
+		 */
 		
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(fName));
@@ -162,24 +177,24 @@ public class SimulationParams {
 	}
 
 	public ArrayList<Position> getTransmitterPositions() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return transmitterPositions;
 	}
 
 	public ArrayList<Position> getReceiverPositions() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return receiverPositions;
 	}
 
 	public ArrayList<Position> getIntermediateNodePositions() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return intermediateNodePositions;
 	}
 
-	public ArrayList<Position> getMicrotubulePlusEndPoints() {
+	/*public ArrayList<Position> getMicrotubulePlusEndPoints() {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	public ArrayList<Position> getMicrotubuleMinusEndPoints() {
 		throw new UnsupportedOperationException("The method is not implemented yet.");
-	}
+	}*/
 
 	public double getTransmitterRadius() {
 		return transmitterRadius;
@@ -193,8 +208,8 @@ public class SimulationParams {
 		return intermediateNodeRadius;
 	}
 
-	public ArrayList<Double> getMicrotubuleRadii() {
-		return microtubuleRadii;
+	public ArrayList<MicrotubuleParams> getMicrotubuleParams() {
+		return microtubuleParams;
 	}
 
 	public int getNumRetransmissions() {
@@ -210,7 +225,7 @@ public class SimulationParams {
 	}
 
 	public boolean isUsingAcknowledgements() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		return useAcknowledgements;
 	}
 
 	public double getMolRandMoveX() {
@@ -231,6 +246,14 @@ public class SimulationParams {
 
 	public double getProbDRail() {
 		return probDRail;
+	}
+
+	public int getMaxNumSteps() {
+		return maxNumSteps;
+	}
+
+	public int getNumMessages() {
+		return numMessages;
 	}
 
 }

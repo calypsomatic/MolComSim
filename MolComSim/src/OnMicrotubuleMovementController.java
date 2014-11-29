@@ -8,6 +8,12 @@ public class OnMicrotubuleMovementController extends MovementController{
 		super(collHandle, sim, mol);
 		microtubule = tubule;
 	}
+	
+	//TODO: Does this need a molecule at all?
+	public OnMicrotubuleMovementController(CollisionHandler collHandle, MolComSim sim, Microtubule tubule) {
+		super(collHandle, sim);
+		microtubule = tubule;
+	}
 
 	/* UNFINISHED METHOD*/
 	protected Position decideNextPosition(Molecule molecule) {
