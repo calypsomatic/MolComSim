@@ -91,6 +91,20 @@ public class SimulationParams {
 		
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(fName));
+		
+		//TODO: fix this, just need to make sure arraylists are initialized
+		transmitterPositions = new ArrayList<Position>();
+		receiverPositions = new ArrayList<Position>();
+		//placeholder for a real way to parse microtubule/molecule params
+		MicrotubuleParams mtp;
+		Position plus = null;
+		Position minus = null;
+		Double mtRadius = null;
+		Integer numMolecules = null;
+		Double mRadius = null;
+		MoleculeType moleculeType = null;
+		MoleculeMovementType moleculeMovementType = null;
+		MoleculeParams mp;
 		while((line = br.readLine())!=null){
 			String param = "";
 			if(!line.equals(""))
@@ -135,22 +149,93 @@ public class SimulationParams {
 				retransmitWaitTime = Integer.parseInt(param);				
 			}
 			else if(line.startsWith("useCollisions")){
-				//how are we coding booleans in the params file?				
+				//how are we coding booleans in the params file?
+				useCollisions = (Integer.parseInt(param) == 1) ? true : false;
 			}
 			else if(line.startsWith("useAcknowledgements")){
-				//how are we coding booleans in the params file?				
+				//how are we coding booleans in the params file?
+				useAcknowledgements = (Integer.parseInt(param) == 1) ? true : false;
 			}
 			else if(line.startsWith("velRail")){
 				velRail = Double.parseDouble(param);				
 			}
 			else if(line.startsWith("probDRail")){
 				probDRail = Double.parseDouble(param);				
-			}/*
-			else if(how are we coding an array of transmitter/receiver positions?){
 			}
-			else if(how do we parse microtubule/molecule params?){
-			}*/		
+			//TODO: fix this
+			else if(line.startsWith("transmitterPosition")){
+				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
+				double y = Double.parseDouble(param.substring(
+						param.indexOf(",")+1, 
+						param.indexOf(",", param.indexOf(",")+1)));
+				double z = Double.parseDouble(param.substring(
+						param.indexOf(",", param.indexOf(",")+1)+1, 
+						param.length()-1));
+				Position tPos = new Position(x, y, z);
+				transmitterPositions.add(tPos);
+			}
+			else if(line.startsWith("receiverPosition")){
+				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
+				double y = Double.parseDouble(param.substring(
+						param.indexOf(",")+1, 
+						param.indexOf(",", param.indexOf(",")+1)));
+				double z = Double.parseDouble(param.substring(
+						param.indexOf(",", param.indexOf(",")+1)+1, 
+						param.length()-1));
+				Position rPos = new Position(x, y, z);
+				receiverPositions.add(rPos);
+			}
+			//TODO: fix this
+			//placeholder for a real way to read in molecule params
+
+			else if (line.startsWith("radiusOfMolecule")){
+				mRadius = Double.parseDouble(param);
+			}
+			else if (line.startsWith("numMolecules")){
+				numMolecules = Integer.parseInt(param);
+			}
+			else if (line.startsWith("moleculeType")){
+				//TODO: fill in other options
+				if (param.equals("INFO"))
+					moleculeType = MoleculeType.INFO;
+			}
+			else if (line.startsWith("moleculeMovementType")){
+				//TODO: fill in other options
+				if (param.equals("PASSIVE"))
+					moleculeMovementType = MoleculeMovementType.PASSIVE;
+			}
+
+			//placeholder for a real way to read in microtubule params
+			else if(line.startsWith("plusEndCentre")){
+				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
+				double y = Double.parseDouble(param.substring(
+						param.indexOf(",")+1, 
+						param.indexOf(",", param.indexOf(",")+1)));
+				double z = Double.parseDouble(param.substring(
+						param.indexOf(",", param.indexOf(",")+1)+1, 
+						param.length()-1));
+				plus = new Position(x, y, z);
+			}
+			else if(line.startsWith("minusEndCentre")){
+				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
+				double y = Double.parseDouble(param.substring(
+						param.indexOf(",")+1, 
+						param.indexOf(",", param.indexOf(",")+1)));
+				double z = Double.parseDouble(param.substring(
+						param.indexOf(",", param.indexOf(",")+1)+1, 
+						param.length()-1));
+				minus = new Position(x, y, z);
+			}
+			else if(line.startsWith("radiusMicroTubule")){
+				mtRadius = Double.parseDouble(param);				
+			}
 		}
+		mtp = new MicrotubuleParams(plus, minus, mtRadius);
+		mp = new MoleculeParams(moleculeType, moleculeMovementType, numMolecules, mRadius);
+		moleculeParams = new ArrayList<MoleculeParams>();
+		microtubuleParams = new ArrayList<MicrotubuleParams>();
+		moleculeParams.add(mp);
+		microtubuleParams.add(mtp);
 		br.close();
 	}
 

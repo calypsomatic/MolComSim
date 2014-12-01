@@ -52,6 +52,12 @@ public class MolComSim {
 		simStep = 0;
 		lastMsgCompleted = false;
 		simParams = new SimulationParams(args);
+		//TODO: Where is the appropriate place for these to be initialized?
+		microtubules = new ArrayList<Microtubule>();
+		nanoMachines = new ArrayList<NanoMachine>();
+		transmitters = new ArrayList<NanoMachine>();
+		receivers = new ArrayList<NanoMachine>();
+		molecules = new ArrayList<Molecule>();
 		createMedium();
 		createNanoMachines();
 		createMicrotubules();		
@@ -81,6 +87,7 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
+			System.out.println("on step " + simStep);
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
@@ -156,7 +163,7 @@ public class MolComSim {
 
 	//any cleanup tasks, including printing simulation results to monitor or file.
 	private void endSim() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		//throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
 	/** Add molecules to molecules list field
