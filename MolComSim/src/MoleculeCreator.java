@@ -3,7 +3,6 @@
  * and places them at a starting point
  */
 
-import java.io.*;
 import java.util.*;
 
 public class MoleculeCreator {
@@ -25,72 +24,65 @@ public class MoleculeCreator {
 		this.position = src.getPosition();
 	}
 	
-	//TODO: Are these movementcontrollers good without having their molecule
-	//explicitly assigned to them?  How to determine if there are nearby molecules?
+	//TODO: How to determine if there are nearby microtubules?
 	//TODO: This entire method is crap.  Make helper methods or use some kind of design pattern
-	//Currently assigns same movementcontrollers and collisionhandlers to multiple molecules
-	//That needs to be fixed for sure
 	public void createMolecules() {
 		ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
 			MoleculeType molType = mp.getMoleculeType();
 			double rad = mp.getRadius();
 			MoleculeMovementType molMoveType = mp.getMoleculeMovementType();
-			MovementController mover;
-			CollisionHandler collH;
-			if (molMoveType.equals(MoleculeMovementType.ACTIVE)){
-				boolean nearbyMT = false;
-				Microtubule microtubule = null;
-				for (Microtubule mt : simulation.getMicrotubules()){
-					if (position.getDistance(mt.getMinusEndCenter()) + mt.getRadius() < rad){
-						nearbyMT = true;
-						microtubule = mt;
-						break;
-					}
-				}
-				if (nearbyMT){
-					collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
-					mover = new OnMicrotubuleMovementController(collH, simulation, microtubule);
-				}
-				else{
-					collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
-					mover = new DiffusiveRandomMovementController(collH, simulation);
-				}
-			}
-			else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
-				collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
-				mover = new DiffusiveRandomMovementController(collH, simulation);
-			}
-			else if (molMoveType.equals(MoleculeMovementType.NONE)){
-				collH = new NullCollisionHandler();
-				mover = new NullMovementController(collH, simulation);
-			} else {
-				//TODO: error management
-				mover = null;
-			}
-			//TODO: make adding movement type work
-			//also current message id
 			for (int i = 0; i < mp.getNumMolecules(); i++){
 				Molecule tempMol;
 				if (molType.equals(MoleculeType.ACK)){
-					tempMol = new AcknowledgementMolecule(mover,
-							position, rad, simulation, source, source.getCurrMsgId(),molMoveType);
+					tempMol = new AcknowledgementMolecule(position, rad, simulation, source, source.getReceiverMessageId(),molMoveType);
 				}
 				else if (molType.equals(MoleculeType.INFO)){
-					tempMol = new InformationMolecule(mover,
-							position, rad, simulation, source, source.getCurrMsgId(), molMoveType);
+					tempMol = new InformationMolecule(position, rad, simulation, source, source.getTransmitterMessageId(), molMoveType);
 				}
 				else if (molType.equals(MoleculeType.NOISE)){
-					tempMol = new NoiseMolecule(mover,
-							position, rad, simulation, molMoveType);
+					tempMol = new NoiseMolecule(position, rad, simulation, molMoveType);
 				}
 				else {
 					//TODO: Error management?
 					tempMol = null;
 				}
+				//MovementController mover;
+				CollisionHandler collH;
+				if (molMoveType.equals(MoleculeMovementType.ACTIVE)){
+					boolean nearbyMT = false;
+					Microtubule microtubule = null;
+					for (Microtubule mt : simulation.getMicrotubules()){
+						if ((position.getDistance(mt.getMinusEndCenter()) + mt.getRadius() < rad)
+								|| (position.getDistance(mt.getPlusEndCenter()) + mt.getRadius() < rad)){
+							nearbyMT = true;
+							microtubule = mt;
+							break;
+						}
+					}
+					if (nearbyMT){
+						collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+						new OnMicrotubuleMovementController(collH, simulation, tempMol, microtubule);		
+					}
+					else{
+						collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+						new DiffusiveRandomMovementController(collH, simulation, tempMol);
+					}
+				}
+				else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
+					collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+					new DiffusiveRandomMovementController(collH, simulation, tempMol);
+				}
+				else if (molMoveType.equals(MoleculeMovementType.NONE)){
+					collH = new NullCollisionHandler();
+					new NullMovementController(collH, simulation, tempMol);
+				} else {
+					//TODO: error management
+				}
+				//tempMol.setMovementController(mover);
 				newMols.add(tempMol);
 			}
-			}
-			simulation.addMolecules(newMols);
+		}
+		simulation.addMolecules(newMols);
 	}
 }

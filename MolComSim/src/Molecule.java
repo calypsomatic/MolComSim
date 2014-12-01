@@ -24,6 +24,14 @@ public abstract class Molecule {
 		this.moleculeMovementType = molMvType;
 	}
 	
+	protected Molecule(Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {
+		this.movementController = null;
+		this.position = psn;
+		this.radius = r;
+		this.simulation = sim;
+		this.moleculeMovementType = molMvType;
+	}
+	
 	//Moves the molecule as defined by its movementController
 	public abstract void move();
 
@@ -46,7 +54,7 @@ public abstract class Molecule {
 	public MovementController getMovementController() {
 		return movementController;
 	}
-
+	
 	protected void setPosition(Position p) {
 		this.position = p;
 	}

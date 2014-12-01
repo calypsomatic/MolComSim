@@ -115,22 +115,16 @@ public class NanoMachine {
 		return simulation;
 	}
 	
-	//TODO: How do we decide if there are both? 
-	public int getCurrMsgId(){
-		if (tx != null){
-			if (rx != null){
-				return 0; //which one do we look at??
-			}
-			else {
-				return tx.getCurrMsgId();
-			}
-		}
-		else if (rx != null){
+	public int getTransmitterMessageId(){
+		if (tx != null)
+			return tx.getCurrMsgId();
+		return -1;
+	}
+	
+	public int getReceiverMessageId(){
+		if (rx != null)
 			return rx.getCurrMsgId();
-		}
-		else {
-			return 0;
-		}
+		return -1;
 	}
 	
 
@@ -160,8 +154,6 @@ public class NanoMachine {
 		 *  Creates molecules for this transmitter
 		 */
 		public void createMolecules() {
-			//TODO: Pseudo-code suggests we pass in currMsgId : but what do we do with this?
-			//Need to change molecule params or mCreator.createMolecules to deal with it
 			moleculeCreator.createMolecules();
 			countdown = simulation.getRetransmitWaitTime();
 		}
@@ -185,7 +177,7 @@ public class NanoMachine {
 		public void receiveMolecule(Molecule m) {
 			if(m.getMsgId() == currMsgId)
 				simulation.completedMessage(currMsgId++);
-			//Should this instead be if !simulation.lastMsgCompleted()?
+			//Should this instead be if !simulation.isLastMsgCompleted()?
 			if(currMsgId < simulation.getNumMessages()) {
 				createMolecules();
 				retransmissionsLeft =  simulation.getNumRetransmissions();
@@ -234,8 +226,6 @@ public class NanoMachine {
 		 *  Creates molecules for this receiver
 		 */
 		public void createMolecules() {
-			//pseudo-code wants us to pass in currMsgId
-			//but design for MoleculeCreater takes in no parameters
 			moleculeCreator.createMolecules();
 			countdown = simulation.getRetransmitWaitTime();
 		}

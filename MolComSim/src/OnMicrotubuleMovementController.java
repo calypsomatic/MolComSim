@@ -1,4 +1,9 @@
-//package MComSim.OnMicrotubuleMovementController;
+/**
+ * MovementController for molecules in active transport
+ * 
+ *
+ */
+		
 
 public class OnMicrotubuleMovementController extends MovementController{
 
@@ -6,12 +11,6 @@ public class OnMicrotubuleMovementController extends MovementController{
 
 	public OnMicrotubuleMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol, Microtubule tubule) {
 		super(collHandle, sim, mol);
-		microtubule = tubule;
-	}
-	
-	//TODO: Does this need a molecule at all?
-	public OnMicrotubuleMovementController(CollisionHandler collHandle, MolComSim sim, Microtubule tubule) {
-		super(collHandle, sim);
 		microtubule = tubule;
 	}
 

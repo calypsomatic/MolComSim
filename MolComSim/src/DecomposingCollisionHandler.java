@@ -2,9 +2,6 @@
  * Handles collisions in the case that molecules decompose over time
  */
 
-import java.io.*;
-import java.util.*;
-
 public class DecomposingCollisionHandler extends CollisionHandler{
 
 	//TODO: Not yet implemented

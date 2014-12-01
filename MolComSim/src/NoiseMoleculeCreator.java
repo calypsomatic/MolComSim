@@ -22,8 +22,8 @@ public class NoiseMoleculeCreator extends MoleculeCreator{
 		double z = Math.random()*simulation.getSimParams().getMediumWidth();
 		for (MoleculeParams nmp : molParams){
 			Position randomPos = new Position(x, y, z);
-			NoiseMolecule tempmol = new NoiseMolecule(new NullMovementController(new NullCollisionHandler(), simulation),
-					randomPos, nmp.getRadius(), simulation, nmp.getMoleculeMovementType());
+			NoiseMolecule tempmol = new NoiseMolecule(randomPos, nmp.getRadius(), simulation, nmp.getMoleculeMovementType());
+			new NullMovementController(new NullCollisionHandler(), simulation, tempmol);
 			noiseMolecules.add(tempmol);
 		}
 		//create molecules using noise molecule params with positions randomly distributed throughout the medium (simulation.getMedium().getlength()…)

@@ -119,12 +119,37 @@ public class SimulationParams {
 			else if(line.startsWith("receiverRadius")){
 				receiverRadius = Double.parseDouble(param);				
 			}
+			else if(line.startsWith("transmitterRadius")){
+				transmitterRadius = Double.parseDouble(param);				
+			}
+			else if(line.startsWith("intermediateNodeRadius")){
+				intermediateNodeRadius = Double.parseDouble(param);				
+			}
+			else if(line.startsWith("numMessages")){
+				numMessages = Integer.parseInt(param);				
+			}
+			else if(line.startsWith("numRetransmissions")){
+				numRetransmissions = Integer.parseInt(param);				
+			}
+			else if(line.startsWith("retransmitWaitTime")){
+				retransmitWaitTime = Integer.parseInt(param);				
+			}
+			else if(line.startsWith("useCollisions")){
+				//how are we coding booleans in the params file?				
+			}
+			else if(line.startsWith("useAcknowledgements")){
+				//how are we coding booleans in the params file?				
+			}
 			else if(line.startsWith("velRail")){
 				velRail = Double.parseDouble(param);				
 			}
 			else if(line.startsWith("probDRail")){
 				probDRail = Double.parseDouble(param);				
+			}/*
+			else if(how are we coding an array of transmitter/receiver positions?){
 			}
+			else if(how do we parse microtubule/molecule params?){
+			}*/		
 		}
 		br.close();
 	}
