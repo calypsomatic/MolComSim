@@ -1,5 +1,7 @@
-//package MComSim.MovementController;
-
+/**
+ * Class that determines how a molecule moves to its 
+ * next position and how it deals with collisions
+ */
 
 public abstract class MovementController {
 
@@ -11,8 +13,22 @@ public abstract class MovementController {
 		collisionHandler = collHandle;
 		simulation = sim;
 		molecule = mol;
+		mol.setMovementController(this);
 	}
+	
+	//TODO: Does a movementcontroller need a molecule at all?
+	/*protected MovementController(CollisionHandler collHandle, MolComSim sim) {
+		collisionHandler = collHandle;
+		simulation = sim;
+		molecule = null;
+	}*/
 
+	/**
+	 * 
+	 * @param molecule The molecule trying to move
+	 * @param sim The simulation in which this is taking place
+	 * @return the position the molecule should move to next
+	 */
 	public Position getNextPosition(Molecule molecule, MolComSim sim) {
 		Position nextPosition = decideNextPosition(molecule);
 		return collisionHandler.handlePotentialCollisions(molecule, nextPosition, simulation);

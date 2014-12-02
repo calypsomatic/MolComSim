@@ -1,0 +1,16 @@
+//package MComSim.NullMovementController;
+
+public class NullMovementController extends MovementController{
+
+	
+	public NullMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol) {
+		super(collHandle, sim, mol);
+	}
+	
+	protected Position decideNextPosition(Molecule molecule) {
+		return getMolecule().getPosition();
+	}
+
+
+
+}

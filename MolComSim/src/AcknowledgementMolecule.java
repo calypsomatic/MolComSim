@@ -1,6 +1,6 @@
 /**
- * Acknowledgement Molecule is a type of molecule
- * that is sent out by a Receiver nanomachine
+ * Acknowledgment Molecule is a type of molecule
+ * that is sent out by a Receiver NanoMachine
  */
 
 import java.util.*;
@@ -11,11 +11,16 @@ public class AcknowledgementMolecule extends Molecule{
 	private ArrayList<NanoMachine> destinations;
 	//Where molecule started from
 	private NanoMachine source;
-	//Which message id the molecule is acknowledging
-	private int msgId;
 
 	public AcknowledgementMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
 		super(mc, psn, r, sim, molMvType);
+		source = src;
+		msgId = msgNum; 
+		destinations = sim.getTransmitters();
+	}
+	
+	public AcknowledgementMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(psn, r, sim, molMvType);
 		source = src;
 		msgId = msgNum; 
 		destinations = sim.getTransmitters();

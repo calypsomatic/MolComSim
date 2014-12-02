@@ -3,7 +3,6 @@
  * that is sent out by a transmitter to 
  * communicate a message
  */
-import java.io.*;
 import java.util.*;
 
 public class InformationMolecule extends Molecule{
@@ -12,11 +11,16 @@ public class InformationMolecule extends Molecule{
 	private ArrayList<NanoMachine> destinations;
 	//Where molecule started from
 	private NanoMachine source;
-	//Which message id the molecule is acknowledging
-	private int msgId;
 
 	public InformationMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
 		super(mc, psn, r, sim, molMvType);
+		this.source = src;
+		this.msgId = msgNum; 
+		this.destinations = sim.getReceivers();
+	}
+	
+	public InformationMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(psn, r, sim, molMvType);
 		this.source = src;
 		this.msgId = msgNum; 
 		this.destinations = sim.getReceivers();

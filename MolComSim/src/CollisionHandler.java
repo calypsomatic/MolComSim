@@ -1,4 +1,9 @@
-//package MComSim.CollisionHandler;
+/**
+ * Processes collisions based on what type of molecules
+ * are colliding and the needs of the particular
+ * simulation
+ *
+ */
 
 public abstract class CollisionHandler {
 

@@ -1,0 +1,68 @@
+***********All the lines in this file, starting with * or blank is parsed as comment.**********************
+**********Please don't change the name of the variable anywhere in this file. Just modify the values.********
+ 
+**********Information about Medium******************
+**********mediumDimension* # means, range of our co-ordinate system in * dimension is [-#/2,#/2]************
+**********Please enter below the appropriate value of # in x,y,z direction *********************
+ 
+mediumDimensionX 100
+mediumDimensionY 100
+mediumDimensionZ 100
+ 
+*********Specify the length of simulation for a molecule************
+*********maxSimulationStep # means, the simulation will generate a maximum of # no. of steps for each molecule, unless it reaches its destination**********
+*********maxSimulationTime # means, the simulation will generate no. of steps for each molecule till # nano seconds, unless it reaches its destination**********
+*********if maxSimulationStep<=0 then only maxSimulationTime is considered by the program.******************
+*********Please enter below the appropriate value of maxSimulationStep or maxSimulationTime****************
+ 
+maxSimulationStep 10000
+maxSimulationTime 0
+ 
+********* Specify the positions of positions of sender and receiver.***********
+********* distSendReceiver # means, the distance between sender and receiver is # with co-ordinates of sender & receiver as (-#/2,0,0) and (#/2,0,0) respectively.*****
+********* It goes unsaid that # of distSendReceiver should be bounded by mediumDimensionX*******************
+********* Also in case you want to manually specify the position of sender and receiver, you can do so by setting 'senderPosition' and 'recieverCenter'************
+********* if distSendReciever<=0 then only 'senderPosition' and 'recieverCenter' is considered by the program.********
+********* Also if you want to assign a sender's position and reciever's center then please enter the co-ordinates within the following boundary***************
+********* x-coordinate [-mediumDimensionX/2 , mediumDimensionX/2]
+********* y-coordinate [-mediumDimensionY/2 , mediumDimensionY/2]
+********* z-coordinate [-mediumDimensionZ/2 , mediumDimensionZ/2]
+ 
+distSendReciever 90
+senderPosition (-45,0,0)
+recieverCenter (45,0,0)
+transmitterPosition (-45,0,0)
+receiverPosition (45,0,0)
+ 
+**********The receiver is considered as spherical volume. So please enter a radius of the receiver below.**********
+receiverRadius 5
+transmitterRadius 5
+
+************Information about Messages**************
+numMessages 5
+numRetransmissions 5
+retransmitWaitTime 100
+ 
+*********Information about Molecules******************
+stepLengthX 1
+stepLengthY 1
+stepLengthZ 1
+radiusOfMolecule 0.05
+numMolecules 100
+moleculeType INFO
+moleculeMovementType PASSIVE
+
+ 
+*********Below parameters are for active propagation
+velRail 1
+probDrail 0.01
+useCollisions 0
+useAcknowledgements 0
+ 
+********Information about microtubule cylindrical tracks************
+plusEndCentre (45,0,0)
+minusEndCentre (-45,0,0)
+radiusMicroTubule 1
+
+ 
+OutputFile Off

@@ -28,5 +28,18 @@ public class Position {
 	public double getZ() {
 		return z;
 	}
+	
+	//TODO: Does this method belong here?
+	//Should it also have a molecule passed in?  Does it need the radius, to check for equality?
+	public boolean isOccupied(MolComSim simulation){
+		for(Molecule m : simulation.getMolecules()){
+			 //TODO: Should we implement our own equals for molecule?
+		 	//if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
+		 	if(m.getPosition().getDistance(this)<(m.getRadius())){//+mol.getRadius())){
+		 		return true;
+		 	}
+		 }
+		return false;
+	}
 
 }
