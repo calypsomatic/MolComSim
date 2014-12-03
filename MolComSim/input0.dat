@@ -15,7 +15,7 @@ mediumDimensionZ 100
 *********if maxSimulationStep<=0 then only maxSimulationTime is considered by the program.******************
 *********Please enter below the appropriate value of maxSimulationStep or maxSimulationTime****************
  
-maxSimulationStep 10000
+maxSimulationStep 100000
 maxSimulationTime 0
  
 ********* Specify the positions of positions of sender and receiver.***********
@@ -41,13 +41,13 @@ transmitterRadius 5
 ************Information about Messages**************
 numMessages 5
 numRetransmissions 5
-retransmitWaitTime 100
+retransmitWaitTime 20
  
 *********Information about Molecules******************
 stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
-radiusOfMolecule 0.05
+radiusOfMolecule 1
 numMolecules 100
 moleculeType INFO
 moleculeMovementType PASSIVE

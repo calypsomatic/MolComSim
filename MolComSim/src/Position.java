@@ -35,11 +35,15 @@ public class Position {
 		for(Molecule m : simulation.getMolecules()){
 			 //TODO: Should we implement our own equals for molecule?
 		 	//if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
-		 	if(m.getPosition().getDistance(this)<(m.getRadius())){//+mol.getRadius())){
+		 	if(m.getPosition().getDistance(this) < m.getRadius()) {
 		 		return true;
 		 	}
 		 }
 		return false;
+	}
+	
+	public String toString(){
+		return "(" + x + ", " + y + ", " + z + ")";
 	}
 
 }

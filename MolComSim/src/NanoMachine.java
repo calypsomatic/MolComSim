@@ -102,6 +102,26 @@ public class NanoMachine {
 			tx.receiveMolecule(m);
 		}
 	}
+	
+	/**
+	 * @return the latest message ID sent from the transmitter
+	 *  -1 if this nanomachine is not a transmitter
+	 */
+	public int getTransmitterMessageId(){
+		if (tx != null)
+			return tx.getCurrMsgId();
+		return -1;
+	}
+	
+	/**
+	 * @return the latest message ID received at the receiver
+	 *  -1 if this nanomachine is not a receiver
+	 */
+	public int getReceiverMessageId(){
+		if (rx != null)
+			return rx.getCurrMsgId();
+		return -1;
+	}
 
 	public Position getPosition() {
 		return position;
@@ -115,17 +135,7 @@ public class NanoMachine {
 		return simulation;
 	}
 	
-	public int getTransmitterMessageId(){
-		if (tx != null)
-			return tx.getCurrMsgId();
-		return -1;
-	}
-	
-	public int getReceiverMessageId(){
-		if (rx != null)
-			return rx.getCurrMsgId();
-		return -1;
-	}
+
 	
 
 	/**
@@ -136,7 +146,8 @@ public class NanoMachine {
 	public static class Transmitter {
 
 		private MolComSim simulation;
-		private int currMsgId = 0;
+		// The message ID of the last message sent out
+		private int currMsgId;
 		private int retransmissionsLeft;
 		private MoleculeCreator moleculeCreator;
 		private NanoMachine nanoMachine;
@@ -159,10 +170,12 @@ public class NanoMachine {
 		}
 
 		/**
-		 * Creates molecules if time hasn't run out
+		 * Creates molecules if time has run out and there are
+		 * retransmissions left
 		 */
 		public void nextStep() {
 			if((countdown-- <= 0) && (retransmissionsLeft > 0)) {
+				System.out.println("Resending molecules\n");
 				createMolecules();
 				retransmissionsLeft--;
 			} 
@@ -175,13 +188,21 @@ public class NanoMachine {
 		 * @param m Molecule being received
 		 */
 		public void receiveMolecule(Molecule m) {
-			if(m.getMsgId() == currMsgId)
+			//If an acknowledgement for the last message is received,
+			//that message is completed.  Increment message ID
+			if(m.getMsgId() == currMsgId){
+				System.out.println("Message " + currMsgId + " received\n");
 				simulation.completedMessage(currMsgId++);
-			//Should this instead be if !simulation.isLastMsgCompleted()?
-			if(currMsgId < simulation.getNumMessages()) {
-				createMolecules();
-				retransmissionsLeft =  simulation.getNumRetransmissions();
+			
+				//If there are more messages left to send, create
+				//molecules with the next message ID and reset retransmissions
+				if(currMsgId < simulation.getNumMessages()) {
+					createMolecules();
+					retransmissionsLeft =  simulation.getNumRetransmissions();
+				}
 			}
+			//If message is not complete and we haven't run out of retransmissions,
+			//send out more molecules with same message ID and decrement retransmissions
 			else if (retransmissionsLeft > 0) {
 				createMolecules();
 				retransmissionsLeft--;
@@ -205,6 +226,7 @@ public class NanoMachine {
 	public static class Receiver {
 
 		private MolComSim simulation;
+		//The latest message ID received
 		private int currMsgId;
 		private int retransmissionsLeft;
 		private MoleculeCreator moleculeCreator;
@@ -214,11 +236,13 @@ public class NanoMachine {
 		public Receiver(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 			this.nanoMachine = nm;
 			this.simulation = sim;
+			currMsgId = 0;
+			
+			//Receivers can only create molecules if the simluation is using acknowledgements
 			if(this.simulation.isUsingAcknowledgements())
 			{
 				this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine);
-				currMsgId = 0;
-				retransmissionsLeft =  this.simulation.getNumRetransmissions();
+				retransmissionsLeft = this.simulation.getNumRetransmissions();
 			}
 		}
 
@@ -232,7 +256,7 @@ public class NanoMachine {
 		
 		/**
 		 * Creates acknowledgment molecules if needed by
-		 * this simulation and time hasn't run out
+		 * this simulation and time has run out
 		 */
 		public void nextStep() {
 			if(simulation.isUsingAcknowledgements() && 
@@ -249,16 +273,23 @@ public class NanoMachine {
 		 * @param m Molecule being received
 		 */
 		public void receiveMolecule(Molecule m) {
+			//If this message is the next one, increment latest received id
 			if(m.getMsgId() == currMsgId + 1){
-				currMsgId++;		
+				currMsgId++;
+				System.out.println("Message " + currMsgId + " received\n");
+				
+				//Send out acknowledgement molecules if simulation calls for it
 				if(simulation.isUsingAcknowledgements()) {
+					System.out.println("Sending acknowledgement\n");
 					createMolecules();
 					retransmissionsLeft =  simulation.getNumRetransmissions();
 				} 
+				//Otherwise mark message as completed
 				else {
 					simulation.completedMessage(currMsgId);
 				}
 			}
+			//If this is not the message we're waiting for, resend last acknowledgement
 			else if (simulation.isUsingAcknowledgements() && (retransmissionsLeft > 0)) {
 				createMolecules();
 				retransmissionsLeft--;

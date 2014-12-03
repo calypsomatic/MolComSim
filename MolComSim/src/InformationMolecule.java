@@ -11,13 +11,6 @@ public class InformationMolecule extends Molecule{
 	private ArrayList<NanoMachine> destinations;
 	//Where molecule started from
 	private NanoMachine source;
-
-	public InformationMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
-		super(mc, psn, r, sim, molMvType);
-		this.source = src;
-		this.msgId = msgNum; 
-		this.destinations = sim.getReceivers();
-	}
 	
 	public InformationMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
 		super(psn, r, sim, molMvType);
@@ -28,6 +21,7 @@ public class InformationMolecule extends Molecule{
 	
 	public void move() {
 		setPosition(getMovementController().getNextPosition(this, getSimulation()));
+		System.out.println("Molecule with id " + msgId + " moving to " + this.position);
 		if(reachedDestination() != null)
 		{
 			reachedDestination().receiveMolecule(this);
@@ -49,12 +43,21 @@ public class InformationMolecule extends Molecule{
 		return null;
 	}
 	
+	//TODO: Should there be two methods like so or one method taking in Object?
 	/** @param dest A Nanomachine this molecule may have reached
 	 *  @return true if the molecule is close enough to this nanomachine,
 	 *  	else false
 	 */
 	private boolean haveOverlap(NanoMachine dest) {
 		return getPosition().getDistance(dest.getPosition()) < getRadius() + dest.getRadius();
+	}
+	
+	/** @param other another molecule that may be nearby
+	 *  @return true if the molecule is bumping into the other molecule,
+	 *  	else false
+	 */
+	private boolean haveOverlap(Molecule other) {
+		return getPosition().getDistance(other.getPosition()) < getRadius() + other.getRadius();
 	}
 
 }

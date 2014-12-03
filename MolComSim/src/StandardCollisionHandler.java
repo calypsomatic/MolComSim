@@ -19,13 +19,16 @@ public class StandardCollisionHandler extends CollisionHandler{
 		/*Legacy code,
 		 *TODO: make isOccupied a method belonging to Position
 		 *or maybe MolComSim,
-		 *improve efficiency
-		 *if(!nextPosition.isOccupied(simulation))	
-		 *	return nextPosition;
-		 *else
-		 *	return mol.getPosition() 
-		 */
-		 for(Molecule m : simulation.getMolecules()){
+		 *improve efficiency*/
+		 if(!nextPosition.isOccupied(simulation)){
+			System.out.println("Molecule with id " + mol.getMsgId() + " cannot move to " +
+					nextPosition + ", it is already occupied\n");
+		 	return nextPosition;
+		 }
+		 else
+		 	return mol.getPosition();
+		 
+		 /*for(Molecule m : simulation.getMolecules()){
 			 //TODO: Should we implement our own equals for molecule?
 		 	if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
 		 		if(m.getPosition().getDistance(nextPosition)<(m.getRadius()+mol.getRadius())){
@@ -33,7 +36,7 @@ public class StandardCollisionHandler extends CollisionHandler{
 		 		}
 		 	}
 		 }
-		 return nextPosition;
+		 return nextPosition;*/
 	}
 
 }

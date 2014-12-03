@@ -11,11 +11,6 @@ public class DiffusiveRandomMovementController extends MovementController{
 		super(collHandle, sim, mol);
 	}
 	
-	//TODO: Do we need a molecule at all?
-	/*public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim) {
-		super(collHandle, sim);
-	}*/
-	
 	/** Randomly selects where to move molecule based on simulation step length parameters
 	 *  @param molecule The molecule to move
 	 *  @return the position to move to
@@ -94,7 +89,12 @@ public class DiffusiveRandomMovementController extends MovementController{
 					}
 				}
 			}
+		if (nextPosition.getX() <= getSimulation().getMedium().getHeight()
+				&& nextPosition.getY() <= getSimulation().getMedium().getLength()
+				&& nextPosition.getZ() <= getSimulation().getMedium().getWidth())
 			return nextPosition;
+		else
+			return currentPosition;
 	}
 
 }

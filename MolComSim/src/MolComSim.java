@@ -1,3 +1,7 @@
+/**
+ * The driver class for setting up and running a simulation
+ * of communication between molecular nanomachines
+ */
 
 import java.io.*;
 import java.util.*;
@@ -87,7 +91,6 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
-			System.out.println("on step " + simStep);
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
@@ -97,24 +100,13 @@ public class MolComSim {
 		}
 		endSim();
 	}
-
-	public int getSimStep() {
-		return simStep;
-	}
-
-	public boolean isLastMsgCompleted() {
-		return lastMsgCompleted;
-	}
 	
-	public int getNumMessages(){
-		return simParams.getNumMessages();
-	}
-
 	/** Creates the medium in which the simulation takes place
 	 *  and places noise molecules inside it
 	 * 
 	 */
 	private void createMedium() {
+		System.out.println("Creating medium...\n");
 		//get Medium params, NoiseMolecule params from simParams
 		double medLength = simParams.getMediumLength();
 		double medHeight = simParams.getMediumHeight();
@@ -124,19 +116,21 @@ public class MolComSim {
 		medium.createMolecules();
 	}
 	
-
+	//TODO: Implement intermediate nodes that are both transmitters
+	// and receivers for multi-hop communication 
 	/** Creates all nanomachines needed for the simulation
 	 *  Each nanomachine creates its own information or
 	 *  acknowledgment molecules
 	 * 
 	 */
 	private void createNanoMachines() {
-		//TODO: Implement intermediate nodes that are both transmitters
-		// and receivers for multi-hop communication 
+		System.out.println("Creating nanomachines...\n");
+		//Get Nanomachine parameters from simParams
 		double transRadius = simParams.getTransmitterRadius();
 		double recRadius = simParams.getReceiverRadius();
 		ArrayList<MoleculeParams> ackParams = simParams.getAcknowledgmentMoleculeParams();
 		ArrayList<MoleculeParams> infoParams = simParams.getInformationMoleculeParams();
+		
 		for (Position p : simParams.getTransmitterPositions()){
 			NanoMachine nm = NanoMachine.createTransmitter(p, transRadius, infoParams, this);
 			nm.createInfoMolecules();
@@ -144,13 +138,16 @@ public class MolComSim {
 		}
 		for (Position p : simParams.getReceiverPositions()){
 			NanoMachine nm = NanoMachine.createReceiver(p, recRadius, ackParams, this);
-			transmitters.add(nm);
-			
+			transmitters.add(nm);			
 		}
 	}
 
+	/**
+	 * Creates microtubules specified in parameters for simulation
+	 */
 	private void createMicrotubules() {
-		//		get microtubule params from simParams
+		System.out.println("Creating microtubules...\n");
+		//Get microtubule params from simParams
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
 			Position end1 = mtps.getMinusEndPoint();
 			Position end2 = mtps.getPlusEndPoint();
@@ -161,8 +158,10 @@ public class MolComSim {
 		}
 	}
 
+	//TODO: What needs to be done here?
 	//any cleanup tasks, including printing simulation results to monitor or file.
 	private void endSim() {
+		System.out.println("Simulation over\n");
 		//throw new UnsupportedOperationException("The method is not implemented yet.");
 	}
 
@@ -176,9 +175,22 @@ public class MolComSim {
 
 	public void completedMessage(int msgNum) {
 		//TODO: possibly print results to file and/or monitor
+		System.out.println("Message " + msgNum + "completed\n");
 		if(msgNum >= numMessages - 1){
 			lastMsgCompleted = true;
 		}
+	}
+
+	public int getSimStep() {
+		return simStep;
+	}
+
+	public boolean isLastMsgCompleted() {
+		return lastMsgCompleted;
+	}
+	
+	public int getNumMessages(){
+		return simParams.getNumMessages();
 	}
 
 	public int getMessagesCompleted() {
@@ -218,7 +230,6 @@ public class MolComSim {
 	}
 
 	public int getNumRetransmissions() {
-		// Is this the correct number?
 		return simParams.getNumRetransmissions();
 	}
 	

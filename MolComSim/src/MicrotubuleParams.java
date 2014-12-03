@@ -1,11 +1,12 @@
 /**
  * Stores the positions of the endpoints
- * for a microtubule
+ * and the radius of a microtubule
  *
  */
 
 public class MicrotubuleParams {
 
+	//TODO: Do these need better names?
 	Position plusEndPoint;
 	Position minusEndPoint;
 	double radius;
