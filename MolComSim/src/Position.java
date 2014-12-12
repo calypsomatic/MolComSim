@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 //package MComSim.Position;
 
 public class Position {
@@ -12,6 +14,16 @@ public class Position {
 		this.z = z0;
 	}
 	
+	public Position(Scanner readParams) {
+		readParams.useDelimiter("[,()\\s]+");
+		x = readParams.nextDouble();
+		y = readParams.nextDouble();
+		z = readParams.nextDouble();
+		readParams.useDelimiter("[\\s]+");
+		// read closing parens, throw it away.
+		readParams.next();
+	}
+
 	public double getDistance(Position other) {
 		return Math.sqrt(Math.pow(x-other.getX(), 2) + Math.pow(y-other.getY(),2) 
 				+ Math.pow(z-other.getZ(),2));

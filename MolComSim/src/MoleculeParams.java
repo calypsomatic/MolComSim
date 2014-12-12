@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /** Stores the parameters needed
  * to create a particular type of molecule
  *
@@ -17,6 +19,17 @@ public class MoleculeParams {
 		this.radius = r;
 	}
 
+	public MoleculeParams(Scanner readParams) {
+		numMolecules = readParams.nextInt();
+		radius = readParams.nextDouble();
+		moleculeType = MoleculeType.getMoleculeType(readParams.next());
+		if(readParams.hasNext()) {
+			moleculeMovementType = MoleculeMovementType.getMovementType(readParams.next());
+		} else { // movement type not specified, use default
+			moleculeMovementType = SimulationParams.getMovementDefault(moleculeType);
+		}
+	}
+
 	public double getRadius() {
 		return radius;
 	}
@@ -32,5 +45,6 @@ public class MoleculeParams {
 	public MoleculeMovementType getMoleculeMovementType() {
 		return moleculeMovementType;
 	}
+	
 
 }

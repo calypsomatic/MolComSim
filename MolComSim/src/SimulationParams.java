@@ -9,19 +9,19 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class SimulationParams {
 
-	private String paramsFileName;
+public class SimulationParams {
+	private String paramsFileName = "input0.dat";
 	private double mediumLength;
 	private double mediumWidth;
 	private double mediumHeight;
-	private ArrayList<Position> transmitterPositions;
+	private ArrayList<Position> transmitterPositions = new ArrayList<Position>();
 	private double transmitterRadius;
-	private ArrayList<Position> receiverPositions;
+	private ArrayList<Position> receiverPositions = new ArrayList<Position>();
 	private double receiverRadius;
 	private ArrayList<Position> intermediateNodePositions;
 	private double intermediateNodeRadius;
-	private ArrayList<MicrotubuleParams> microtubuleParams;
+	private ArrayList<MicrotubuleParams> microtubuleParams = new ArrayList<MicrotubuleParams>();
 	//private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
 	private int maxNumSteps;
@@ -29,17 +29,22 @@ public class SimulationParams {
 	private int retransmitWaitTime;
 	private boolean useCollisions;
 	private boolean useAcknowledgements;
-	private ArrayList<MoleculeParams> moleculeParams;
+	private ArrayList<MoleculeParams> moleculeParams = new ArrayList<MoleculeParams>();
 	private double molRandMoveX;
 	private double molRandMoveY;
 	private double molRandMoveZ;
 	private double velRail;
 	private double probDRail;
+	private static final int ARQ_CODE_LENGTH = 2;
+	// movement defaults to be used if movement type not specified in the params file.
+	private static HashMap<MoleculeType, MoleculeMovementType> movementDefaults = 
+			new HashMap<MoleculeType, MoleculeMovementType>(); 
 	
-	private HashMap<String, Object> allParams;
+	// Try this approach later if time.
+	// private HashMap<String, Object> allParams = new HashMap<String, Object>();
 
 	public SimulationParams(String[] args) {
-		allParams = new HashMap<String, Object>();
+		setInitialMovementDefaults();
 		parseArgs(args);
 		try {
 			readParamsFile(paramsFileName);
@@ -49,16 +54,25 @@ public class SimulationParams {
 		}
 	}
 
+	public static MoleculeMovementType getMovementDefault(MoleculeType mt) {
+		return movementDefaults.get(mt);
+	}
+	
+	private void setInitialMovementDefaults() {
+		movementDefaults.put(MoleculeType.ACK, MoleculeMovementType.ACTIVE);
+		movementDefaults.put(MoleculeType.INFO, MoleculeMovementType.ACTIVE);
+		movementDefaults.put(MoleculeType.NOISE, MoleculeMovementType.NONE);
+	}
+	
 	private void parseArgs(String[] args) {
 		/*parses command line arguments, stores them in fields
-	args can include type of movement for acknowledgement, information, 
-	and noise molecules (passive = default for info and ack, 
-	stationary = default for noise).  
-	Indicated with: -(tx|rx|no): (active|passive|stationary) 
-	(where no stands for noise)
+	args can include default for type of movement for acknowledgement, information, 
+	and noise molecules (active = starting default for info and ack, 
+	stationary = starting default for noise).    
+	Indicated with: -dmt: (INFO|ACK|NOISE) (ACTIVE|PASSIVE|NONE) 
 	args can include type of Automatic Repeat Request scheme used 
 	(currently none is default, for no acknowledgement molecules, 
-	change to sw11 later).  Indicated with: arq: (sw)(1..n),(1..m) , 
+	change to sw11 later).  Indicated with: -arq: (sw)(1..n),(1..m) , 
 	where sw means stop-and-wait (might implement 
 	other ARQ schemes later, the next integer value represents the 
 	number of information molecules to send (minimum 1), and the next 
@@ -66,9 +80,41 @@ public class SimulationParams {
 	args can include input file location/name (default: params.dat).  
 	Indicated with: pfile:<string>.  
 	paramsFile must be set up in parseArgs, but not opened for reading.*/
-		//throw new UnsupportedOperationException("The method is not implemented yet.");
-		if (args.length == 0){
-			paramsFileName = "input0.dat";
+		int numInfoMols = 0;
+		int numAckMols = 0;
+		
+		for(int i = 0; i < args.length; i++) {
+			if(args[i].equals("-pfile:")) {
+				paramsFileName = args[++i];
+			} else if(args[i].equals("-arq:")) {
+				int commaIndex = args[i+1].indexOf(',');
+				if(commaIndex != -1) {
+					numInfoMols = Integer.parseInt(args[i+1].substring(ARQ_CODE_LENGTH, commaIndex));
+					numAckMols = Integer.parseInt(args[i+1].substring(commaIndex + 1, args[i+1].length()));
+					if(numAckMols > 0) {
+						useAcknowledgements = true;
+					}
+					i++;
+				}
+			} else if(args[i].equals("-dmt:")) {
+				MoleculeType mt = MoleculeType.getMoleculeType(args[++i]);
+				MoleculeMovementType mmt = MoleculeMovementType.getMovementType(args[++i]);
+				movementDefaults.put(mt, mmt);
+			} else {
+				throw new IllegalArgumentException("Invalid argument: " + args[i] + 
+						" as command line argument.");
+			}
+		}
+		
+		if(numInfoMols > 0) {
+			moleculeParams.add(
+					new MoleculeParams(
+							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), numInfoMols, 1));
+		}
+		if(numAckMols > 0) {
+			moleculeParams.add(
+					new MoleculeParams(
+							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols, 1));			
 		}
 	}
 
@@ -92,19 +138,6 @@ public class SimulationParams {
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(fName));
 		
-		//TODO: fix this, just need to make sure arraylists are initialized
-		transmitterPositions = new ArrayList<Position>();
-		receiverPositions = new ArrayList<Position>();
-		//placeholder for a real way to parse microtubule/molecule params
-		MicrotubuleParams mtp;
-		Position plus = null;
-		Position minus = null;
-		Double mtRadius = null;
-		Integer numMolecules = null;
-		Double mRadius = null;
-		MoleculeType moleculeType = null;
-		MoleculeMovementType moleculeMovementType = null;
-		MoleculeParams mp;
 		while((line = br.readLine())!=null){
 			String param = "";
 			if(!line.equals(""))
@@ -162,80 +195,31 @@ public class SimulationParams {
 			else if(line.startsWith("probDRail")){
 				probDRail = Double.parseDouble(param);				
 			}
-			//TODO: fix this
 			else if(line.startsWith("transmitterPosition")){
-				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
-				double y = Double.parseDouble(param.substring(
-						param.indexOf(",")+1, 
-						param.indexOf(",", param.indexOf(",")+1)));
-				double z = Double.parseDouble(param.substring(
-						param.indexOf(",", param.indexOf(",")+1)+1, 
-						param.length()-1));
-				Position tPos = new Position(x, y, z);
-				transmitterPositions.add(tPos);
+				transmitterPositions.add(
+						new Position(
+								new Scanner(
+										line.substring(line.indexOf(" ")))));
 			}
 			else if(line.startsWith("receiverPosition")){
-				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
-				double y = Double.parseDouble(param.substring(
-						param.indexOf(",")+1, 
-						param.indexOf(",", param.indexOf(",")+1)));
-				double z = Double.parseDouble(param.substring(
-						param.indexOf(",", param.indexOf(",")+1)+1, 
-						param.length()-1));
-				Position rPos = new Position(x, y, z);
-				receiverPositions.add(rPos);
-			}
-			//TODO: fix this
-			//placeholder for a real way to read in molecule params
+				receiverPositions.add(
+						new Position(
+								new Scanner(
+										line.substring(line.indexOf(" ")))));
+			} else if (line.startsWith("moleculeParams")) {
+				moleculeParams.add(
+						new MoleculeParams(
+								new Scanner(
+										line.substring(line.indexOf(" ")))));
 
-			else if (line.startsWith("radiusOfMolecule")){
-				mRadius = Double.parseDouble(param);
-			}
-			else if (line.startsWith("numMolecules")){
-				numMolecules = Integer.parseInt(param);
-			}
-			else if (line.startsWith("moleculeType")){
-				//TODO: fill in other options
-				if (param.equals("INFO"))
-					moleculeType = MoleculeType.INFO;
-			}
-			else if (line.startsWith("moleculeMovementType")){
-				//TODO: fill in other options
-				if (param.equals("PASSIVE"))
-					moleculeMovementType = MoleculeMovementType.PASSIVE;
-			}
-
-			//placeholder for a real way to read in microtubule params
-			else if(line.startsWith("plusEndCentre")){
-				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
-				double y = Double.parseDouble(param.substring(
-						param.indexOf(",")+1, 
-						param.indexOf(",", param.indexOf(",")+1)));
-				double z = Double.parseDouble(param.substring(
-						param.indexOf(",", param.indexOf(",")+1)+1, 
-						param.length()-1));
-				plus = new Position(x, y, z);
-			}
-			else if(line.startsWith("minusEndCentre")){
-				double x = Double.parseDouble(param.substring(1,param.indexOf(",")));
-				double y = Double.parseDouble(param.substring(
-						param.indexOf(",")+1, 
-						param.indexOf(",", param.indexOf(",")+1)));
-				double z = Double.parseDouble(param.substring(
-						param.indexOf(",", param.indexOf(",")+1)+1, 
-						param.length()-1));
-				minus = new Position(x, y, z);
-			}
-			else if(line.startsWith("radiusMicroTubule")){
-				mtRadius = Double.parseDouble(param);				
-			}
+				//placeholder for a real way to read in microtubule params
+			} else if(line.startsWith("microtubuleParams")) {
+				microtubuleParams.add(
+						new MicrotubuleParams(
+								new Scanner(
+										line.substring(line.indexOf(" ")))));
+			} 
 		}
-		mtp = new MicrotubuleParams(plus, minus, mtRadius);
-		mp = new MoleculeParams(moleculeType, moleculeMovementType, numMolecules, mRadius);
-		moleculeParams = new ArrayList<MoleculeParams>();
-		microtubuleParams = new ArrayList<MicrotubuleParams>();
-		moleculeParams.add(mp);
-		microtubuleParams.add(mtp);
 		br.close();
 	}
 

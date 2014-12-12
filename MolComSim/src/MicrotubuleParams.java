@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Stores the positions of the endpoints
  * for a microtubule
@@ -16,6 +18,12 @@ public class MicrotubuleParams {
 		this.radius = radius;
 	}
 	
+	public MicrotubuleParams(Scanner readParams) {
+		plusEndPoint = new Position(readParams);
+		minusEndPoint = new Position(readParams);
+		radius = readParams.nextDouble();
+	}
+
 	public Position getPlusEndPoint(){
 		return this.plusEndPoint;
 	}

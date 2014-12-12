@@ -47,10 +47,7 @@ retransmitWaitTime 100
 stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
-radiusOfMolecule 0.05
-numMolecules 100
-moleculeType INFO
-moleculeMovementType PASSIVE
+moleculeParams 100 0.05 INFO PASSIVE
 
  
 *********Below parameters are for active propagation
@@ -60,9 +57,6 @@ useCollisions 0
 useAcknowledgements 0
  
 ********Information about microtubule cylindrical tracks************
-plusEndCentre (45,0,0)
-minusEndCentre (-45,0,0)
-radiusMicroTubule 1
-
+microtubuleParams (45.0, 0.0, 0.0) (-45.0, 0.0, 0.0) 1.0
  
 OutputFile Off
