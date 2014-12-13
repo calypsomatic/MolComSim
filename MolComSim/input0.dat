@@ -15,7 +15,7 @@ mediumDimensionZ 100
 *********if maxSimulationStep<=0 then only maxSimulationTime is considered by the program.******************
 *********Please enter below the appropriate value of maxSimulationStep or maxSimulationTime****************
  
-maxSimulationStep 10000
+maxSimulationStep 100000
 maxSimulationTime 0
  
 ********* Specify the positions of positions of sender and receiver.***********
@@ -35,19 +35,19 @@ transmitterPosition (-45,0,0)
 receiverPosition (45,0,0)
  
 **********The receiver is considered as spherical volume. So please enter a radius of the receiver below.**********
-receiverRadius 5
-transmitterRadius 5
+receiverRadius 2
+transmitterRadius 2
 
 ************Information about Messages**************
 numMessages 5
 numRetransmissions 5
-retransmitWaitTime 100
+retransmitWaitTime 1000
  
 *********Information about Molecules******************
 stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 100 0.05 INFO PASSIVE
+moleculeParams 10 1.0 INFO PASSIVE
 
  
 *********Below parameters are for active propagation
@@ -59,4 +59,4 @@ useAcknowledgements 0
 ********Information about microtubule cylindrical tracks************
 microtubuleParams (45.0, 0.0, 0.0) (-45.0, 0.0, 0.0) 1.0
  
-OutputFile Off
+outputFile output.dat

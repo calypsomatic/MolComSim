@@ -136,7 +136,7 @@ public class NanoMachine {
 	public static class Transmitter {
 
 		private MolComSim simulation;
-		private int currMsgId = 0;
+		private int currMsgId = 1;
 		private int retransmissionsLeft;
 		private MoleculeCreator moleculeCreator;
 		private NanoMachine nanoMachine;
@@ -146,7 +146,6 @@ public class NanoMachine {
 			this.nanoMachine = nm;
 			this.simulation = sim;
 			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine);
-			this.currMsgId = 0;
 			this.retransmissionsLeft =  this.simulation.getNumRetransmissions();
 		}
 
@@ -162,10 +161,17 @@ public class NanoMachine {
 		 * Creates molecules if time hasn't run out
 		 */
 		public void nextStep() {
-			if((countdown-- <= 0) && (retransmissionsLeft > 0)) {
-				createMolecules();
-				retransmissionsLeft--;
-			} 
+			if(countdown-- <= 0) {
+				if(simulation.isUsingAcknowledgements()) {
+					if(retransmissionsLeft > 0) {
+						createMolecules();
+						retransmissionsLeft--;
+					} 
+				} else {
+					++currMsgId;
+					createMolecules();
+				}
+			}
 		}
 
 		/**
@@ -178,7 +184,8 @@ public class NanoMachine {
 			if(m.getMsgId() == currMsgId)
 				simulation.completedMessage(currMsgId++);
 			//Should this instead be if !simulation.isLastMsgCompleted()?
-			if(currMsgId < simulation.getNumMessages()) {
+			//Yes, I like that better.  Changed it.
+			if(!simulation.isLastMsgCompleted()) {
 				createMolecules();
 				retransmissionsLeft =  simulation.getNumRetransmissions();
 			}

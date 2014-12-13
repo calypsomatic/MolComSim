@@ -4,8 +4,10 @@
  *
  */
 
-public class DiffusiveRandomMovementController extends MovementController{
+import java.util.*;
 
+public class DiffusiveRandomMovementController extends MovementController{
+	private static Random random = new Random();
 	
 	public DiffusiveRandomMovementController(CollisionHandler collHandle, MolComSim sim, Molecule mol) {
 		super(collHandle, sim, mol);
@@ -27,10 +29,14 @@ public class DiffusiveRandomMovementController extends MovementController{
 		double currentX = currentPosition.getX();
 		double currentY = currentPosition.getY();
 		double currentZ = currentPosition.getZ();
-		//TODO: This is not actually random, need to multiply the delta by 0, 1, or -1 randomly
-		double nextX = currentX + getSimulation().getSimParams().getMolRandMoveX();
-		double nextY = currentY + getSimulation().getSimParams().getMolRandMoveY();
-		double nextZ = currentZ + getSimulation().getSimParams().getMolRandMoveZ();
+		// The idea behind the getMolRandMove~ methods are that the molecule moves a random amount in one step
+		// , and that will, for each dimension, be a random amount between -getMolRandMove~ and +getMolRandMove~
+		double maxXDelta = getSimulation().getSimParams().getMolRandMoveX();
+		double maxYDelta = getSimulation().getSimParams().getMolRandMoveY();;
+		double maxZDelta = getSimulation().getSimParams().getMolRandMoveZ();;
+		double nextX = currentX + (2 * random.nextDouble() * maxXDelta) - maxXDelta;
+		double nextY = currentY + (2 * random.nextDouble() * maxYDelta) - maxYDelta;
+		double nextZ = currentZ + (2 * random.nextDouble() * maxZDelta) - maxZDelta;
 		Position nextPosition = new Position(nextX, nextY, nextZ);
 		if (molecule.getMoleculeMovementType() == MoleculeMovementType.ACTIVE){
 			for (Microtubule mt : getSimulation().getMicrotubules()){

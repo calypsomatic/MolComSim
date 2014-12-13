@@ -56,6 +56,7 @@ public abstract class Molecule {
 	}
 	
 	protected void setPosition(Position p) {
+		// System.out.println("Molecule reached position: " + p);
 		this.position = p;
 	}
 

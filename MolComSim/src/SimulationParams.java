@@ -15,6 +15,7 @@ public class SimulationParams {
 	private double mediumLength;
 	private double mediumWidth;
 	private double mediumHeight;
+	private String outputFileName = null;
 	private ArrayList<Position> transmitterPositions = new ArrayList<Position>();
 	private double transmitterRadius;
 	private ArrayList<Position> receiverPositions = new ArrayList<Position>();
@@ -218,11 +219,18 @@ public class SimulationParams {
 						new MicrotubuleParams(
 								new Scanner(
 										line.substring(line.indexOf(" ")))));
-			} 
+			} else if(line.startsWith("outputFile") && !(param.equals("Off"))) {
+				outputFileName = param;
+			}
 		}
 		br.close();
 	}
 
+	public String getOutputFileName() {
+		return outputFileName;
+		
+	}
+	
 	public double getMediumLength() {
 		return mediumLength;
 	}

@@ -30,7 +30,7 @@ public abstract class MovementController {
 	 * @return the position the molecule should move to next
 	 */
 	public Position getNextPosition(Molecule molecule, MolComSim sim) {
-		Position nextPosition = decideNextPosition(molecule);
+		Position nextPosition = simulation.getMedium().getClosestPosition(decideNextPosition(molecule));
 		return collisionHandler.handlePotentialCollisions(molecule, nextPosition, simulation);
 	}
 

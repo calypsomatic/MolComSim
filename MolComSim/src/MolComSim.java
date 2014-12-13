@@ -7,6 +7,7 @@ public class MolComSim {
 	//Parameters for this simulation instance and a reader for it
 	private FileReader paramsFile;
 	private SimulationParams simParams;
+	private FileWriter outputFile = null;
 	
 	//Collections of all the actors in this simulation
 	private ArrayList<Microtubule> microtubules;
@@ -38,7 +39,7 @@ public class MolComSim {
 	 *  @param args Should be a parameter file
 	 * 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		MolComSim molComSim = createInstance();
 		molComSim.run(args);
 	}
@@ -48,10 +49,13 @@ public class MolComSim {
 	 * 
 	 * @param args Should be a parameter file
 	 */
-	private void startSim(String[] args) {
+	private void startSim(String[] args) throws IOException {
 		simStep = 0;
 		lastMsgCompleted = false;
 		simParams = new SimulationParams(args);
+		if(simParams.getOutputFileName() != null) {
+			outputFile = new FileWriter(simParams.getOutputFileName());
+		}
 		//TODO: Where is the appropriate place for these to be initialized?
 		microtubules = new ArrayList<Microtubule>();
 		nanoMachines = new ArrayList<NanoMachine>();
@@ -81,13 +85,13 @@ public class MolComSim {
 	 * 
 	 * @param args Should be a parameter file
 	 */
-	private void run(String[] args) {
+	private void run(String[] args)  throws IOException {
 		startSim(args);
 		//As long as we have not run for too long and have not
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
-			System.out.println("on step " + simStep);
+			// System.out.println("on step " + simStep);
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
@@ -141,11 +145,12 @@ public class MolComSim {
 			NanoMachine nm = NanoMachine.createTransmitter(p, transRadius, infoParams, this);
 			nm.createInfoMolecules();
 			transmitters.add(nm);
+			nanoMachines.add(nm);
 		}
 		for (Position p : simParams.getReceiverPositions()){
 			NanoMachine nm = NanoMachine.createReceiver(p, recRadius, ackParams, this);
-			transmitters.add(nm);
-			
+			receivers.add(nm);
+			nanoMachines.add(nm);			
 		}
 	}
 
@@ -162,8 +167,28 @@ public class MolComSim {
 	}
 
 	//any cleanup tasks, including printing simulation results to monitor or file.
-	private void endSim() {
-		//throw new UnsupportedOperationException("The method is not implemented yet.");
+	private void endSim() throws IOException {
+		String endMessage = "Ending simulation: Last step: " + simStep + "\n";
+		if(messagesCompleted < simParams.getNumMessages()){
+			endMessage += "Total messsages completed: " + messagesCompleted + 
+					" out of " + simParams.getNumMessages() + "\n";
+		} else {
+			endMessage += "All " + simParams.getNumMessages() + " messages completed.\n";
+		}
+		
+		System.out.print(endMessage);
+		if(outputFile != null) {
+			try {
+				outputFile.write(endMessage);
+			} catch (IOException e) {
+				System.out.println("Error: unable to write to file: " + simParams.getOutputFileName());
+				e.printStackTrace();
+			}
+		}
+
+		if(outputFile != null) {
+			outputFile.close();
+		}
 	}
 
 	/** Add molecules to molecules list field
@@ -175,9 +200,20 @@ public class MolComSim {
 	}
 
 	public void completedMessage(int msgNum) {
-		//TODO: possibly print results to file and/or monitor
-		if(msgNum >= numMessages - 1){
+		messagesCompleted = msgNum;
+		String completedMessage = "Completed message: " + msgNum + ", at step: " + simStep + "\n";
+		if(msgNum >= simParams.getNumMessages()){
 			lastMsgCompleted = true;
+			completedMessage += "Last message completed.\n";
+		}
+		System.out.print(completedMessage);
+		if(outputFile != null) {
+			try {
+				outputFile.write(completedMessage);
+			} catch (IOException e) {
+				System.out.println("Error: unable to write to file: " + simParams.getOutputFileName());
+				e.printStackTrace();
+			}
 		}
 	}
 
