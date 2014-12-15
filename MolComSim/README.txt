@@ -30,7 +30,7 @@
 	C) Modify the parameters file as specified in part 2.
 	D) Place the build file (build.xml) in the base directory.
 	E) To run MolComSim From a command prompt, at the base directory, type: 
-		> java MolComSim <param1> <param2> ... <param n>
+		> java -jar MolComSim.jar <param1> <param2> ... <param n>
 		Where the command-line parameters (<param1> etc) are as specified in part 3
 	F) Alternatively, if you have Java installed, and you do not wish to use 
 		command line parameters, you can run MolComSim from a command prompt at the 
