@@ -62,9 +62,10 @@ public class MolComSim {
 		transmitters = new ArrayList<NanoMachine>();
 		receivers = new ArrayList<NanoMachine>();
 		molecules = new ArrayList<Molecule>();
+		createMicrotubules();
 		createMedium();
 		createNanoMachines();
-		createMicrotubules();		
+		//createMicrotubules();		
 		// Note: it is the job of the medium and NanoMachines to create molecules
 	}
 

@@ -47,14 +47,14 @@ public class MoleculeCreator {
 					//TODO: Error management?
 					tempMol = null;
 				}
-				//MovementController mover;
 				CollisionHandler collH;
+				//Look for nearby microtubules if the molecules are ACTIVE
 				if (molMoveType.equals(MoleculeMovementType.ACTIVE)){
 					boolean nearbyMT = false;
 					Microtubule microtubule = null;
 					for (Microtubule mt : simulation.getMicrotubules()){
-						if ((position.getDistance(mt.getMinusEndCenter()) + mt.getRadius() < rad)
-								|| (position.getDistance(mt.getPlusEndCenter()) + mt.getRadius() < rad)){
+						//If a microtubule is found nearby, attach to it
+						if (mt.isNearby(tempMol.getPosition(), tempMol.getRadius())){
 							nearbyMT = true;
 							microtubule = mt;
 							break;
@@ -79,7 +79,6 @@ public class MoleculeCreator {
 				} else {
 					//TODO: error management
 				}
-				//tempMol.setMovementController(mover);
 				newMols.add(tempMol);
 			}
 		}

@@ -14,21 +14,25 @@ public class OnMicrotubuleMovementController extends MovementController{
 		microtubule = tubule;
 	}
 
-	/* UNFINISHED METHOD*/
+	/**
+	 * Determines the next position for a molecule moving along a microtubule
+	 * @param molecule The molecule whose position is being decided
+	 * @return the Position it should go to
+	 */
 	protected Position decideNextPosition(Molecule molecule) {
-		/*decide next position based on microtubule, getMolecule().getPosition() and getSimulation().getSimParams.getVelRail().  Use algorithm similar to current code.
-		 
-	if(molecule gets derailed) // check using getSimulation().getSimParams().getProbDRail() and random number generator, as per current code.
-	{
-		molecule.setMoleculeMovementController(new DiffusiveRandomMovementController(new StandardCollisionHandler(), getSimulation(), getMolecule()));		
-	} 
-	return the next position*/
-		Position nextPosition;
-		Position plusend = microtubule.getPlusEndCenter();
-		Position minusend = microtubule.getMinusEndCenter();
 		Position currentPosition = getMolecule().getPosition();
-		double velocity = getSimulation().getSimParams().getVelRail();
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		Position direction = microtubule.getDirectionVector();
+		Position nextPosition = new Position(currentPosition.getX() + direction.getX(), currentPosition.getY() + direction.getY(), currentPosition.getZ() + direction.getZ());
+		//If the molecule gets derailed, it moves to the same spot, but switches to passive movement off the microtubule
+		if (Math.random() < this.simulation.getSimParams().getProbDRail()){
+			CollisionHandler collh;
+			if (simulation.isUsingCollisions())
+				collh = new StandardCollisionHandler();
+			else
+				collh = new NullCollisionHandler();
+			molecule.setMovementController(new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule()));
+		}
+		return nextPosition;
 	}
 
 }
