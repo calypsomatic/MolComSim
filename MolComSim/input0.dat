@@ -42,26 +42,26 @@ transmitterRadius 2
 
 ************Information about Messages**************
 numMessages 5
-numRetransmissions 5
+numRetransmissions 2
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
-stepLengthX 1
+stepLengthX 5
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 10 1.0 INFO ACTIVE
-moleculeParams 10 1.0 NOISE
+moleculeParams 1 1.0 INFO PASSIVE
+moleculeParams 1 1.0 NOISE
 
  
 *********Below parameters are for active propagation
 velRail 1
-probDRail 0.51
-useCollisions 0
+probDRail 0.1
+useCollisions 1
 useAcknowledgements 0
  
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
-microtubuleParams (-45.0, 0.0, 0.0) (45.0, 0.0, 0.0) 1.0
+microtubuleParams (-46.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1.0
 **microtubuleParams (-45.0, 30.0, 0.0) (-45.0, -30.0, 30.0) 1.0
  
 outputFile output.dat

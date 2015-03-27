@@ -46,6 +46,7 @@ public class Medium {
 	// Checks to see if toCheck is within bounds of medium.
 	// if so, returns toCheck,  otherwise returns whatever closest position 
 	// to toCheck is within the medium.
+	//TODO: Incorporate molecule's radius
 	Position getClosestPosition(Position toCheck) {
 		double x, y, z;
 		if(toCheck.getX() > (length / 2.0)) {

@@ -189,10 +189,10 @@ public class NanoMachine {
 				createMolecules();
 				retransmissionsLeft =  simulation.getNumRetransmissions();
 			}
-			else if (retransmissionsLeft > 0) {
+			/*else if (retransmissionsLeft > 0) {
 				createMolecules();
 				retransmissionsLeft--;
-			}
+			}*/
 		}
 
 		public NanoMachine getNanoMachine() {
