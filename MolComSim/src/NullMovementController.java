@@ -14,7 +14,7 @@ public class NullMovementController extends MovementController{
 		super(collHandle, sim);
 	}*/
 	
-	protected Position decideNextPosition(Molecule molecule) {
+	protected Position decideNextPosition() {
 		return getMolecule().getPosition();
 	}
 

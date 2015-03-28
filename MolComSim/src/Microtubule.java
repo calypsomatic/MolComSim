@@ -7,16 +7,17 @@
 public class Microtubule {
 
 	private double radius;
+	private double length = 0;
 	//Positions for each end of the microtubule
 	//TODO: Might need more descriptive names
-	private Position plusEndCenter;
-	private Position minusEndCenter;
+	private Position startPoint;
+	private Position endPoint;
 	private MolComSim simulation;
 	private Position directionVector;
 	
-	public Microtubule(Position pEndCntr, Position mEndCntr, double r, MolComSim sim) {
-		this.plusEndCenter = pEndCntr;
-		this.minusEndCenter = mEndCntr;
+	public Microtubule(Position start, Position end, double r, MolComSim sim) {
+		startPoint = start;
+		endPoint = end;
 		this.radius = r;
 		this.simulation = sim;
 	}
@@ -25,12 +26,12 @@ public class Microtubule {
 		return radius;
 	}
 
-	public Position getPlusEndCenter() {
-		return plusEndCenter;
+	public Position getStartPoint() {
+		return startPoint;
 	}
 
-	public Position getMinusEndCenter() {
-		return minusEndCenter;
+	public Position getEndPoint() {
+		return endPoint;
 	}
 	
 	public MolComSim getSimulation(){
@@ -42,12 +43,12 @@ public class Microtubule {
 	public Position getDirectionVector(){
 		if (directionVector == null){
 			double vel = simulation.getSimParams().getVelRail();
-			double x1 = minusEndCenter.getX();
-			double y1 = minusEndCenter.getY();
-			double z1 = minusEndCenter.getZ();
-			double x2 = plusEndCenter.getX();
-			double y2 = plusEndCenter.getY();
-			double z2 = plusEndCenter.getZ();
+			double x1 = startPoint.getX();
+			double y1 = startPoint.getY();
+			double z1 = startPoint.getZ();
+			double x2 = endPoint.getX();
+			double y2 = endPoint.getY();
+			double z2 = endPoint.getZ();
 			//The difference between the start and end points for each coordinate,
 			//Defines the direction along the microtubule
 			double delX = (x2 - x1);
@@ -64,33 +65,50 @@ public class Microtubule {
 		return directionVector;
 	}
 	
-	/**
-	 * 
-	 * @param pos The position being tested for nearness to microtubule
-	 * @param radius The radius defining how far away is "near"
-	 * @return True if <position> is with <radius> of the microtubule
-	 */
-	public boolean isNearby(Position pos, double radius){
-		//Distance between the starting end of the microtubule and the position
-		double dist = minusEndCenter.getDistance(pos);
-		//Vector difference between minusEndCenter and position
-		Position diff = new Position(minusEndCenter.getX() - pos.getX(), 
-				minusEndCenter.getY() - pos.getY(),
-				minusEndCenter.getZ() - pos.getZ());
-		//The dot product of the direction vector of the microtubule
-		//and the difference vector from the position to the minusEndPoint
-		double dirDiffDot = dot(getDirectionVector(), diff);
-		//Solving for the intersection of the line from minusEndPoint to plusEndPoint
-		//And a sphere of radius <radius> centered as <pos>
-		double sqterm = Math.sqrt(dirDiffDot*dirDiffDot - dist*dist + radius*radius);
-		//If this value is negative, there is no solution for this intersection
-		if (sqterm < 0)
+	public boolean isNearby(Position pos, double rad){
+		/*
+		 * Considering the microtubule to be a vector A,
+		 * and creating another vector B from the start of the microtubule
+		 * to pos, find the projection of B onto A 
+		 */
+		Position A = new Position(endPoint.getX() - startPoint.getX(),
+				endPoint.getY() - startPoint.getY(),
+				endPoint.getZ() - startPoint.getZ());
+
+		Position B = new Position(pos.getX() - startPoint.getX(),
+				pos.getY() - startPoint.getY(),
+				pos.getZ() - startPoint.getZ());
+		double AdotB = dot(A, B);
+		double MTLength = endPoint.getDistance(startPoint);
+		//if this value is negative, the closest point from pos to the microtubule
+		//is beyond the microtubule's endpoint
+		if (AdotB < 0)
 			return false;
-		//Else, the line and position intersect
-		else
-			return true;	
+		//Find the component of B that is parallel to A
+		if(startPoint.getDistance(pos) == 0.0) 
+			return true;
+		double bpCoeff = AdotB/(MTLength*startPoint.getDistance(pos));
+		Position BParallel = new Position (A.getX() * bpCoeff, A.getY()*bpCoeff, A.getZ()*bpCoeff);
+		//if this length is greater than MTLength, closest point from pos to microtubule
+		//is beyond the microtubule's other endpoint
+		double bpLength = Math.sqrt(BParallel.getX()*BParallel.getX() + BParallel.getY()*BParallel.getY()
+				+ BParallel.getZ()*BParallel.getZ());
+		if (bpLength > MTLength)
+			return false;
+		//Find the perpendicular component of B
+		Position BPerp = new Position(B.getX() - BParallel.getX(), B.getY() - BParallel.getY(),
+				B.getZ() - BParallel.getZ());
+		//Find the magnitute of BPerpendicular
+		double bperpLength = Math.sqrt(BPerp.getX()*BPerp.getX() + BPerp.getY()*BPerp.getY()
+				+ BPerp.getZ()*BPerp.getZ());
+		//If this length is less than molecule's radius + microtubule's radius, they are close enough
+		if (bperpLength <= rad + radius)
+			return true;
+		//Note: might want to check for weird cases where pos is very close to MT ends
+		return false;
 	}
 	
+
 	//Returns the dot product of two position vectors
 	private double dot(Position a, Position b){
 		return a.getX()*b.getX() + a.getY()*b.getY() + a.getZ()*b.getZ();

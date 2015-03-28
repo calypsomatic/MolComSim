@@ -37,8 +37,8 @@ receiverPosition (45,0,0)
 **receiverPosition (-45,-30,30)
  
 **********The receiver is considered as spherical volume. So please enter a radius of the receiver below.**********
-receiverRadius 2
-transmitterRadius 2
+receiverRadius 3
+transmitterRadius 3
 
 ************Information about Messages**************
 numMessages 5
@@ -50,18 +50,20 @@ stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
 moleculeParams 10 1.0 INFO ACTIVE
+moleculeParams 10 1.0 ACK ACTIVE
 moleculeParams 10 1.0 NOISE
 
  
 *********Below parameters are for active propagation
 velRail 1
-probDRail 0.51
+probDRail 0.01
 useCollisions 0
-useAcknowledgements 0
+useAcknowledgements 1
  
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
-microtubuleParams (-45.0, 0.0, 0.0) (45.0, 0.0, 0.0) 1.0
+microtubuleParams (-45.0, 0.0, 0.0) (45.0, 3.0, 0.0) 1.0
+microtubuleParams (45.0, 0.0, 0.0) (-45.0, -3.0, 0.0) 1.0
 **microtubuleParams (-45.0, 30.0, 0.0) (-45.0, -30.0, 30.0) 1.0
  
 outputFile output.dat

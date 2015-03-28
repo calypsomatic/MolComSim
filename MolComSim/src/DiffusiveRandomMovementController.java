@@ -18,9 +18,9 @@ public class DiffusiveRandomMovementController extends MovementController{
 	 *  @return the position to move to
 	 * 
 	 */
-	protected Position decideNextPosition(Molecule molecule) {
+	protected Position decideNextPosition() {
 		//Randomly decide the next position based on current position + some delta.
-		Position currentPosition = molecule.getPosition();
+		Position currentPosition = getMolecule().getPosition();
 		double currentX = currentPosition.getX();
 		double currentY = currentPosition.getY();
 		double currentZ = currentPosition.getZ();
@@ -35,17 +35,27 @@ public class DiffusiveRandomMovementController extends MovementController{
 		Position nextPosition = new Position(nextX, nextY, nextZ);
 		
 		//If the molecule has ACTIVE movement type, it looks for a nearby microtubule to reattach to
-		if (molecule.getMoleculeMovementType() == MoleculeMovementType.ACTIVE){
+		if (getMolecule().getMoleculeMovementType() == MoleculeMovementType.ACTIVE){
 			for (Microtubule mt : getSimulation().getMicrotubules()){
 				//If a microtubule is found nearby, the molecule attaches to it
-				if (mt.isNearby(molecule.getPosition(), molecule.getRadius())){
+				if (mt.isNearby(getMolecule().getPosition(), getMolecule().getRadius())){
+					System.out.println("step = " + getSimulation().getSimStep());
+					if(getMolecule() instanceof AcknowledgementMolecule) {
+						System.out.println("acknowledgement Molecule going from passive to active on microtubule with params: ");
+						System.out.println("start: " + mt.getStartPoint() + " end " + mt.getEndPoint());
+						System.out.println("molecule position " + getMolecule().getPosition());
+					} else {
+						System.out.println("information Molecule going from passive to active on microtubule with params: ");
+						System.out.println("start: " + mt.getStartPoint() + " end " + mt.getEndPoint());						
+						System.out.println("molecule position " + getMolecule().getPosition());
+					}
 					CollisionHandler collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
-					new OnMicrotubuleMovementController(collH, getSimulation(), molecule, mt);
+					new OnMicrotubuleMovementController(collH, getSimulation(), getMolecule(), mt);
 					break;
 				}
 			}
 		}
-				return nextPosition;
-		}
+		return nextPosition;
 	}
+}
 

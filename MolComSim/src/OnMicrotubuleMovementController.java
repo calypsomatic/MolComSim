@@ -19,7 +19,7 @@ public class OnMicrotubuleMovementController extends MovementController{
 	 * @param molecule The molecule whose position is being decided
 	 * @return the Position it should go to
 	 */
-	protected Position decideNextPosition(Molecule molecule) {
+	protected Position decideNextPosition() {
 		Position currentPosition = getMolecule().getPosition();
 		Position direction = microtubule.getDirectionVector();
 		Position nextPosition = new Position(currentPosition.getX() + direction.getX(), currentPosition.getY() + direction.getY(), currentPosition.getZ() + direction.getZ());
@@ -30,7 +30,17 @@ public class OnMicrotubuleMovementController extends MovementController{
 				collh = new StandardCollisionHandler();
 			else
 				collh = new NullCollisionHandler();
-			molecule.setMovementController(new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule()));
+			System.out.println("step = " + getSimulation().getSimStep());
+			if(getMolecule() instanceof AcknowledgementMolecule) {
+				System.out.println("acknowledgement Molecule going from active to passive on microtubule with params: ");
+				System.out.println("start: " + microtubule.getStartPoint() + " end " + microtubule.getEndPoint());
+				System.out.println("molecule position " + getMolecule().getPosition());
+			} else {
+				System.out.println("information Molecule going from active to passive on microtubule with params: ");
+				System.out.println("start: " + microtubule.getStartPoint() + " end " + microtubule.getEndPoint());						
+				System.out.println("molecule position " + getMolecule().getPosition());
+			}
+			new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule());
 		}
 		return nextPosition;
 	}

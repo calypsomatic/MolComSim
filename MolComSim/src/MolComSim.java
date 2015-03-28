@@ -92,12 +92,31 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
+			if(simStep % 1000 == 0) {
+				System.out.println("on step: " + simStep);
+				System.out.println("number of molecules: " + molecules.size());
+			}
 			// System.out.println("on step " + simStep);
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
+			int i = 0;
 			for(Molecule m : molecules){	
+				if(simStep % 1000 == 0) {
+					if(m instanceof AcknowledgementMolecule) {
+						System.out.println("molecule " + i + " is an acknowledgement molecule");
+						System.out.println("at position " + m.getPosition());
+					} else if(m instanceof InformationMolecule) {
+						System.out.println("molecule " + i + " is an information molecule");
+						System.out.println("at position " + m.getPosition());
+					} else if(m instanceof NoiseMolecule) {
+						System.out.println("molecule " + i + " is a noise molecule");						
+						System.out.println("at position " + m.getPosition());
+					}
+
+				}
 				m.move();
+				i++;
 			}
 		}
 		endSim();
@@ -158,11 +177,11 @@ public class MolComSim {
 	private void createMicrotubules() {
 		//		get microtubule params from simParams
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
-			Position end1 = mtps.getMinusEndPoint();
-			Position end2 = mtps.getPlusEndPoint();
+			Position start = mtps.getStartPoint();
+			Position end = mtps.getEndPoint();
 			double radius = mtps.getRadius();
 			
-			Microtubule tempMT = new Microtubule(end1, end2, radius, this);
+			Microtubule tempMT = new Microtubule(start, end, radius, this);
 			microtubules.add(tempMT);
 		}
 	}
