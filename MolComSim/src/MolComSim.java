@@ -27,7 +27,7 @@ public class MolComSim {
 	private int messagesCompleted;
 	private boolean lastMsgCompleted;
 	private int numMessages;
-
+	
 	//This instance of the Molecular Communication Simulation
 	static MolComSim molComSim;
 
@@ -198,6 +198,9 @@ public class MolComSim {
 	 */
 	public void addMolecules(ArrayList<Molecule> mols) {
 		this.molecules.addAll(mols);
+		for (Molecule mol : mols){
+			addObject(mol, mol.getPosition());
+		}
 	}
 
 	public void completedMessage(int msgNum) {
@@ -266,5 +269,18 @@ public class MolComSim {
 	public int getRetransmitWaitTime(){
 		return simParams.getRetransmitWaitTime();
 	}
+	
+	public void addObject(Object obj, Position pos){
+		medium.addObject(obj, pos);
+	}
+	
+	public void moveObject(Object obj, Position oldPos, Position newPos){
+		medium.moveObject(obj, oldPos, newPos);
+	}
+	
+	public boolean isOccupied(Position pos){
+		return medium.isOccupied(pos);
+	}
+
 
 }

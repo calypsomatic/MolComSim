@@ -42,15 +42,15 @@ transmitterRadius 2
 
 ************Information about Messages**************
 numMessages 5
-numRetransmissions 2
+numRetransmissions 5
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
 stepLengthX 5
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 1 1.0 INFO PASSIVE
-moleculeParams 1 1.0 NOISE
+moleculeParams 10000 1.0 INFO PASSIVE
+moleculeParams 10000 1.0 NOISE
 
  
 *********Below parameters are for active propagation
