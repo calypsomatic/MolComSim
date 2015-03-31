@@ -31,7 +31,7 @@ public class StandardCollisionHandler extends CollisionHandler{
 		 		if(m.getPosition().getDistance(nextPosition)<(m.getRadius()+mol.getRadius())){
 		 			return mol.getPosition();
 		 		}
-		 	}
+		 	} 
 		 }
 		 return nextPosition;
 	}

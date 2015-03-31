@@ -62,7 +62,7 @@ public class MolComSim {
 		transmitters = new ArrayList<NanoMachine>();
 		receivers = new ArrayList<NanoMachine>();
 		molecules = new ArrayList<Molecule>();
-		createMicrotubules();
+		createMicrotubules(); 
 		createMedium();
 		createNanoMachines();
 		//createMicrotubules();		
@@ -92,7 +92,6 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
-			// System.out.println("on step " + simStep);
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
@@ -158,11 +157,11 @@ public class MolComSim {
 	private void createMicrotubules() {
 		//		get microtubule params from simParams
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
-			Position end1 = mtps.getMinusEndPoint();
-			Position end2 = mtps.getPlusEndPoint();
+			Position start = mtps.getStartPoint();
+			Position end = mtps.getEndPoint();
 			double radius = mtps.getRadius();
 			
-			Microtubule tempMT = new Microtubule(end1, end2, radius, this);
+			Microtubule tempMT = new Microtubule(start, end, radius, this);
 			microtubules.add(tempMT);
 		}
 	}
@@ -171,7 +170,7 @@ public class MolComSim {
 	private void endSim() throws IOException {
 		String endMessage = "Ending simulation: Last step: " + simStep + "\n";
 		if(messagesCompleted < simParams.getNumMessages()){
-			endMessage += "Total messsages completed: " + messagesCompleted + 
+			endMessage += "Total messages completed: " + messagesCompleted + 
 					" out of " + simParams.getNumMessages() + "\n";
 		} else {
 			endMessage += "All " + simParams.getNumMessages() + " messages completed.\n";

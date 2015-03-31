@@ -22,7 +22,7 @@ public class DiffusiveRandomMovementController extends MovementController{
 		//Randomly decide the next position based on current position + some delta.
 		Position currentPosition = getMolecule().getPosition();
 		double currentX = currentPosition.getX();
-		double currentY = currentPosition.getY();
+		double currentY = currentPosition.getY(); 
 		double currentZ = currentPosition.getZ();
 		// The idea behind the getMolRandMove~ methods are that the molecule moves a random amount in one step
 		// , and that will, for each dimension, be a random amount between -getMolRandMove~ and +getMolRandMove~
@@ -45,7 +45,7 @@ public class DiffusiveRandomMovementController extends MovementController{
 				}
 			}
 		}
-				return nextPosition;
-		}
+		return nextPosition;
 	}
+}
 

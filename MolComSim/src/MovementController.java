@@ -23,7 +23,7 @@ public abstract class MovementController {
 		molecule = null;
 	}*/
 
-	/**
+	/** 
 	 * 
 	 * @param molecule The molecule trying to move
 	 * @param sim The simulation in which this is taking place

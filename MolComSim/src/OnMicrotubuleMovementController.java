@@ -24,13 +24,13 @@ public class OnMicrotubuleMovementController extends MovementController{
 		Position direction = microtubule.getDirectionVector();
 		Position nextPosition = new Position(currentPosition.getX() + direction.getX(), currentPosition.getY() + direction.getY(), currentPosition.getZ() + direction.getZ());
 		//If the molecule gets derailed, it moves to the same spot, but switches to passive movement off the microtubule
-		if (Math.random() > this.simulation.getSimParams().getProbDRail()){
+		if (Math.random() < this.simulation.getSimParams().getProbDRail()){
 			CollisionHandler collh;
 			if (simulation.isUsingCollisions())
 				collh = new StandardCollisionHandler();
 			else
 				collh = new NullCollisionHandler();
-			getMolecule().setMovementController(new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule()));
+			new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule());
 		}
 		return nextPosition;
 	}

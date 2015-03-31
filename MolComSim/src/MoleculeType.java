@@ -15,7 +15,7 @@ public enum MoleculeType {
 			return NOISE;
 		} else {
 			throw new IllegalArgumentException("Invalid argument: " + stringRep + 
-					" to MoleculeType.getMoleculeType");
+					" to MoleculeType.getMoleculeType"); 
 		}	
 	}
 }

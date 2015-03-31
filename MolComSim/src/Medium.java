@@ -24,7 +24,7 @@ public class Medium {
 
 	/** Populate itself with noise molecules*/
 	public void createMolecules() {
-		mCreator.createMolecules();
+		mCreator.createMolecules(); 
 	}
 	
 	public double getLength() {

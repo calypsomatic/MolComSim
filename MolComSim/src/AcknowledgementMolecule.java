@@ -10,7 +10,7 @@ public class AcknowledgementMolecule extends Molecule{
 	//Indicates where molecule is intended to go
 	private ArrayList<NanoMachine> destinations;
 	//Where molecule started from
-	private NanoMachine source;
+	private NanoMachine source; 
 
 	public AcknowledgementMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
 		super(mc, psn, r, sim, molMvType);

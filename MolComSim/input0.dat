@@ -49,19 +49,19 @@ retransmitWaitTime 1000
 stepLengthX 5
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 1 1.0 INFO PASSIVE
+moleculeParams 10 1.0 INFO ACTIVE
 moleculeParams 1 1.0 NOISE
 
  
 *********Below parameters are for active propagation
 velRail 1
-probDRail 0.1
+probDRail 0.01
 useCollisions 1
 useAcknowledgements 0
  
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
-microtubuleParams (-46.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1.0
+microtubuleParams (-45.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1.0
 **microtubuleParams (-45.0, 30.0, 0.0) (-45.0, -30.0, 30.0) 1.0
  
 outputFile output.dat
