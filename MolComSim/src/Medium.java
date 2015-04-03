@@ -26,7 +26,7 @@ public class Medium {
 
 	/** Populate itself with noise molecules*/
 	public void createMolecules() {
-		mCreator.createMolecules();
+		mCreator.createMolecules(); 
 	}
 	
 	public double getLength() {
@@ -89,24 +89,17 @@ public class Medium {
 	}
 	
 	public void moveObject(Object obj, Position oldPos, Position newPos){
-		if (!grid.containsKey(oldPos)){
-			grid.put(oldPos, new ArrayList<Object>());
-		}
-		grid.get(oldPos).remove(obj);
-		if (grid.get(oldPos).isEmpty())
-			grid.remove(oldPos);
+		if (grid.containsKey(oldPos)){
+			grid.get(oldPos).remove(obj);
+			if (grid.get(oldPos).isEmpty())
+				grid.remove(oldPos);
+			}
 		addObject(obj, newPos);
 	}
 	
 	public boolean isOccupied(Position pos){
-		/*if (simulation.getSimStep() % 5 == 0){
-			System.out.println("Position: " + pos);
-		}*/
 		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
 			return false;
-		/*if (simulation.getSimStep() % 5 == 0){
-			System.out.println(grid.get(pos));
-		}*/
 		return true;
 	}
 

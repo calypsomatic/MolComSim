@@ -8,32 +8,37 @@ import java.util.Scanner;
 
 public class MicrotubuleParams {
 
-	Position plusEndPoint;
-	Position minusEndPoint;
+	Position startPoint;
+	Position endPoint;
 	double radius;
 	
-	public MicrotubuleParams(Position plus, Position minus, double radius){
-		this.plusEndPoint = plus;
-		this.minusEndPoint = minus;
+	public MicrotubuleParams(Position plus, Position minus, int radius){
+		this.startPoint = plus;
+		this.endPoint = minus;
+	}
+	
+	public MicrotubuleParams(Position start, Position end, double radius){
+		startPoint = start;
+		endPoint = end;
 		this.radius = radius;
 	}
 	
 	public MicrotubuleParams(Scanner readParams) {
-		plusEndPoint = new Position(readParams);
-		minusEndPoint = new Position(readParams);
-		radius = readParams.nextDouble();
+		startPoint = new Position(readParams);
+		endPoint = new Position(readParams);
+		radius = readParams.nextInt();
 	}
 
-	public Position getPlusEndPoint(){
-		return this.plusEndPoint;
+	public Position getEndPoint(){
+		return endPoint;
 	}
 	
-	public Position getMinusEndPoint(){
-		return this.minusEndPoint;
+	public Position getStartPoint(){
+		return startPoint;
 	}
 	
 	public double getRadius(){
-		return this.radius;
+		return radius;
 	}
 
 }

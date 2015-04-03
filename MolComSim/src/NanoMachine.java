@@ -141,6 +141,7 @@ public class NanoMachine {
 		private MoleculeCreator moleculeCreator;
 		private NanoMachine nanoMachine;
 		private int countdown;
+		private boolean createMoleculesDelayed = false;
 
 		public Transmitter(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 			this.nanoMachine = nm;
@@ -161,11 +162,13 @@ public class NanoMachine {
 		 * Creates molecules if time hasn't run out
 		 */
 		public void nextStep() {
-			if(countdown-- <= 0) {
+			if(createMoleculesDelayed) {
+				createMolecules();
+				createMoleculesDelayed = false;
+			} else if(countdown-- <= 0) {
 				if(simulation.isUsingAcknowledgements()) {
-					if(retransmissionsLeft > 0) {
+					if(retransmissionsLeft-- > 0) {
 						createMolecules();
-						retransmissionsLeft--;
 					} 
 				} else {
 					++currMsgId;
@@ -181,18 +184,15 @@ public class NanoMachine {
 		 * @param m Molecule being received
 		 */
 		public void receiveMolecule(Molecule m) {
-			if(m.getMsgId() == currMsgId)
+			if(m.getMsgId() == currMsgId) {
 				simulation.completedMessage(currMsgId++);
-			//Should this instead be if !simulation.isLastMsgCompleted()?
-			//Yes, I like that better.  Changed it.
-			if(!simulation.isLastMsgCompleted()) {
-				createMolecules();
-				retransmissionsLeft =  simulation.getNumRetransmissions();
-			}
-			/*else if (retransmissionsLeft > 0) {
-				createMolecules();
-				retransmissionsLeft--;
-			}*/
+				if(!simulation.isLastMsgCompleted()) {
+					createMoleculesDelayed = true;  
+					retransmissionsLeft = simulation.getNumRetransmissions();
+				}
+			} else if(retransmissionsLeft-- > 0){
+				createMoleculesDelayed = true;
+			}			
 		}
 
 		public NanoMachine getNanoMachine() {
@@ -217,6 +217,7 @@ public class NanoMachine {
 		private MoleculeCreator moleculeCreator;
 		private NanoMachine nanoMachine;
 		private int countdown;
+		private boolean createMoleculesDelayed = false;
 
 		public Receiver(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 			this.nanoMachine = nm;
@@ -242,10 +243,12 @@ public class NanoMachine {
 		 * this simulation and time hasn't run out
 		 */
 		public void nextStep() {
-			if(simulation.isUsingAcknowledgements() && 
-			((countdown-- <= 0) && (retransmissionsLeft > 0))){
+			if(createMoleculesDelayed) {
 				createMolecules();
-				retransmissionsLeft--;
+				createMoleculesDelayed = false;
+			} else if(simulation.isUsingAcknowledgements() && 
+			((countdown-- <= 0) && (retransmissionsLeft-- > 0))){
+				createMolecules();
 			} 
 		}
 
@@ -259,16 +262,15 @@ public class NanoMachine {
 			if(m.getMsgId() == currMsgId + 1){
 				currMsgId++;		
 				if(simulation.isUsingAcknowledgements()) {
-					createMolecules();
+					createMoleculesDelayed = true;
 					retransmissionsLeft =  simulation.getNumRetransmissions();
 				} 
 				else {
 					simulation.completedMessage(currMsgId);
 				}
 			}
-			else if (simulation.isUsingAcknowledgements() && (retransmissionsLeft > 0)) {
-				createMolecules();
-				retransmissionsLeft--;
+			else if (simulation.isUsingAcknowledgements() && (retransmissionsLeft-- > 0)) {
+				createMoleculesDelayed = true;
 			}
 		}
 

@@ -33,9 +33,7 @@ public class StandardCollisionHandler extends CollisionHandler{
 		 		}
 		 	}
 		 }*/
-		if (simulation.isOccupied(nextPosition)){
-			//if (simulation.getSimStep()%10 == 0)
-			System.out.println("collision");
+		if (simulation.getMedium().isOccupied(nextPosition)){
 			return mol.getPosition();
 		}
 		 simulation.moveObject(mol, mol.getPosition(), nextPosition);

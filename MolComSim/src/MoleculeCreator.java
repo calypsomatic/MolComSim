@@ -70,7 +70,7 @@ public class MoleculeCreator {
 					}
 				}
 				else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
-					collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+					collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
 					new DiffusiveRandomMovementController(collH, simulation, tempMol);
 				}
 				else if (molMoveType.equals(MoleculeMovementType.NONE)){

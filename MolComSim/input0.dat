@@ -29,10 +29,10 @@ maxSimulationTime 0
 ********* z-coordinate [-mediumDimensionZ/2 , mediumDimensionZ/2]
  
 distSendReciever 90
-senderPosition (-45,0,0)
-recieverCenter (45,0,0)
-transmitterPosition (-45,0,0)
-receiverPosition (45,0,0)
+senderPosition (-45.0, 0.0, 0.0)
+recieverCenter (45.0, 0.0, 0.0)
+transmitterPosition (-45.0, 0.0, 0.0)
+receiverPosition (45.0, 0.0, 0.0)
 **transmitterPosition (-45,30,0)
 **receiverPosition (-45,-30,30)
  
@@ -46,11 +46,11 @@ numRetransmissions 5
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
-stepLengthX 5
+stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 10000 1.0 INFO PASSIVE
-moleculeParams 10000 1.0 NOISE
+moleculeParams 10 1 INFO ACTIVE
+moleculeParams 10 1 NOISE
 
  
 *********Below parameters are for active propagation
@@ -61,7 +61,7 @@ useAcknowledgements 0
  
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
-microtubuleParams (-46.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1.0
+microtubuleParams (-46.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1
 **microtubuleParams (-45.0, 30.0, 0.0) (-45.0, -30.0, 30.0) 1.0
  
 outputFile output.dat
