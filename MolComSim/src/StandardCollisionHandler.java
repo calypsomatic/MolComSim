@@ -25,14 +25,18 @@ public class StandardCollisionHandler extends CollisionHandler{
 		 *else
 		 *	return mol.getPosition() 
 		 */
-		 for(Molecule m : simulation.getMolecules()){
+		 /*for(Molecule m : simulation.getMolecules()){
 			 //TODO: Should we implement our own equals for molecule?
 		 	if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
 		 		if(m.getPosition().getDistance(nextPosition)<(m.getRadius()+mol.getRadius())){
 		 			return mol.getPosition();
 		 		}
 		 	}
-		 }
+		 }*/
+		if (simulation.getMedium().isOccupied(nextPosition)){
+			return mol.getPosition();
+		}
+		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
 		 return nextPosition;
 	}
 

@@ -13,6 +13,7 @@ public class NullCollisionHandler extends CollisionHandler{
 	 * @return nextPosition There are no collisions
 	 */
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
+		simulation.moveObject(mol, mol.getPosition(), nextPosition);
 		return nextPosition;
 	}
 

@@ -7,11 +7,15 @@ public class Position {
 	private double x;
 	private double y;
 	private double z;
+	protected static final double THRESHOLD = 1.0;
 
 	public Position(double x0, double y0, double z0) {
-		this.x = x0;
-		this.y = y0;
-		this.z = z0;
+		int tempX = (int) x0;
+		int tempY = (int) y0;
+		int tempZ = (int) z0;
+		this.x = x0 - tempX > 0.5 ? tempX + 1.0 : tempX;
+		this.y = y0 - tempY > 0.5 ? tempY + 1.0 : tempY;
+		this.z = z0 - tempZ > 0.5 ? tempZ + 1.0 : tempZ;
 	}
 	
 	public Position(Scanner readParams) {
@@ -57,5 +61,29 @@ public class Position {
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
+
+	@Override
+	public boolean equals(Object other){
+		if (other instanceof Position){
+			Position nextother = (Position) other;
+			if ((int) x == (int) nextother.getX() && (int) y == (int) nextother.getY()
+				&& (int) z == (int) nextother.getZ())
+				return true;
+		/*if (Math.abs(x - other.getX()) <= THRESHOLD &&
+				Math.abs(y - other.getY()) <= THRESHOLD &&
+				Math.abs(z - other.getZ()) <= THRESHOLD)
+			return true;*/
+		}
+		return false;
+	}
+	
+	 @Override
+	    public int hashCode() {
+	        int hash = 1;
+	        hash = hash * 17 + (int) x;
+	        hash = hash * 31 + (int) y;
+	        hash = hash * 13 + (int) z;
+	        return hash;
+	    }
 
 }
