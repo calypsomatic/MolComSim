@@ -38,10 +38,6 @@ public class StandardCollisionHandler extends CollisionHandler{
 			return mol.getPosition();
 		}
 		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
-=======
-		 	} 
-		 }
->>>>>>> d0a004491afb8546b2a4567a755d87bb68e87a13
 		 return nextPosition;
 	}
 
