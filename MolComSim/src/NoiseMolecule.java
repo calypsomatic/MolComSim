@@ -19,4 +19,4 @@ public class NoiseMolecule extends Molecule{
 		setPosition(getMovementController().getNextPosition(this, getSimulation()));
 	}
 
-}
+} 

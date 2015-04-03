@@ -21,7 +21,7 @@ public class InformationMolecule extends Molecule{
 	
 	public InformationMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
 		super(psn, r, sim, molMvType);
-		this.source = src;
+		this.source = src; 
 		this.msgId = msgNum; 
 		this.destinations = sim.getReceivers();
 	}

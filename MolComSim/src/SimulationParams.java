@@ -34,7 +34,7 @@ public class SimulationParams {
 	private double molRandMoveX;
 	private double molRandMoveY;
 	private double molRandMoveZ;
-	private double velRail;
+	private double velRail; 
 	private double probDRail;
 	private static final int ARQ_CODE_LENGTH = 2;
 	// movement defaults to be used if movement type not specified in the params file.

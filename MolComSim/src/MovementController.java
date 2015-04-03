@@ -16,7 +16,7 @@ public abstract class MovementController {
 		mol.setMovementController(this);
 	}
 
-	/**
+	/** 
 	 * 
 	 * @param molecule The molecule trying to move
 	 * @param sim The simulation in which this is taking place

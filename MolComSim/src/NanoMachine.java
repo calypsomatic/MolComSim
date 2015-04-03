@@ -174,7 +174,7 @@ public class NanoMachine {
 					++currMsgId;
 					createMolecules();
 				}
-			}
+			} 
 		}
 
 		/**

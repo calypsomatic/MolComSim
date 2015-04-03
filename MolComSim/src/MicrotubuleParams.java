@@ -12,11 +12,14 @@ public class MicrotubuleParams {
 	Position endPoint;
 	double radius;
 	
+<<<<<<< HEAD
 	public MicrotubuleParams(Position plus, Position minus, int radius){
 		this.startPoint = plus;
 		this.endPoint = minus;
 	}
 	
+=======
+>>>>>>> d0a004491afb8546b2a4567a755d87bb68e87a13
 	public MicrotubuleParams(Position start, Position end, double radius){
 		startPoint = start;
 		endPoint = end;
@@ -26,7 +29,11 @@ public class MicrotubuleParams {
 	public MicrotubuleParams(Scanner readParams) {
 		startPoint = new Position(readParams);
 		endPoint = new Position(readParams);
+<<<<<<< HEAD
 		radius = readParams.nextInt();
+=======
+		radius = readParams.nextDouble(); 
+>>>>>>> d0a004491afb8546b2a4567a755d87bb68e87a13
 	}
 
 	public Position getEndPoint(){

@@ -62,7 +62,7 @@ public class MolComSim {
 		transmitters = new ArrayList<NanoMachine>();
 		receivers = new ArrayList<NanoMachine>();
 		molecules = new ArrayList<Molecule>();
-		createMicrotubules();
+		createMicrotubules(); 
 		createMedium();
 		createNanoMachines();
 		//createMicrotubules();		
@@ -92,10 +92,13 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
+<<<<<<< HEAD
 			/*if ( simStep % 1000 == 0) {
 		         System.out .println( "on step: " + simStep );
 		         System.out .println( "number of molecules: " + molecules .size());
 		}*/
+=======
+>>>>>>> d0a004491afb8546b2a4567a755d87bb68e87a13
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}

@@ -21,7 +21,7 @@ public class MoleculeParams {
 
 	public MoleculeParams(Scanner readParams) {
 		numMolecules = readParams.nextInt();
-		radius = readParams.nextDouble();
+		radius = readParams.nextDouble(); 
 		moleculeType = MoleculeType.getMoleculeType(readParams.next());
 		if(readParams.hasNext()) {
 			moleculeMovementType = MoleculeMovementType.getMovementType(readParams.next());

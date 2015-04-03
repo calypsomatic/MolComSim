@@ -26,7 +26,7 @@ public class MoleculeCreator {
 	
 	//TODO: How to determine if there are nearby microtubules?
 	//TODO: This entire method is crap.  Make helper methods or use some kind of design pattern
-	public void createMolecules() {
+	public void createMolecules() { 
 		ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
 			MoleculeType molType = mp.getMoleculeType();

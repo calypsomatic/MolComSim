@@ -21,7 +21,7 @@ public abstract class Molecule {
 		this.position = psn;
 		this.radius = r;
 		this.simulation = sim;
-		this.moleculeMovementType = molMvType;
+		this.moleculeMovementType = molMvType; 
 	}
 	
 	protected Molecule(Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {

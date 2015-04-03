@@ -17,4 +17,4 @@ public class NullCollisionHandler extends CollisionHandler{
 		return nextPosition;
 	}
 
-}
+} 
