@@ -26,7 +26,6 @@ public class MicrotubuleParams {
 	public MicrotubuleParams(Scanner readParams) {
 		startPoint = new Position(readParams);
 		endPoint = new Position(readParams);
-		radius = readParams.nextInt();
 		radius = readParams.nextDouble(); 
 	}
 

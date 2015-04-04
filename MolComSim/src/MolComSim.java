@@ -92,16 +92,13 @@ public class MolComSim {
 		//yet finished sending our messages, move the simulation forward
 		for(; (simStep < simParams.getMaxNumSteps()) && (!lastMsgCompleted); simStep++) 
 		{
-			/*if ( simStep % 1000 == 0) {
-		         System.out .println( "on step: " + simStep );
-		         System.out .println( "number of molecules: " + molecules .size());
-		}*/
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
 			for(Molecule m : molecules){	
 				m.move();
 			}
+			collectGarbage();
 		}
 		endSim();
 	}
@@ -283,6 +280,14 @@ public class MolComSim {
 	
 	public boolean isOccupied(Position pos){
 		return medium.isOccupied(pos);
+	}
+	
+	public void collectGarbage(){
+		ArrayList<Object> garbage = medium.getObjectsAtPos(medium.garbageSpot());
+		medium.collectGarbage();
+		for (Object o : garbage){
+			molecules.remove(o);
+		}
 	}
 
 

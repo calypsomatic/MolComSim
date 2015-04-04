@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-//package MComSim.Position;
-
 public class Position {
 
 	private double x;
@@ -9,6 +7,7 @@ public class Position {
 	private double z;
 	protected static final double THRESHOLD = 1.0;
 
+	//Rounds input coordinates to closest integer value
 	public Position(double x0, double y0, double z0) {
 		int tempX = (int) x0;
 		int tempY = (int) y0;
@@ -18,6 +17,8 @@ public class Position {
 		this.z = z0 - tempZ > 0.5 ? tempZ + 1.0 : tempZ;
 	}
 	
+	//Reads the three coordinates of a Position with input Scanner
+	//Assumes written as (x, y, z)
 	public Position(Scanner readParams) {
 		readParams.useDelimiter("[,()\\s]+");
 		x = readParams.nextDouble();
@@ -69,10 +70,6 @@ public class Position {
 			if ((int) x == (int) nextother.getX() && (int) y == (int) nextother.getY()
 				&& (int) z == (int) nextother.getZ())
 				return true;
-		/*if (Math.abs(x - other.getX()) <= THRESHOLD &&
-				Math.abs(y - other.getY()) <= THRESHOLD &&
-				Math.abs(z - other.getZ()) <= THRESHOLD)
-			return true;*/
 		}
 		return false;
 	}

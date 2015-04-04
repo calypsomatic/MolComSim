@@ -29,6 +29,7 @@ public class SimulationParams {
 	private int numRetransmissions;
 	private int retransmitWaitTime;
 	private boolean useCollisions;
+	private boolean decomposing;
 	private boolean useAcknowledgements;
 	private ArrayList<MoleculeParams> moleculeParams = new ArrayList<MoleculeParams>();
 	private double molRandMoveX;
@@ -118,12 +119,13 @@ public class SimulationParams {
 							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols, 1));			
 		}
 	}
+	
+	/* Open params file for reading
+	   Reads params from paramsFile (field)
+	   Each param type is identified by the first string starting a line,
+	   Although its values may extend over multiple lines
+	   Stores each param’s value(s) in a private field. */
 	private void readParamsFile(String fName) throws IOException{
-		/*open params file for reading
-	Reads params from paramsFile (field), each param type is identified by the first string starting a line, although its values may extend over multiple lines (for example, to make it easier to view arrays of things).  Stores each param’s value(s) in a
- 	private field.  Alternatively, we could do this with a hashmap of key, value pairs, where the key is the String representing the name of the parameter and the value is of Object type so it can be anything we want.  Not sure which is the better way
- 	to go.  
-	close param file for reading*/
 		
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(fName));
@@ -172,11 +174,12 @@ public class SimulationParams {
 				retransmitWaitTime = Integer.parseInt(param);				
 			}
 			else if(line.startsWith("useCollisions")){
-				//how are we coding booleans in the params file?
 				useCollisions = (Integer.parseInt(param) == 1) ? true : false;
 			}
+			else if(line.startsWith("decomposing")){
+				decomposing = (Integer.parseInt(param) == 1) ? true : false;
+			}
 			else if(line.startsWith("useAcknowledgements")){
-				//how are we coding booleans in the params file?
 				useAcknowledgements = (Integer.parseInt(param) == 1) ? true : false;
 			}
 			else if(line.startsWith("velRail")){
@@ -305,6 +308,10 @@ public class SimulationParams {
 
 	public boolean isUsingCollisions() {
 		return useCollisions;
+	}
+	
+	public boolean isDecomposing() {
+		return decomposing;
 	}
 
 	public boolean isUsingAcknowledgements() {
