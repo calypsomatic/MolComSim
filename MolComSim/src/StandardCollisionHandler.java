@@ -4,7 +4,11 @@
  * collision is detected
  */
 
-public class StandardCollisionHandler extends CollisionHandler{
+public class StandardCollisionHandler extends CollisionDecorator{
+	
+	public StandardCollisionHandler(CollisionHandler cH){
+		super(cH);
+	}
 
 	/** 
 	 * 
@@ -16,11 +20,13 @@ public class StandardCollisionHandler extends CollisionHandler{
 	 *   if moving to nextPosition would result in a collision
 	 */
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
-		if (simulation.getMedium().isOccupied(nextPosition)){
+		Position nextPos = collH.handlePotentialCollisions(mol, nextPosition, simulation);
+		if (simulation.getMedium().isOccupied(nextPos)){
+			//System.out.println("standard collision");
 			return mol.getPosition();
 		}
-		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
-		 return nextPosition;
+		 simulation.moveObject(mol, mol.getPosition(), nextPos);
+		 return nextPos;
 	}
 
 }

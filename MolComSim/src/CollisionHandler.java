@@ -5,7 +5,7 @@
  *
  */
 
-public abstract class CollisionHandler {
+public interface CollisionHandler {
 
 	public abstract Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation);
 

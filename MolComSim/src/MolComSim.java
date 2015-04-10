@@ -266,6 +266,10 @@ public class MolComSim {
 		return simParams.isUsingCollisions();
 	}
 	
+	public boolean decomposing(){
+		return simParams.isDecomposing();
+	}
+	
 	public int getRetransmitWaitTime(){
 		return simParams.getRetransmitWaitTime();
 	}

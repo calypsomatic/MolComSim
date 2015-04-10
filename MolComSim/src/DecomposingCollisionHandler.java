@@ -3,11 +3,16 @@
  */
 import java.util.ArrayList;
 
-public class DecomposingCollisionHandler extends CollisionHandler{
+public class DecomposingCollisionHandler extends CollisionDecorator{
+	
+	public DecomposingCollisionHandler(CollisionHandler cH){
+		super(cH);
+	}
 
 	//TODO: Add possibility of microtubule as well
 	//TODO: Put in params or whatever of when/how to actually use this collision
-	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
+	public Position handlePotentialCollisions(Molecule mol, Position nextPos, MolComSim simulation) {
+		Position nextPosition = collH.handlePotentialCollisions(mol, nextPos, simulation);
 		if (simulation.getMedium().isOccupied(nextPosition)){
 			ArrayList<Object> alreadyThere = simulation.getMedium().getObjectsAtPos(nextPosition);
 			if (mol instanceof InformationMolecule){

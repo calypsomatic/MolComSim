@@ -36,9 +36,11 @@ public class MoleculeCreator {
 				Molecule tempMol;
 				if (molType.equals(MoleculeType.ACK)){
 					tempMol = new AcknowledgementMolecule(position, rad, simulation, source, source.getReceiverMessageId(),molMoveType);
+					//System.out.println("adding ack " +  source.getReceiverMessageId() + " at " + position);
 				}
 				else if (molType.equals(MoleculeType.INFO)){
 					tempMol = new InformationMolecule(position, rad, simulation, source, source.getTransmitterMessageId(), molMoveType);
+					//System.out.println("adding info " +  source.getTransmitterMessageId() + " at " + position);
 				}
 				else if (molType.equals(MoleculeType.NOISE)){
 					tempMol = new NoiseMolecule(position, rad, simulation, molMoveType);
@@ -61,20 +63,29 @@ public class MoleculeCreator {
 						}
 					}
 					if (nearbyMT){
-						collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+						//collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+						collH = simulation.isUsingCollisions() ? 
+								(simulation.decomposing() ? new OnTubuleCollisionHandler(new DecomposingCollisionHandler(new SimpleCollisionHandler())) :
+									new OnTubuleCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 						new OnMicrotubuleMovementController(collH, simulation, tempMol, microtubule);		
 					}
 					else{
-						collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+						//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+						collH = simulation.isUsingCollisions() ? 
+								(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
+									new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 						new DiffusiveRandomMovementController(collH, simulation, tempMol);
 					}
 				}
 				else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
-					collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+					//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+					collH = simulation.isUsingCollisions() ? 
+							(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
+								new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 					new DiffusiveRandomMovementController(collH, simulation, tempMol);
 				}
 				else if (molMoveType.equals(MoleculeMovementType.NONE)){
-					collH = new NullCollisionHandler();
+					collH = new SimpleCollisionHandler();
 					new NullMovementController(collH, simulation, tempMol);
 				} else {
 					//TODO: error management
