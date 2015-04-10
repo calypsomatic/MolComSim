@@ -102,7 +102,7 @@ public class Microtubule {
 		//Note: might want to check for weird cases where pos is very close to MT ends
 		return false;
 	}
-	
+
 	//Returns the dot product of two position vectors
 	private int dot(Position a, Position b){
 		return a.getX()*b.getX() + a.getY()*b.getY() + a.getZ()*b.getZ();

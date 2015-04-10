@@ -37,7 +37,11 @@ public class StandardCollisionHandler extends CollisionHandler{
 		if (simulation.getMedium().isOccupied(nextPosition)){
 			return mol.getPosition();
 		}
+<<<<<<< HEAD
 		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
+=======
+		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
+>>>>>>> refs/remotes/origin/master
 		 return nextPosition;
 	}
 

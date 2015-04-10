@@ -2,7 +2,7 @@
  * Handles collisions in the case that molecules decompose over time
  */
 
-public class DecomposingCollisionHandler extends CollisionHandler{
+public class DecomposingCollisionHandler implements CollisionHandler{
 
 	//TODO: Not yet implemented
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {

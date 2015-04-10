@@ -39,7 +39,8 @@ public class DiffusiveRandomMovementController extends MovementController{
 			for (Microtubule mt : getSimulation().getMicrotubules()){
 				//If a microtubule is found nearby, the molecule attaches to it
 				if (mt.isNearby(getMolecule().getPosition())){
-					CollisionHandler collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+					CollisionHandler collH = simulation.isUsingCollisions() ? 
+							new OnTubuleCollisionHandler() : new NullCollisionHandler();
 					new OnMicrotubuleMovementController(collH, getSimulation(), getMolecule(), mt);
 					break;
 				}

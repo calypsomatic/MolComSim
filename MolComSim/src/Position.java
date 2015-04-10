@@ -7,7 +7,6 @@ public class Position {
 	private int x;
 	private int y;
 	private int z;
-
 	public Position(int x0, int y0, int z0) {
 		this.x = x0;
 		this.y = y0;
@@ -70,7 +69,7 @@ public class Position {
 	}
 	
 	 @Override
-	    public int hashCode() {
+	 public int hashCode() {
 	        int hash = 1;
 	        hash = hash * 17 + x;
 	        hash = hash * 31 + y;

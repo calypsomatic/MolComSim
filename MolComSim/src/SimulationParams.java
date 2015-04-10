@@ -115,23 +115,12 @@ public class SimulationParams {
 							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols));			
 		}
 	}
-
-	/** UNFINISHED METHOD*/
 	private void readParamsFile(String fName) throws IOException{
 		/*open params file for reading
 	Reads params from paramsFile (field), each param type is identified by the first string starting a line, although its values may extend over multiple lines (for example, to make it easier to view arrays of things).  Stores each param’s value(s) in a
  	private field.  Alternatively, we could do this with a hashmap of key, value pairs, where the key is the String representing the name of the parameter and the value is of Object type so it can be anything we want.  Not sure which is the better way
  	to go.  
 	close param file for reading*/
-		/*LEGACY CODE*/
-		//TODO: Can this be improved?
-		//TODO: Make sure all parameters are accounted for and line up between file and this method
-		boolean flag = true;
-		
-		/* Something like, while next, if next in allParams, 
-		 * then add the one after that as value for that key in allParams
-		 * Will need a lot of error checking
-		 */
 		
 		String line;
 		BufferedReader br = new BufferedReader(new FileReader(fName));
@@ -280,8 +269,25 @@ public class SimulationParams {
 		return receiverParams;
 	}
 
+<<<<<<< HEAD
 	public ArrayList<IntermediateNodeParam> getIntermediateNodeParams() {
 		return intermediateNodeParams;
+=======
+	public ArrayList<Position> getIntermediateNodePositions() {
+		return intermediateNodePositions;
+	}
+
+	public double getTransmitterRadius() {
+		return transmitterRadius;
+	}
+
+	public double getReceiverRadius() {
+		return receiverRadius;
+	}
+
+	public double getIntermediateNodeRadius() {
+		return intermediateNodeRadius;
+>>>>>>> refs/remotes/origin/master
 	}
 
 	public ArrayList<MicrotubuleParams> getMicrotubuleParams() {
