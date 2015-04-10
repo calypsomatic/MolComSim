@@ -14,12 +14,12 @@ public class OnTubuleCollisionHandler extends CollisionHandler{
 	 *   get knocked off rail
 	 */
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
-		if(!nextPosition.isOccupied(simulation)){
-			return nextPosition;
+		if(simulation.isOccupied(nextPosition)){
+			new DiffusiveRandomMovementController(new StandardCollisionHandler(), simulation, mol);
+			return mol.getPosition();
 		}
 		else {
-			mol.setMovementController(new DiffusiveRandomMovementController(new StandardCollisionHandler(), simulation, mol));
-			return mol.getPosition();
+			return nextPosition;
 		}
 	}
 

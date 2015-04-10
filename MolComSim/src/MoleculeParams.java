@@ -8,30 +8,23 @@ import java.util.Scanner;
 public class MoleculeParams {
 
 	private int numMolecules;
-	private double radius;
 	private MoleculeType moleculeType;
 	private MoleculeMovementType moleculeMovementType;
 
-	public MoleculeParams(MoleculeType mType, MoleculeMovementType mMovementType, int numMols, double r) {
+	public MoleculeParams(MoleculeType mType, MoleculeMovementType mMovementType, int numMols) {
 		this.numMolecules = numMols;
 		this.moleculeMovementType = mMovementType;
 		this.moleculeType = mType;
-		this.radius = r;
 	}
 
 	public MoleculeParams(Scanner readParams) {
 		numMolecules = readParams.nextInt();
-		radius = readParams.nextDouble(); 
 		moleculeType = MoleculeType.getMoleculeType(readParams.next());
 		if(readParams.hasNext()) {
 			moleculeMovementType = MoleculeMovementType.getMovementType(readParams.next());
 		} else { // movement type not specified, use default
 			moleculeMovementType = SimulationParams.getMovementDefault(moleculeType);
 		}
-	}
-
-	public double getRadius() {
-		return radius;
 	}
 
 	public int getNumMolecules() {

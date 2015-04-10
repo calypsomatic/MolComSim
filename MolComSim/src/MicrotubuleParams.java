@@ -10,18 +10,15 @@ public class MicrotubuleParams {
 
 	Position startPoint;
 	Position endPoint;
-	double radius;
 	
-	public MicrotubuleParams(Position start, Position end, double radius){
+	public MicrotubuleParams(Position start, Position end){
 		startPoint = start;
 		endPoint = end;
-		this.radius = radius;
 	}
 	
 	public MicrotubuleParams(Scanner readParams) {
 		startPoint = new Position(readParams);
 		endPoint = new Position(readParams);
-		radius = readParams.nextDouble(); 
 	}
 
 	public Position getEndPoint(){
@@ -32,8 +29,4 @@ public class MicrotubuleParams {
 		return startPoint;
 	}
 	
-	public double getRadius(){
-		return radius;
-	}
-
 }

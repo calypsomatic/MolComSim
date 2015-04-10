@@ -12,16 +12,13 @@ import java.util.*;
 
 public class SimulationParams {
 	private String paramsFileName = "input0.dat";
-	private double mediumLength;
-	private double mediumWidth;
-	private double mediumHeight;
+	private int mediumLength;
+	private int mediumWidth;
+	private int mediumHeight;
 	private String outputFileName = null;
-	private ArrayList<Position> transmitterPositions = new ArrayList<Position>();
-	private double transmitterRadius;
-	private ArrayList<Position> receiverPositions = new ArrayList<Position>();
-	private double receiverRadius;
-	private ArrayList<Position> intermediateNodePositions;
-	private double intermediateNodeRadius;
+	private ArrayList<NanoMachineParam> transmitterParams = new ArrayList<>();
+	private ArrayList<NanoMachineParam> receiverParams = new ArrayList<>();
+	private ArrayList<IntermediateNodeParam> intermediateNodeParams = new ArrayList<>();
 	private ArrayList<MicrotubuleParams> microtubuleParams = new ArrayList<MicrotubuleParams>();
 	//private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
@@ -31,10 +28,10 @@ public class SimulationParams {
 	private boolean useCollisions;
 	private boolean useAcknowledgements;
 	private ArrayList<MoleculeParams> moleculeParams = new ArrayList<MoleculeParams>();
-	private double molRandMoveX;
-	private double molRandMoveY;
-	private double molRandMoveZ;
-	private double velRail; 
+	private int molRandMoveX;
+	private int molRandMoveY;
+	private int molRandMoveZ;
+	private int velRail; 
 	private double probDRail;
 	private static final int ARQ_CODE_LENGTH = 2;
 	// movement defaults to be used if movement type not specified in the params file.
@@ -110,12 +107,12 @@ public class SimulationParams {
 		if(numInfoMols > 0) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), numInfoMols, 1));
+							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), numInfoMols));
 		}
 		if(numAckMols > 0) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols, 1));			
+							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols));			
 		}
 	}
 
@@ -144,34 +141,43 @@ public class SimulationParams {
 			if(!line.equals(""))
 				param = line.substring(line.indexOf(" ")+1).trim();
 			if(line.startsWith("stepLengthX")){
-				molRandMoveX = Double.parseDouble(param);
+				molRandMoveX = Integer.parseInt(param);
 			}
 			else if(line.startsWith("stepLengthY")){
-				molRandMoveY = Double.parseDouble(param);
+				molRandMoveY = Integer.parseInt(param);
 			}
 			else if(line.startsWith("stepLengthZ")){
-				molRandMoveZ = Double.parseDouble(param);
+				molRandMoveZ = Integer.parseInt(param);
 			}
 			else if(line.startsWith("mediumDimensionX")){
-				mediumLength = Double.parseDouble(param);
+				mediumLength = Integer.parseInt(param);
 			}
 			else if(line.startsWith("mediumDimensionY")){
-				mediumWidth = Double.parseDouble(param);				
+				mediumWidth = Integer.parseInt(param);				
 			}
 			else if(line.startsWith("mediumDimensionZ")){
-				mediumHeight = Double.parseDouble(param);
+				mediumHeight = Integer.parseInt(param);
 			}		
 			else if (line.startsWith("maxSimulationStep")){
 				maxNumSteps = Integer.parseInt(param);
 			}
-			else if(line.startsWith("receiverRadius")){
-				receiverRadius = Double.parseDouble(param);				
+			else if(line.startsWith("transmitter")){
+				transmitterParams.add(
+						new NanoMachineParam(
+								new Scanner(
+									line.substring(line.indexOf(" ")))));				
 			}
-			else if(line.startsWith("transmitterRadius")){
-				transmitterRadius = Double.parseDouble(param);				
+			else if(line.startsWith("receiver")){
+				receiverParams.add(
+						new NanoMachineParam(
+								new Scanner(
+									line.substring(line.indexOf(" ")))));				
 			}
-			else if(line.startsWith("intermediateNodeRadius")){
-				intermediateNodeRadius = Double.parseDouble(param);				
+			else if(line.startsWith("intermediateNode")){
+				intermediateNodeParams.add(
+						new IntermediateNodeParam(
+								new Scanner(
+									line.substring(line.indexOf(" ")))));				
 			}
 			else if(line.startsWith("numMessages")){
 				numMessages = Integer.parseInt(param);				
@@ -191,22 +197,10 @@ public class SimulationParams {
 				useAcknowledgements = (Integer.parseInt(param) == 1) ? true : false;
 			}
 			else if(line.startsWith("velRail")){
-				velRail = Double.parseDouble(param);				
+				velRail = Integer.parseInt(param);				
 			}
 			else if(line.startsWith("probDRail")){
 				probDRail = Double.parseDouble(param);				
-			}
-			else if(line.startsWith("transmitterPosition")){
-				transmitterPositions.add(
-						new Position(
-								new Scanner(
-										line.substring(line.indexOf(" ")))));
-			}
-			else if(line.startsWith("receiverPosition")){
-				receiverPositions.add(
-						new Position(
-								new Scanner(
-										line.substring(line.indexOf(" ")))));
 			} else if (line.startsWith("moleculeParams")) {
 				moleculeParams.add(
 						new MoleculeParams(
@@ -231,15 +225,15 @@ public class SimulationParams {
 		
 	}
 	
-	public double getMediumLength() {
+	public int getMediumLength() {
 		return mediumLength;
 	}
 
-	public double getMediumWidth() {
+	public int getMediumWidth() {
 		return mediumWidth;
 	}
 
-	public double getMediumHeight() {
+	public int getMediumHeight() {
 		return mediumHeight;
 	}
 
@@ -278,36 +272,16 @@ public class SimulationParams {
 		return ackMParams;
 	}
 
-	public ArrayList<Position> getTransmitterPositions() {
-		return transmitterPositions;
+	public ArrayList<NanoMachineParam> getTransmitterParams() {
+		return transmitterParams;
 	}
 
-	public ArrayList<Position> getReceiverPositions() {
-		return receiverPositions;
+	public ArrayList<NanoMachineParam> getReceiverParams() {
+		return receiverParams;
 	}
 
-	public ArrayList<Position> getIntermediateNodePositions() {
-		return intermediateNodePositions;
-	}
-
-	/*public ArrayList<Position> getMicrotubulePlusEndPoints() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
-	}
-
-	public ArrayList<Position> getMicrotubuleMinusEndPoints() {
-		throw new UnsupportedOperationException("The method is not implemented yet.");
-	}*/
-
-	public double getTransmitterRadius() {
-		return transmitterRadius;
-	}
-
-	public double getReceiverRadius() {
-		return receiverRadius;
-	}
-
-	public double getIntermediateNodeRadius() {
-		return intermediateNodeRadius;
+	public ArrayList<IntermediateNodeParam> getIntermediateNodeParams() {
+		return intermediateNodeParams;
 	}
 
 	public ArrayList<MicrotubuleParams> getMicrotubuleParams() {
@@ -330,19 +304,19 @@ public class SimulationParams {
 		return useAcknowledgements;
 	}
 
-	public double getMolRandMoveX() {
+	public int getMolRandMoveX() {
 		return molRandMoveX;
 	}
 
-	public double getMolRandMoveY() {
+	public int getMolRandMoveY() {
 		return molRandMoveY;
 	}
 
-	public double getMolRandMoveZ() {
+	public int getMolRandMoveZ() {
 		return molRandMoveZ;
 	}
 
-	public double getVelRail() {
+	public int getVelRail() {
 		return velRail;
 	}
 

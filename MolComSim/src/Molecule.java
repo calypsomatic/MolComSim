@@ -9,25 +9,22 @@
 public abstract class Molecule {
 
 	private Position position;
-	private double radius;
 	private MovementController movementController;
 	private MolComSim simulation;
 	private MoleculeMovementType moleculeMovementType;
 	//Id of the message a molecule carries - null for noise molecules
 	protected Integer msgId;
 
-	protected Molecule(MovementController mc, Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {
+	protected Molecule(MovementController mc, Position psn, MolComSim sim, MoleculeMovementType molMvType) {
 		this.movementController = mc;
 		this.position = psn;
-		this.radius = r;
 		this.simulation = sim;
 		this.moleculeMovementType = molMvType; 
 	}
 	
-	protected Molecule(Position psn, double r, MolComSim sim, MoleculeMovementType molMvType) {
+	protected Molecule(Position psn, MolComSim sim, MoleculeMovementType molMvType) {
 		this.movementController = null;
 		this.position = psn;
-		this.radius = r;
 		this.simulation = sim;
 		this.moleculeMovementType = molMvType;
 	}
@@ -37,10 +34,6 @@ public abstract class Molecule {
 
 	public Position getPosition() {
 		return position;
-	}
-
-	public double getRadius() {
-		return radius;
 	}
 
 	public void setMovementController(MovementController mc) {

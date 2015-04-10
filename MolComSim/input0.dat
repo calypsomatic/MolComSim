@@ -18,50 +18,49 @@ mediumDimensionZ 100
 maxSimulationStep 100000
 maxSimulationTime 0
  
-********* Specify the positions of positions of sender and receiver.***********
-********* distSendReceiver # means, the distance between sender and receiver is # with co-ordinates of sender & receiver as (-#/2,0,0) and (#/2,0,0) respectively.*****
-********* It goes unsaid that # of distSendReceiver should be bounded by mediumDimensionX*******************
-********* Also in case you want to manually specify the position of sender and receiver, you can do so by setting 'senderPosition' and 'recieverCenter'************
-********* if distSendReciever<=0 then only 'senderPosition' and 'recieverCenter' is considered by the program.********
-********* Also if you want to assign a sender's position and reciever's center then please enter the co-ordinates within the following boundary***************
-********* x-coordinate [-mediumDimensionX/2 , mediumDimensionX/2]
-********* y-coordinate [-mediumDimensionY/2 , mediumDimensionY/2]
-********* z-coordinate [-mediumDimensionZ/2 , mediumDimensionZ/2]
- 
-distSendReciever 90
-senderPosition (-45,0,0)
-recieverCenter (45,0,0)
-transmitterPosition (-45,0,0)
-receiverPosition (45,0,0)
-**transmitterPosition (-45,30,0)
-**receiverPosition (-45,-30,30)
- 
-**********The receiver is considered as spherical volume. So please enter a radius of the receiver below.**********
-receiverRadius 2
-transmitterRadius 2
+***** Specify transmitters by: *********************************************************************
+*****  1) center position (x, y, z) *****************************************************************
+*****  2) size/radius (optional, defaults to 1) *****************************************************
+*****  3) molecule release position (x, y, z) (optional, defaults to same position as center) *******
+transmitter (-45, 0, 0) 2 (-45, 0, 0)
+
+***** Specify receivers by: *********************************************************************
+*****  1) center position (x, y, z) *****************************************************************
+*****  2) size/radius (optional, defaults to 1) *****************************************************
+*****  3) molecule release position (x, y, z) (optional, defaults to same position as center) *******
+receiver (45, 0, 0) 2 (45, 0, 0)
+
+***** Specify intermediate nodes by: ********************************************************************************
+*****  1) center position (x, y, z) **********************************************************************************
+*****  2) size/radius (optional, defaults to 1) **********************************************************************
+*****  3) Information molecule release position (x, y, z) (optional, defaults to same position as center) ************
+*****  4) Acknowledgement molecule release position (x, y, z) (optional, defaults to same position as center) ********
+*****  Either both or neither release positions must be specified ****************************************************
+** intermediateNode (0, 0, 0) 3 (0, 1, 0) (0, -1, 0)
 
 ************Information about Messages**************
 numMessages 5
-numRetransmissions 2
+numRetransmissions 5
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
-stepLengthX 5
+stepLengthX 3
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 10 1.0 INFO ACTIVE
-moleculeParams 1 1.0 NOISE
+moleculeParams 10 INFO PASSIVE
+moleculeParams 10 ACK PASSIVE
+moleculeParams 0 NOISE
 
  
 *********Below parameters are for active propagation
-velRail 1
+velRail 2
 probDRail 0.01
 useCollisions 1
 useAcknowledgements 0
  
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
-microtubuleParams (-45.0, 1.0, 0.0) (45.0, 0.0, 0.0) 1.0
-**microtubuleParams (-45.0, 30.0, 0.0) (-45.0, -30.0, 30.0) 1.0
+microtubuleParams (-45, 0, 0) (45, 0, 0)
+**microtubuleParams (-45, 30, 0) (-45, -30, 30)
  
 outputFile output.dat
