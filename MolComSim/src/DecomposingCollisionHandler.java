@@ -14,7 +14,7 @@ public class DecomposingCollisionHandler extends CollisionDecorator{
 	public Position handlePotentialCollisions(Molecule mol, Position nextPos, MolComSim simulation) {
 		Position nextPosition = collH.handlePotentialCollisions(mol, nextPos, simulation);
 		if (simulation.getMedium().isOccupied(nextPosition)){
-			System.out.println("decomposing collision");
+			//System.out.println("decomposing collision");
 			ArrayList<Object> alreadyThere = simulation.getMedium().getObjectsAtPos(nextPosition);
 			if (mol instanceof InformationMolecule){
 				for (Object o : alreadyThere){

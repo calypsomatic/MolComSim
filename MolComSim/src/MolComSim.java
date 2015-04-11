@@ -290,11 +290,8 @@ public class MolComSim {
 		ArrayList<Object> garbage = medium.getObjectsAtPos(medium.garbageSpot());
 		medium.collectGarbage();
 		for (Object o : garbage){
-			System.out.println(o);
 			molecules.remove(o);
 		}
-		if (!garbage.isEmpty())
-			System.out.println(molecules.contains(garbage.get(0)));
 	}
 
 
