@@ -13,7 +13,7 @@ public class IntermediateNodeParam extends NanoMachineParam {
 	
 	public IntermediateNodeParam(Scanner readParams) {
 		super(readParams);
-		infoMolReleasePoint =  super.getMolReleasePoint();
+		infoMolReleasePoint = super.getMolReleasePoint();
 		if(readParams.hasNext()) {
 			ackMolReleasePoint = new Position(readParams);
 		} else {

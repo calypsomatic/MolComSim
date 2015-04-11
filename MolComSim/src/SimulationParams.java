@@ -207,6 +207,20 @@ public class SimulationParams {
 			}
 		}
 		br.close();
+		setMolDefaultsIfNeeded();
+	}
+
+	private void setMolDefaultsIfNeeded() {
+		if(getInformationMoleculeParams().isEmpty()) {
+			moleculeParams.add(
+					new MoleculeParams(
+							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), 1));
+		}
+		if(useAcknowledgements && getInformationMoleculeParams().isEmpty()) {
+			moleculeParams.add(
+					new MoleculeParams(
+							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), 1));
+		}	
 	}
 
 	public String getOutputFileName() {
@@ -269,27 +283,10 @@ public class SimulationParams {
 		return receiverParams;
 	}
 
-<<<<<<< HEAD
 	public ArrayList<IntermediateNodeParam> getIntermediateNodeParams() {
 		return intermediateNodeParams;
-=======
-	public ArrayList<Position> getIntermediateNodePositions() {
-		return intermediateNodePositions;
 	}
-
-	public double getTransmitterRadius() {
-		return transmitterRadius;
-	}
-
-	public double getReceiverRadius() {
-		return receiverRadius;
-	}
-
-	public double getIntermediateNodeRadius() {
-		return intermediateNodeRadius;
->>>>>>> refs/remotes/origin/master
-	}
-
+	
 	public ArrayList<MicrotubuleParams> getMicrotubuleParams() {
 		return microtubuleParams;
 	}

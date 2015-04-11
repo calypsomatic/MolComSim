@@ -3,7 +3,7 @@
  * It gets knocked off the microtubule
  */
 
-public class OnTubuleCollisionHandler extends CollisionHandler{
+public class OnTubuleCollisionHandler implements CollisionHandler{
 
 	/**
 	 * @param mol The molecule trying to move

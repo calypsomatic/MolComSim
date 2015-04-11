@@ -4,7 +4,7 @@
  * collision is detected
  */
 
-public class StandardCollisionHandler extends CollisionHandler{
+public class StandardCollisionHandler implements CollisionHandler{
 
 	/** 
 	 * 
@@ -31,17 +31,14 @@ public class StandardCollisionHandler extends CollisionHandler{
 		 		if(m.getPosition().getDistance(nextPosition)<(m.getRadius()+mol.getRadius())){
 		 			return mol.getPosition();
 		 		}
-<<<<<<< HEAD
-		 	}
+	 		}
 		 }*/
 		if (simulation.getMedium().isOccupied(nextPosition)){
 			return mol.getPosition();
 		}
-<<<<<<< HEAD
+
 		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
-=======
-		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
->>>>>>> refs/remotes/origin/master
+
 		 return nextPosition;
 	}
 
