@@ -26,10 +26,14 @@ public class OnMicrotubuleMovementController extends MovementController{
 		//If the molecule gets derailed, it moves to the same spot, but switches to passive movement off the microtubule
 		if (Math.random() < this.simulation.getSimParams().getProbDRail()){
 			CollisionHandler collh;
-			if (simulation.isUsingCollisions())
-				collh = new StandardCollisionHandler();
+			if (simulation.isUsingCollisions()){
+				if (simulation.decomposing())
+					collh = new DecomposingCollisionHandler(new SimpleCollisionHandler());
+				else
+					collh = new StandardCollisionHandler(new SimpleCollisionHandler());
+			}
 			else
-				collh = new NullCollisionHandler();
+				collh = new SimpleCollisionHandler();
 			new DiffusiveRandomMovementController(collh, getSimulation(), getMolecule());
 		}
 		return nextPosition;

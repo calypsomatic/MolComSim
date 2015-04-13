@@ -306,8 +306,9 @@ public class SimulationParams {
 		return useCollisions;
 	}
 	
+	//Decomposing can only be used if acknowledgements are also being used
 	public boolean isDecomposing() {
-		return decomposing;
+		return decomposing && useAcknowledgements;
 	}
 
 	public boolean isUsingAcknowledgements() {

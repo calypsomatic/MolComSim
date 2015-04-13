@@ -60,20 +60,29 @@ public class MoleculeCreator {
 						}
 					}
 					if (nearbyMT){
-						collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+						//collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+						collH = simulation.isUsingCollisions() ? 
+								(simulation.decomposing() ? new OnTubuleCollisionHandler(new DecomposingCollisionHandler(new SimpleCollisionHandler())) :
+									new OnTubuleCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 						new OnMicrotubuleMovementController(collH, simulation, tempMol, microtubule);		
 					}
 					else{
-						collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+						//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+						collH = simulation.isUsingCollisions() ? 
+								(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
+									new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 						new DiffusiveRandomMovementController(collH, simulation, tempMol);
 					}
 				}
 				else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
-					collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+					//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
+					collH = simulation.isUsingCollisions() ? 
+							(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
+								new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
 					new DiffusiveRandomMovementController(collH, simulation, tempMol);
 				}
 				else if (molMoveType.equals(MoleculeMovementType.NONE)){
-					collH = new NullCollisionHandler();
+					collH = new SimpleCollisionHandler();
 					new NullMovementController(collH, simulation, tempMol);
 				} else {
 					//TODO: error management

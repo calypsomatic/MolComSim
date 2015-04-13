@@ -62,5 +62,5 @@ decomposing 1
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
 microtubuleParams (-45, 0, 0) (45, 0, 0)
 **microtubuleParams (-45, 30, 0) (-45, -30, 30)
- 
+
 outputFile output.dat

@@ -3,7 +3,11 @@
  * It gets knocked off the microtubule
  */
 
-public class OnTubuleCollisionHandler implements CollisionHandler{
+public class OnTubuleCollisionHandler extends CollisionDecorator{
+	
+	public OnTubuleCollisionHandler(CollisionHandler cH){
+		super(cH);
+	}
 
 	/**
 	 * @param mol The molecule trying to move
@@ -13,9 +17,13 @@ public class OnTubuleCollisionHandler implements CollisionHandler{
 	 * @return nextPosition if unoccupied, otherwise stay in place but
 	 *   get knocked off rail
 	 */
-	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
-		if(simulation.isOccupied(nextPosition)){
-			new DiffusiveRandomMovementController(new StandardCollisionHandler(), simulation, mol);
+	public Position handlePotentialCollisions(Molecule mol, Position nextPos, MolComSim simulation) {
+		Position nextPosition = collH.handlePotentialCollisions(mol, nextPos, simulation);
+		if(!simulation.isOccupied(nextPosition)){
+			return nextPosition;
+		}
+		else {
+			new DiffusiveRandomMovementController(new StandardCollisionHandler(new SimpleCollisionHandler()), simulation, mol);
 			return mol.getPosition();
 		}
 		else {

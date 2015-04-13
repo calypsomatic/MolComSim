@@ -103,9 +103,11 @@ public class NanoMachine {
 	 */
 	public void receiveMolecule(Molecule m) {
 		if(m instanceof InformationMolecule && rx != null) {
+			//System.out.println("info msg #: " + m.getMsgId() + " received at " + position);
 			rx.receiveMolecule(m);
 		} 
 		else if(m instanceof AcknowledgementMolecule && tx != null) {
+			//System.out.println("ack msg #: " + m.getMsgId() + " received at " + position);
 			tx.receiveMolecule(m);
 		}
 	}
@@ -180,7 +182,8 @@ public class NanoMachine {
 						createMolecules();
 					} 
 				} else {
-					++currMsgId;
+					if (currMsgId < simulation.getNumMessages())
+						++currMsgId;
 					createMolecules();
 				}
 			} 
@@ -255,6 +258,7 @@ public class NanoMachine {
 		 */
 		public void nextStep() {
 			if(createMoleculesDelayed) {
+				//System.out.println(simulation.getSimStep());
 				createMolecules();
 				createMoleculesDelayed = false;
 			} else if(simulation.isUsingAcknowledgements() && 
