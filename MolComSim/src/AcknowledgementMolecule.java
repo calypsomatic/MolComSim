@@ -12,15 +12,15 @@ public class AcknowledgementMolecule extends Molecule{
 	//Where molecule started from
 	private NanoMachine source; 
 
-	public AcknowledgementMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
-		super(mc, psn, r, sim, molMvType);
+	public AcknowledgementMolecule(MovementController mc, Position psn, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(mc, psn, sim, molMvType);
 		source = src;
 		msgId = msgNum; 
 		destinations = sim.getTransmitters();
 	}
 	
-	public AcknowledgementMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
-		super(psn, r, sim, molMvType);
+	public AcknowledgementMolecule(Position psn, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(psn, sim, molMvType);
 		source = src;
 		msgId = msgNum; 
 		destinations = sim.getTransmitters();
@@ -53,7 +53,7 @@ public class AcknowledgementMolecule extends Molecule{
 	 *  	else false
 	 */
 	private boolean haveOverlap(NanoMachine dest) {
-		return getPosition().getDistance(dest.getPosition()) < getRadius() + dest.getRadius();
+		return getPosition().getDistance(dest.getPosition()) < 2;
 	}
 
 }

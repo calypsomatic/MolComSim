@@ -24,8 +24,10 @@ public class OnTubuleCollisionHandler extends CollisionDecorator{
 		}
 		else {
 			new DiffusiveRandomMovementController(new StandardCollisionHandler(new SimpleCollisionHandler()), simulation, mol);
-			//System.out.println("tubule collision");
 			return mol.getPosition();
+		}
+		else {
+			return nextPosition;
 		}
 	}
 
