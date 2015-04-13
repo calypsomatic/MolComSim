@@ -3,7 +3,7 @@
  * 
  */
 
-public class NullCollisionHandler extends CollisionHandler{
+public class NullCollisionHandler implements CollisionHandler{
 
 	/**
 	 * @param mol The molecule trying to move

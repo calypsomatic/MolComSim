@@ -14,7 +14,7 @@ public class MolComSim {
 	private ArrayList<NanoMachine> nanoMachines;
 	private ArrayList<NanoMachine> transmitters;
 	private ArrayList<NanoMachine> receivers;
-	private ArrayList<Molecule> molecules;
+	private ArrayList<Molecule> molecules; 
 
 	//The medium in which the simulation takes place
 	private Medium medium;
@@ -95,7 +95,9 @@ public class MolComSim {
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
-			for(Molecule m : molecules){	
+			int i = 1;
+			for(Molecule m : molecules){
+				// System.out.print("Moving molecule " + i++ + " ");
 				m.move();
 			}
 			collectGarbage();
@@ -121,9 +123,9 @@ public class MolComSim {
 	 */
 	private void createMedium() {
 		//get Medium params, NoiseMolecule params from simParams
-		double medLength = simParams.getMediumLength();
-		double medHeight = simParams.getMediumHeight();
-		double medWidth = simParams.getMediumWidth();
+		int medLength = simParams.getMediumLength();
+		int medHeight = simParams.getMediumHeight();
+		int medWidth = simParams.getMediumWidth();
 		ArrayList<MoleculeParams> nMParams = simParams.getNoiseMoleculeParams();
 		medium = new Medium(medLength, medHeight, medWidth, nMParams, this);
 		medium.createMolecules();
@@ -136,20 +138,23 @@ public class MolComSim {
 	 * 
 	 */
 	private void createNanoMachines() {
-		//TODO: Implement intermediate nodes that are both transmitters
-		// and receivers for multi-hop communication 
-		double transRadius = simParams.getTransmitterRadius();
-		double recRadius = simParams.getReceiverRadius();
 		ArrayList<MoleculeParams> ackParams = simParams.getAcknowledgmentMoleculeParams();
 		ArrayList<MoleculeParams> infoParams = simParams.getInformationMoleculeParams();
-		for (Position p : simParams.getTransmitterPositions()){
-			NanoMachine nm = NanoMachine.createTransmitter(p, transRadius, infoParams, this);
+		for (NanoMachineParam nmp : simParams.getTransmitterParams()){
+			NanoMachine nm = NanoMachine.createTransmitter(nmp.getCenter(), nmp.getRadius(), nmp.getMolReleasePoint(), infoParams, this);
 			nm.createInfoMolecules();
 			transmitters.add(nm);
 			nanoMachines.add(nm);
 		}
-		for (Position p : simParams.getReceiverPositions()){
-			NanoMachine nm = NanoMachine.createReceiver(p, recRadius, ackParams, this);
+		for (NanoMachineParam nmp : simParams.getReceiverParams()) {
+			NanoMachine nm = NanoMachine.createReceiver(nmp.getCenter(), nmp.getRadius(), nmp.getMolReleasePoint(), ackParams, this);
+			receivers.add(nm);
+			nanoMachines.add(nm);			
+		}
+		for (IntermediateNodeParam inp : simParams.getIntermediateNodeParams()) {
+			NanoMachine nm = NanoMachine.createIntermediateNode(inp.getCenter(), inp.getRadius(), 
+					inp.getInfoMolReleasePoint(), inp.getAckMolReleasePoint(), infoParams, ackParams, this);
+			transmitters.add(nm);
 			receivers.add(nm);
 			nanoMachines.add(nm);			
 		}
@@ -160,9 +165,8 @@ public class MolComSim {
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
 			Position start = mtps.getStartPoint();
 			Position end = mtps.getEndPoint();
-			double radius = mtps.getRadius();
 			
-			Microtubule tempMT = new Microtubule(start, end, radius, this);
+			Microtubule tempMT = new Microtubule(start, end, this);
 			microtubules.add(tempMT);
 		}
 	}

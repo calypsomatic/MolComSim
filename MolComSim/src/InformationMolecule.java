@@ -12,15 +12,15 @@ public class InformationMolecule extends Molecule{
 	//Where molecule started from
 	private NanoMachine source;
 
-	public InformationMolecule(MovementController mc, Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
-		super(mc, psn, r, sim, molMvType);
+	public InformationMolecule(MovementController mc, Position psn, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(mc, psn, sim, molMvType);
 		this.source = src;
 		this.msgId = msgNum; 
 		this.destinations = sim.getReceivers();
 	}
 	
-	public InformationMolecule(Position psn, double r, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
-		super(psn, r, sim, molMvType);
+	public InformationMolecule(Position psn, MolComSim sim, NanoMachine src, int msgNum, MoleculeMovementType molMvType) {
+		super(psn, sim, molMvType);
 		this.source = src; 
 		this.msgId = msgNum; 
 		this.destinations = sim.getReceivers();
@@ -28,9 +28,10 @@ public class InformationMolecule extends Molecule{
 	
 	public void move() {
 		setPosition(getMovementController().getNextPosition(this, getSimulation()));
-		if(reachedDestination() != null)
+		NanoMachine dest = reachedDestination();
+		if(dest != null)
 		{
-			reachedDestination().receiveMolecule(this);
+			dest.receiveMolecule(this);
 		}
 	}
 
@@ -54,7 +55,7 @@ public class InformationMolecule extends Molecule{
 	 *  	else false
 	 */
 	private boolean haveOverlap(NanoMachine dest) {
-		return getPosition().getDistance(dest.getPosition()) < getRadius() + dest.getRadius();
+		return getPosition().getDistance(dest.getPosition()) < 1 + (int)dest.getRadius();
 	}
 
 }

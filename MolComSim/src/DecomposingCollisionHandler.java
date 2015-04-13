@@ -3,7 +3,7 @@
  */
 import java.util.ArrayList;
 
-public class DecomposingCollisionHandler extends CollisionHandler{
+public class DecomposingCollisionHandler implements CollisionHandler{
 
 	//TODO: Add possibility of microtubule as well
 	//TODO: Put in params or whatever of when/how to actually use this collision

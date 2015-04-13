@@ -25,13 +25,14 @@ public class NanoMachine {
 	 * 
 	 * @param position Where the NanoMachine is located
 	 * @param radius The radius of the NanoMachine
+	 * @param molReleasePsn Position inside the transmitter at which point new molecules are released (created) 
 	 * @param mpl The parameters for the molecules the Nanomachine will transmit
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting transmitter-only nanomachine
 	 */
-	public static NanoMachine createTransmitter(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+	public static NanoMachine createTransmitter(Position position, double radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
-		retVal.tx = new Transmitter(retVal, mpl, sim);
+		retVal.tx = new Transmitter(retVal, molReleasePsn, mpl, sim);
 		retVal.rx = null;
 		return retVal;
 	}
@@ -40,13 +41,14 @@ public class NanoMachine {
 	 * 
 	 * @param position Where the NanoMachine is located
 	 * @param radius The radius of the NanoMachine
+	 * @param molReleasePsn Position inside the transmitter at which point new molecules are released (created) 
 	 * @param mpl The parameters for the molecules the Nanomachine will receive
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting receiver-only nanomachine
 	 */
-	public static NanoMachine createReceiver(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+	public static NanoMachine createReceiver(Position position, double radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
-		retVal.rx = new Receiver(retVal, mpl, sim);
+		retVal.rx = new Receiver(retVal, molReleasePsn, mpl, sim);
 		retVal.tx = null;
 		return retVal;
 	}
@@ -55,14 +57,19 @@ public class NanoMachine {
 	 * 
 	 * @param position Where the NanoMachine is located
 	 * @param radius The radius of the NanoMachine
+	 * @param infoMolReleasePsn Position inside the transmitter at which point new info molecules are released (created) 
+	 * @param ackMolReleasePsn Position inside the transmitter at which point new acko molecules are released (created) 
 	 * @param mpl The parameters for the molecules the Nanomachine will transmit and receive
+	 * @param ackParams 
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting transmitter-receiver nanomachine
 	 */
-	public static NanoMachine createIntermediateNode(Position position, double radius, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+	public static NanoMachine createIntermediateNode(Position position, double radius, 
+			Position infoMolReleasePsn, Position ackMolReleasePsn, ArrayList<MoleculeParams> mpl, 
+			ArrayList<MoleculeParams> ackParams, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
-		retVal.rx = new Receiver(retVal, mpl, sim);
-		retVal.tx = new Transmitter(retVal, mpl, sim);
+		retVal.rx = new Receiver(retVal, ackMolReleasePsn, mpl, sim);
+		retVal.tx = new Transmitter(retVal, infoMolReleasePsn, mpl, sim);
 		return retVal;	
 	}
 
@@ -142,11 +149,13 @@ public class NanoMachine {
 		private NanoMachine nanoMachine;
 		private int countdown;
 		private boolean createMoleculesDelayed = false;
+		private Position molReleasePsn;
 
-		public Transmitter(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+		public Transmitter(NanoMachine nm, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+			this.molReleasePsn = molReleasePsn;
 			this.nanoMachine = nm;
 			this.simulation = sim;
-			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine);
+			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine, this.molReleasePsn);
 			this.retransmissionsLeft =  this.simulation.getNumRetransmissions();
 		}
 
@@ -218,13 +227,15 @@ public class NanoMachine {
 		private NanoMachine nanoMachine;
 		private int countdown;
 		private boolean createMoleculesDelayed = false;
+		private Position molReleasePsn;
 
-		public Receiver(NanoMachine nm, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+		public Receiver(NanoMachine nm, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+			this.molReleasePsn = molReleasePsn;
 			this.nanoMachine = nm;
 			this.simulation = sim;
 			if(this.simulation.isUsingAcknowledgements())
 			{
-				this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine);
+				this.moleculeCreator = new MoleculeCreator(mpl, simulation, nanoMachine, molReleasePsn);
 				currMsgId = 0;
 				retransmissionsLeft =  this.simulation.getNumRetransmissions();
 			}

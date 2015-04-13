@@ -4,7 +4,7 @@
  * collision is detected
  */
 
-public class StandardCollisionHandler extends CollisionHandler{
+public class StandardCollisionHandler implements CollisionHandler{
 
 	/** 
 	 * 

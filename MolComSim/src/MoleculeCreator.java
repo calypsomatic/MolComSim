@@ -17,11 +17,11 @@ public class MoleculeCreator {
 		this.simulation = sim;
 	}
 
-	public MoleculeCreator(ArrayList<MoleculeParams> mParams, MolComSim sim, NanoMachine src) {
+	public MoleculeCreator(ArrayList<MoleculeParams> mParams, MolComSim sim, NanoMachine src, Position molReleasePsn) {
 		this.molParams = mParams;
 		this.simulation = sim;
 		this.source = src;
-		this.position = src.getPosition();
+		this.position = molReleasePsn;
 	}
 	
 	//TODO: How to determine if there are nearby microtubules?
@@ -30,18 +30,17 @@ public class MoleculeCreator {
 		ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
 			MoleculeType molType = mp.getMoleculeType();
-			double rad = mp.getRadius();
 			MoleculeMovementType molMoveType = mp.getMoleculeMovementType();
 			for (int i = 0; i < mp.getNumMolecules(); i++){
 				Molecule tempMol;
 				if (molType.equals(MoleculeType.ACK)){
-					tempMol = new AcknowledgementMolecule(position, rad, simulation, source, source.getReceiverMessageId(),molMoveType);
+					tempMol = new AcknowledgementMolecule(position, simulation, source, source.getReceiverMessageId(),molMoveType);
 				}
 				else if (molType.equals(MoleculeType.INFO)){
-					tempMol = new InformationMolecule(position, rad, simulation, source, source.getTransmitterMessageId(), molMoveType);
+					tempMol = new InformationMolecule(position, simulation, source, source.getTransmitterMessageId(), molMoveType);
 				}
 				else if (molType.equals(MoleculeType.NOISE)){
-					tempMol = new NoiseMolecule(position, rad, simulation, molMoveType);
+					tempMol = new NoiseMolecule(position, simulation, molMoveType);
 				}
 				else {
 					//TODO: Error management?
@@ -54,7 +53,7 @@ public class MoleculeCreator {
 					Microtubule microtubule = null;
 					for (Microtubule mt : simulation.getMicrotubules()){
 						//If a microtubule is found nearby, attach to it
-						if (mt.isNearby(tempMol.getPosition(), tempMol.getRadius())){
+						if (mt.isNearby(tempMol.getPosition())){
 							nearbyMT = true;
 							microtubule = mt;
 							break;
