@@ -14,6 +14,7 @@ public class Medium {
 	private NoiseMoleculeCreator mCreator;
 	private MolComSim simulation;
 	private HashMap<Position, ArrayList<Object>> grid;
+	private final Position garbageSpot;
 
 	public Medium(int l, int h, int w, ArrayList<MoleculeParams> noiseMoleculeParams, MolComSim sim) {
 		this.length = l;
@@ -22,6 +23,8 @@ public class Medium {
 		this.simulation = sim;
 		this.mCreator = new NoiseMoleculeCreator(noiseMoleculeParams, this.simulation);
 		this.grid = new HashMap<Position, ArrayList<Object>>();
+		garbageSpot = new Position(length*2, height*2, width*2);
+		grid.put(garbageSpot, new ArrayList<Object>());
 	}
 
 	/** Populate itself with noise molecules*/
@@ -84,8 +87,6 @@ public class Medium {
 			grid.put(pos, new ArrayList<Object>());
 		}
 		grid.get(pos).add(obj);
-		/*if (grid.size() > 10)
-			System.out.println("Simstep: " + simulation.getSimStep() + " gridsize: " + grid.size());*/
 	}
 	
 	public void moveObject(Object obj, Position oldPos, Position newPos){
@@ -95,13 +96,27 @@ public class Medium {
 				grid.remove(oldPos);
 			}
 		addObject(obj, newPos);
-		// System.out.println("moved from " + oldPos + " to " + newPos);
 	}
 	
 	public boolean isOccupied(Position pos){
 		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
 			return false;
 		return true;
+	}
+	
+	public ArrayList<Object> getObjectsAtPos(Position pos){
+		if (isOccupied(pos) || pos.equals(garbageSpot))
+			return grid.get(pos);
+		else 
+			return null;
+	}
+	
+	public Position garbageSpot(){
+		return garbageSpot;
+	}
+	
+	public void collectGarbage(){
+		grid.put(garbageSpot, new ArrayList<Object>());
 	}
 
 }

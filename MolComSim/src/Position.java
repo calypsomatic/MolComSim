@@ -1,7 +1,5 @@
 import java.util.Scanner;
 
-//package MComSim.Position;
-
 public class Position {
 
 	private int x;
@@ -13,6 +11,8 @@ public class Position {
 		this.z = z0;
 	}
 	
+	//Reads the three coordinates of a Position with input Scanner
+	//Assumes written as (x, y, z)
 	public Position(Scanner readParams) {
 		readParams.useDelimiter("[,()\\s]+");
 		x = readParams.nextInt();

@@ -1,23 +1,43 @@
 /**
  * Handles collisions in the case that molecules decompose over time
  */
+import java.util.ArrayList;
 
 public class DecomposingCollisionHandler implements CollisionHandler{
 
-	//TODO: Not yet implemented
+	//TODO: Add possibility of microtubule as well
+	//TODO: Put in params or whatever of when/how to actually use this collision
 	public Position handlePotentialCollisions(Molecule mol, Position nextPosition, MolComSim simulation) {
-		/*if(!nextPosition.isOccupied(simulation)){
-		return nextPosition;
+		if (simulation.getMedium().isOccupied(nextPosition)){
+			ArrayList<Object> alreadyThere = simulation.getMedium().getObjectsAtPos(nextPosition);
+			if (mol instanceof InformationMolecule){
+				for (Object o : alreadyThere){
+					if (o instanceof AcknowledgementMolecule){
+						if ( ((AcknowledgementMolecule) o).getMsgId() == mol.getMsgId()){
+							//remove info molecule from simulation
+							//TODO: a better way to get this spot
+							//TODO: change moveObject to return a position so this can be done in one line
+							simulation.moveObject(mol, mol.getPosition(), simulation.getMedium().garbageSpot());
+							return simulation.getMedium().garbageSpot();
+						}						
+					}
+				}
+			}
+			else if (mol instanceof AcknowledgementMolecule){
+				for (Object o : alreadyThere){
+					if (o instanceof InformationMolecule){
+						if ( ((InformationMolecule) o).getMsgId() == mol.getMsgId()){
+							//remove info molecule from simulation
+							simulation.getMedium().moveObject(o, nextPosition, simulation.getMedium().garbageSpot());
+							break;
+						}						
+					}
+				}
+			}
+			return mol.getPosition();
 		}
-		else {
-		if(mol.getMoleculeType.equals(MoleculeType.INFO) && and collision with ack molecule and msg ID of both match OR
-			mol is ack and collision with info and msg ID of both match)
-		{
-			delete the info molecule from the simulation
-		}
-		return mol.getPosition()
-	}*/
-		throw new UnsupportedOperationException("The method is not implemented yet.");
+		 simulation.moveObject(mol, mol.getPosition(), nextPosition);
+		 return nextPosition;
 	}
  
 }

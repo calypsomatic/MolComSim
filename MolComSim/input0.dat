@@ -16,7 +16,7 @@ mediumDimensionZ 100
 *********Please enter below the appropriate value of maxSimulationStep or maxSimulationTime****************
  
 maxSimulationStep 100000
- 
+
 ***** Specify transmitters by: *********************************************************************
 *****  1) center position (x, y, z) *****************************************************************
 *****  2) size/radius (optional, defaults to 1) *****************************************************
@@ -56,7 +56,8 @@ velRail 2
 probDRail 0.01
 useCollisions 1
 useAcknowledgements 1
- 
+decomposing 1
+
 ********Information about microtubule cylindrical tracks************
 ***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
 microtubuleParams (-45, 0, 0) (45, 0, 0)
