@@ -1,4 +1,3 @@
-//package MComSim.MoleculeType;
 
 public enum MoleculeType {
 

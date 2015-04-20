@@ -42,7 +42,7 @@ public class Position {
 	
 	//TODO: Does this method belong here?
 	//Should it also have a molecule passed in?  Does it need the radius, to check for equality?
-	public boolean isOccupied(MolComSim simulation){
+	/*public boolean isOccupied(MolComSim simulation){
 		for(Molecule m : simulation.getMolecules()){
 			 //TODO: Should we implement our own equals for molecule?
 		 	//if(!m.equals(mol)){ // && m not at dest or nextPosition in mol's dest or something
@@ -51,7 +51,7 @@ public class Position {
 		 	}
 		 }
 		return false;
-	}
+	}*/
 	
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";

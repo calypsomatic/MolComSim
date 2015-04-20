@@ -1,4 +1,7 @@
-
+/*
+ * The simplest collision handler ignores all possibility of a collision
+ * 
+ */
 public class SimpleCollisionHandler implements CollisionHandler {
 
 	@Override

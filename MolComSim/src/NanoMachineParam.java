@@ -1,3 +1,7 @@
+/**
+ * Parameters for a NanoMachine
+ */
+
 import java.util.Scanner;
 
 

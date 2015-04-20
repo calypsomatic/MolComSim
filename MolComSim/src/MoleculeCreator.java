@@ -24,8 +24,8 @@ public class MoleculeCreator {
 		this.position = molReleasePsn;
 	}
 	
-	//TODO: How to determine if there are nearby microtubules?
-	//TODO: This entire method is crap.  Make helper methods or use some kind of design pattern
+
+	//TODO: Should this method be simplified with factories or helper methods?
 	public void createMolecules() { 
 		ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
@@ -49,25 +49,14 @@ public class MoleculeCreator {
 				CollisionHandler collH;
 				//Look for nearby microtubules if the molecules are ACTIVE
 				if (molMoveType.equals(MoleculeMovementType.ACTIVE)){
-					boolean nearbyMT = false;
-					Microtubule microtubule = null;
-					for (Microtubule mt : simulation.getMicrotubules()){
-						//If a microtubule is found nearby, attach to it
-						if (mt.isNearby(tempMol.getPosition())){
-							nearbyMT = true;
-							microtubule = mt;
-							break;
-						}
-					}
-					if (nearbyMT){
-						//collH = simulation.isUsingCollisions() ? new OnTubuleCollisionHandler() : new NullCollisionHandler();
+					Microtubule microtubule = simulation.getMedium().hasMicrotubule(tempMol.getPosition());
+					if (microtubule != null){
 						collH = simulation.isUsingCollisions() ? 
 								(simulation.decomposing() ? new OnTubuleCollisionHandler(new DecomposingCollisionHandler(new SimpleCollisionHandler())) :
 									new OnTubuleCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
-						new OnMicrotubuleMovementController(collH, simulation, tempMol, microtubule);		
+						new OnMicrotubuleMovementController(collH, simulation, tempMol, microtubule);
 					}
 					else{
-						//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
 						collH = simulation.isUsingCollisions() ? 
 								(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
 									new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();
@@ -75,7 +64,6 @@ public class MoleculeCreator {
 					}
 				}
 				else if (molMoveType.equals(MoleculeMovementType.PASSIVE)){
-					//collH = simulation.isUsingCollisions() ? new StandardCollisionHandler() : new NullCollisionHandler();
 					collH = simulation.isUsingCollisions() ? 
 							(simulation.decomposing() ? new DecomposingCollisionHandler(new SimpleCollisionHandler()) :
 								new StandardCollisionHandler(new SimpleCollisionHandler())) : new SimpleCollisionHandler();

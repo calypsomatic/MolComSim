@@ -46,8 +46,8 @@ retransmitWaitTime 1000
 stepLengthX 3
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 10 INFO PASSIVE
-moleculeParams 10 ACK PASSIVE
+moleculeParams 10 INFO ACTIVE
+moleculeParams 10 ACK ACTIVE
 moleculeParams 0 NOISE
 
  
