@@ -216,6 +216,8 @@ public class NanoMachine {
 				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMoleculesDelayed = true;
 			}			
+			// Need to remove received molecules from the simulation.
+			simulation.moveObject(m, m.getPosition(), simulation.getMedium().garbageSpot());
 		}
 
 		public NanoMachine getNanoMachine() {
@@ -304,6 +306,8 @@ public class NanoMachine {
 				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMoleculesDelayed = true;
 			}
+			// Need to remove received molecules from the simulation.
+			simulation.moveObject(m, m.getPosition(), simulation.getMedium().garbageSpot());
 		}
 
 		public NanoMachine getNanoMachine() {
