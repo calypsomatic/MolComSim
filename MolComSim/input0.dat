@@ -46,10 +46,10 @@ retransmitWaitTime 1000
 stepLengthX 3
 stepLengthY 1
 stepLengthZ 1
-moleculeParams 10 INFO PASSIVE
-moleculeParams 10 ACK PASSIVE
+** last mol param is optional, adaptive change number.  Changes num mols to send out based on comm scucess/failure.
+moleculeParams 10 INFO PASSIVE 1
+moleculeParams 10 ACK PASSIVE 1
 moleculeParams 0 NOISE
-
  
 *********Below parameters are for active propagation
 velRail 2

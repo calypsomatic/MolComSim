@@ -26,9 +26,6 @@ public class OnTubuleCollisionHandler extends CollisionDecorator{
 			new DiffusiveRandomMovementController(new StandardCollisionHandler(new SimpleCollisionHandler()), simulation, mol);
 			return mol.getPosition();
 		}
-		else {
-			return nextPosition;
-		}
 	}
 
 } 
