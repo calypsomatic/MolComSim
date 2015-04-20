@@ -1,8 +1,20 @@
+<<<<<<< HEAD
 Completed message: 1, at step: 5649
 Completed message: 2, at step: 11339
 Completed message: 3, at step: 24216
 Completed message: 4, at step: 35823
 Completed message: 5, at step: 50726
+=======
+Completed message: 1, at step: 5335
+Completed message: 2, at step: 8541
+Completed message: 3, at step: 9570
+Completed message: 4, at step: 10600
+Completed message: 5, at step: 11709
+>>>>>>> branch 'master' of https://github.com/calypsomatic/MolComSim.git
 Last message completed.
+<<<<<<< HEAD
 Ending simulation: Last step: 50727
+=======
+Ending simulation: Last step: 11710
+>>>>>>> branch 'master' of https://github.com/calypsomatic/MolComSim.git
 All 5 messages completed.

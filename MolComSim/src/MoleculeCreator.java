@@ -26,11 +26,15 @@ public class MoleculeCreator {
 	
 
 	//TODO: Should this method be simplified with factories or helper methods?
-	public void createMolecules() { 
+	//TODO: This entire method is crap.  Make helper methods or use some kind of design pattern
+	//TODO: lastTransmissionStatus should be it's own enumerated type.  IT tracks whether any previous 
+	// communications were successful or not for adaptive changes.
+	public void createMolecules(int lastTransmissionStatus) { 
 		ArrayList<Molecule> newMols = new ArrayList<Molecule>();
 		for (MoleculeParams mp : molParams){
 			MoleculeType molType = mp.getMoleculeType();
 			MoleculeMovementType molMoveType = mp.getMoleculeMovementType();
+			mp.applyAdaptiveChange(lastTransmissionStatus); // make changes to num molecules based on communication success.
 			for (int i = 0; i < mp.getNumMolecules(); i++){
 				Molecule tempMol;
 				if (molType.equals(MoleculeType.ACK)){
