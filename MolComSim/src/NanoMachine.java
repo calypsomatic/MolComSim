@@ -15,6 +15,10 @@ public class NanoMachine {
 	private MolComSim simulation;
 	private Receiver rx;
 	private Transmitter tx;
+	// These are to track communication status for adaptive change
+	public static final int LAST_COMMUNICATION_SUCCESS = 1;
+	public static final int LAST_COMMUNICATION_FAILURE = -1;
+	public static final int NO_PREVIOUS_COMMUNICATION = 0;
 
 	private NanoMachine(Position psn, double r) {
 		this.position = psn;
@@ -152,6 +156,9 @@ public class NanoMachine {
 		private int countdown;
 		private boolean createMoleculesDelayed = false;
 		private Position molReleasePsn;
+		
+		// To track communication status for adaptive change
+		private int lastCommunicationStatus = NO_PREVIOUS_COMMUNICATION; // TODO: should really be an enumerated type
 
 		public Transmitter(NanoMachine nm, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 			this.molReleasePsn = molReleasePsn;
@@ -165,7 +172,7 @@ public class NanoMachine {
 		 *  Creates molecules for this transmitter
 		 */
 		public void createMolecules() {
-			moleculeCreator.createMolecules();
+			moleculeCreator.createMolecules(lastCommunicationStatus);
 			countdown = simulation.getRetransmitWaitTime();
 		}
 
@@ -178,10 +185,12 @@ public class NanoMachine {
 				createMoleculesDelayed = false;
 			} else if(countdown-- <= 0) {
 				if(simulation.isUsingAcknowledgements()) {
+					lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 					if(retransmissionsLeft-- > 0) {
 						createMolecules();
 					} 
 				} else {
+					lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;
 					if (currMsgId < simulation.getNumMessages())
 						++currMsgId;
 					createMolecules();
@@ -197,12 +206,14 @@ public class NanoMachine {
 		 */
 		public void receiveMolecule(Molecule m) {
 			if(m.getMsgId() == currMsgId) {
+				lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;
 				simulation.completedMessage(currMsgId++);
 				if(!simulation.isLastMsgCompleted()) {
 					createMoleculesDelayed = true;  
 					retransmissionsLeft = simulation.getNumRetransmissions();
 				}
 			} else if(retransmissionsLeft-- > 0){
+				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMoleculesDelayed = true;
 			}			
 		}
@@ -232,6 +243,9 @@ public class NanoMachine {
 		private boolean createMoleculesDelayed = false;
 		private Position molReleasePsn;
 
+		// To track communication status for adaptive change
+		private int lastCommunicationStatus = NO_PREVIOUS_COMMUNICATION;
+
 		public Receiver(NanoMachine nm, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 			this.molReleasePsn = molReleasePsn;
 			this.nanoMachine = nm;
@@ -248,7 +262,7 @@ public class NanoMachine {
 		 *  Creates molecules for this receiver
 		 */
 		public void createMolecules() {
-			moleculeCreator.createMolecules();
+			moleculeCreator.createMolecules(lastCommunicationStatus);
 			countdown = simulation.getRetransmitWaitTime();
 		}
 		
@@ -263,6 +277,7 @@ public class NanoMachine {
 				createMoleculesDelayed = false;
 			} else if(simulation.isUsingAcknowledgements() && 
 			((countdown-- <= 0) && (retransmissionsLeft-- > 0))){
+				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMolecules();
 			} 
 		}
@@ -276,6 +291,7 @@ public class NanoMachine {
 		public void receiveMolecule(Molecule m) {
 			if(m.getMsgId() == currMsgId + 1){
 				currMsgId++;		
+				lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;
 				if(simulation.isUsingAcknowledgements()) {
 					createMoleculesDelayed = true;
 					retransmissionsLeft =  simulation.getNumRetransmissions();
@@ -285,6 +301,7 @@ public class NanoMachine {
 				}
 			}
 			else if (simulation.isUsingAcknowledgements() && (retransmissionsLeft-- > 0)) {
+				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMoleculesDelayed = true;
 			}
 		}

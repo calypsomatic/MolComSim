@@ -108,12 +108,12 @@ public class SimulationParams {
 		if(numInfoMols > 0) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), numInfoMols));
+							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), numInfoMols, 0));
 		}
 		if(numAckMols > 0) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols));			
+							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), numAckMols, 0));			
 		}
 	}
 	
@@ -217,12 +217,12 @@ public class SimulationParams {
 		if(getInformationMoleculeParams().isEmpty()) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), 1));
+							MoleculeType.INFO, movementDefaults.get(MoleculeType.INFO), 1, 0));
 		}
-		if(useAcknowledgements && getInformationMoleculeParams().isEmpty()) {
+		if(useAcknowledgements && getAcknowledgmentMoleculeParams().isEmpty()) {
 			moleculeParams.add(
 					new MoleculeParams(
-							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), 1));
+							MoleculeType.ACK, movementDefaults.get(MoleculeType.ACK), 1, 0));
 		}	
 	}
 
