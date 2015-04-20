@@ -13,7 +13,9 @@ public class Medium {
 	private int width;
 	private NoiseMoleculeCreator mCreator;
 	private MolComSim simulation;
+	//Keep track of the location of all objects in the medium
 	private HashMap<Position, ArrayList<Object>> grid;
+	//garbageSpot is located outside of the bounds of the medium, where molecules go to die
 	private final Position garbageSpot;
 
 	public Medium(int l, int h, int w, ArrayList<MoleculeParams> noiseMoleculeParams, MolComSim sim) {
@@ -51,7 +53,6 @@ public class Medium {
 	// Checks to see if toCheck is within bounds of medium.
 	// if so, returns toCheck,  otherwise returns whatever closest position 
 	// to toCheck is within the medium.
-	//TODO: Incorporate molecule's radius
 	Position getClosestPosition(Position toCheck) {
 		int x, y, z;
 		if(toCheck.getX() > (length / 2)) {
@@ -82,6 +83,7 @@ public class Medium {
 		
 	}
 	
+	//Add an object to the grid of objects
 	public void addObject(Object obj, Position pos){
 		if (!grid.containsKey(pos)){
 			grid.put(pos, new ArrayList<Object>());
@@ -89,6 +91,7 @@ public class Medium {
 		grid.get(pos).add(obj);
 	}
 	
+	//Move an object from its old location in the grid to the new position
 	public void moveObject(Object obj, Position oldPos, Position newPos){
 		if (grid.containsKey(oldPos)){
 			grid.get(oldPos).remove(obj);
@@ -98,12 +101,39 @@ public class Medium {
 		addObject(obj, newPos);
 	}
 	
+	//Checks to see if a particular position already has anything in it
 	public boolean isOccupied(Position pos){
 		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
 			return false;
 		return true;
 	}
 	
+	public Microtubule hasMicrotubule(Position pos){
+		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
+			return null;
+		else {
+			for (Object o : grid.get(pos)){
+				if (o instanceof Microtubule)
+					return (Microtubule) o;
+			}
+		}
+		return null;
+	}
+	
+	//Checks to see if a particular position has a molecule in it
+	public boolean hasMolecule(Position pos){
+		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
+			return false;
+		else {
+			for (Object o : grid.get(pos)){
+				if (o instanceof Molecule)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	//Returns a list of everything located in a particular position
 	public ArrayList<Object> getObjectsAtPos(Position pos){
 		if (isOccupied(pos) || pos.equals(garbageSpot))
 			return grid.get(pos);
@@ -115,8 +145,14 @@ public class Medium {
 		return garbageSpot;
 	}
 	
+	//Erase all objects in the garbageSpot
 	public void collectGarbage(){
 		grid.put(garbageSpot, new ArrayList<Object>());
 	}
+	
+	//This is for testing purposes only, remove from program
+	/*public HashMap<Position, ArrayList<Object>> getGrid(){
+		return grid;
+	}*/
 
 }

@@ -56,16 +56,14 @@ public class MolComSim {
 		if(simParams.getOutputFileName() != null) {
 			outputFile = new FileWriter(simParams.getOutputFileName());
 		}
-		//TODO: Where is the appropriate place for these to be initialized?
 		microtubules = new ArrayList<Microtubule>();
 		nanoMachines = new ArrayList<NanoMachine>();
 		transmitters = new ArrayList<NanoMachine>();
 		receivers = new ArrayList<NanoMachine>();
 		molecules = new ArrayList<Molecule>();
-		createMicrotubules(); 
 		createMedium();
-		createNanoMachines();
-		//createMicrotubules();		
+		createMicrotubules(); 
+		createNanoMachines();	
 		// Note: it is the job of the medium and NanoMachines to create molecules
 	}
 
@@ -95,9 +93,7 @@ public class MolComSim {
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
-			int i = 1;
 			for(Molecule m : molecules){
-				// System.out.print("Moving molecule " + i++ + " ");
 				m.move();
 			}
 			collectGarbage();
@@ -164,11 +160,30 @@ public class MolComSim {
 		//		get microtubule params from simParams
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {
 			Position start = mtps.getStartPoint();
-			Position end = mtps.getEndPoint();
-			
+			Position end = mtps.getEndPoint();			
 			Microtubule tempMT = new Microtubule(start, end, this);
+			growMicrotubule(tempMT);
 			microtubules.add(tempMT);
 		}
+	}
+
+	//Adds microtubule to medium's grid all along its length
+	private void growMicrotubule(Microtubule tempMT){
+		//Collect all positions the microtubule occupies
+		HashSet<Position> mtPos = new HashSet<Position>();
+		Position start = tempMT.getStartPoint();
+		mtPos.add(start);
+		Position end = tempMT.getEndPoint();
+		//Determine the direction the microtubule is pointed in, using doubles
+		DoublePosition direction = tempMT.getDirectionVector();
+		DoublePosition currentPos = direction.toDouble(start);
+		//Add positions to position set, until we reach the end of the microtubule
+		while (!mtPos.contains(end)){		
+			mtPos.addAll(direction.add(currentPos));
+			currentPos = currentPos.addDouble(direction);
+		}
+		//Add microtubule and its positions to the grid
+		addObjects(tempMT, mtPos);
 	}
 
 	//any cleanup tasks, including printing simulation results to monitor or file.
@@ -207,6 +222,7 @@ public class MolComSim {
 		}
 	}
 
+	//Reports to the console that a message has been completed
 	public void completedMessage(int msgNum) {
 		messagesCompleted = msgNum;
 		String completedMessage = "Completed message: " + msgNum + ", at step: " + simStep + "\n";
@@ -262,7 +278,6 @@ public class MolComSim {
 	}
 
 	public int getNumRetransmissions() {
-		// Is this the correct number?
 		return simParams.getNumRetransmissions();
 	}
 	
@@ -278,8 +293,16 @@ public class MolComSim {
 		return simParams.getRetransmitWaitTime();
 	}
 	
+	//Add an object to the medium's position grid
 	public void addObject(Object obj, Position pos){
 		medium.addObject(obj, pos);
+	}
+	
+	//Add an object to multiple positions in the medium's grid
+	public void addObjects(Object obj, HashSet<Position> pos){
+		for (Position p : pos){
+			medium.addObject(obj, p);
+		}
 	}
 	
 	public void moveObject(Object obj, Position oldPos, Position newPos){
@@ -290,6 +313,7 @@ public class MolComSim {
 		return medium.isOccupied(pos);
 	}
 	
+	//Removes all molecules located at the garbageSpot, waiting to be deleted
 	public void collectGarbage(){
 		ArrayList<Object> garbage = medium.getObjectsAtPos(medium.garbageSpot());
 		medium.collectGarbage();

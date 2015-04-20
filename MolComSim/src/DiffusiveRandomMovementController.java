@@ -16,7 +16,6 @@ public class DiffusiveRandomMovementController extends MovementController{
 	/** Randomly selects where to move molecule based on simulation step length parameters
 	 *  @param molecule The molecule to move
 	 *  @return the position to move to
-	 * 
 	 */
 	protected Position decideNextPosition() {
 		//Randomly decide the next position based on current position + some delta.
@@ -36,15 +35,13 @@ public class DiffusiveRandomMovementController extends MovementController{
 		
 		//If the molecule has ACTIVE movement type, it looks for a nearby microtubule to reattach to
 		if (getMolecule().getMoleculeMovementType() == MoleculeMovementType.ACTIVE){
-			for (Microtubule mt : getSimulation().getMicrotubules()){
-				//If a microtubule is found nearby, the molecule attaches to it
-				if (mt.isNearby(getMolecule().getPosition(), getMolecule().getRadius())){
-					CollisionHandler collH = simulation.isUsingCollisions() ? 
-							(simulation.decomposing() ? new OnTubuleCollisionHandler(new DecomposingCollisionHandler(new SimpleCollisionHandler())) :
-								new OnTubuleCollisionHandler(new SimpleCollisionHandler())) : new NullCollisionHandler(new SimpleCollisionHandler());
-					new OnMicrotubuleMovementController(collH, getSimulation(), getMolecule(), mt);
-					break;
-				}
+			//If a microtubule is found, change molecule's collision handler and movement controller
+			Microtubule microtubule = simulation.getMedium().hasMicrotubule(getMolecule().getPosition());
+			if (microtubule != null){
+				CollisionHandler collH = simulation.isUsingCollisions() ? 
+						(simulation.decomposing() ? new OnTubuleCollisionHandler(new DecomposingCollisionHandler(new SimpleCollisionHandler())) :
+							new OnTubuleCollisionHandler(new SimpleCollisionHandler())) : new NullCollisionHandler(new SimpleCollisionHandler());
+				new OnMicrotubuleMovementController(collH, simulation, getMolecule(), microtubule);
 			}
 		}
 		return nextPosition;

@@ -1,6 +1,5 @@
 /**
  * MovementController for molecules in active transport
- * 
  *
  */
 		
@@ -21,7 +20,7 @@ public class OnMicrotubuleMovementController extends MovementController{
 	 */
 	protected Position decideNextPosition() {
 		Position currentPosition = getMolecule().getPosition();
-		Position direction = microtubule.getDirectionVector();
+		Position direction = microtubule.getDirectionVector().toInt();
 		Position nextPosition = new Position(currentPosition.getX() + direction.getX(), currentPosition.getY() + direction.getY(), currentPosition.getZ() + direction.getZ());
 		//If the molecule gets derailed, it moves to the same spot, but switches to passive movement off the microtubule
 		if (Math.random() < this.simulation.getSimParams().getProbDRail()){

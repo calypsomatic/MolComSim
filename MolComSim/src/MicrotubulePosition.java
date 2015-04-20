@@ -1,3 +1,5 @@
+
+//TODO: Is this class ever used?  Erase if not
 public class MicrotubulePosition {
 
 	Position plusEndPoint;

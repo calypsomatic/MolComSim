@@ -35,7 +35,6 @@ public class InformationMolecule extends Molecule{
 		}
 	}
 
-	//TODO: Should this be renamed whichDestinationReached?
 	/**
 	 * @return The destination nanomachine this molecule has arrived at,
 	 * 	or null if it has not reached any destination on its list

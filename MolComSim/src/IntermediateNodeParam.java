@@ -1,3 +1,7 @@
+/**
+ * Parameters for a NanoMachine that has both a Transmitter and a Receiver
+ */
+
 import java.util.Scanner;
 
 

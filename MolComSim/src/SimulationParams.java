@@ -20,7 +20,6 @@ public class SimulationParams {
 	private ArrayList<NanoMachineParam> receiverParams = new ArrayList<>();
 	private ArrayList<IntermediateNodeParam> intermediateNodeParams = new ArrayList<>();
 	private ArrayList<MicrotubuleParams> microtubuleParams = new ArrayList<MicrotubuleParams>();
-	//private ArrayList<Double> microtubuleRadii;
 	private int numMessages;
 	private int maxNumSteps;
 	private int numRetransmissions;
@@ -39,9 +38,6 @@ public class SimulationParams {
 	private static HashMap<MoleculeType, MoleculeMovementType> movementDefaults = 
 			new HashMap<MoleculeType, MoleculeMovementType>(); 
 	
-	// Try this approach later if time.
-	// private HashMap<String, Object> allParams = new HashMap<String, Object>();
-
 	public SimulationParams(String[] args) {
 		setInitialMovementDefaults();
 		parseArgs(args);
@@ -199,7 +195,6 @@ public class SimulationParams {
 								new Scanner(
 										line.substring(line.indexOf(" ")))));
 
-				//placeholder for a real way to read in microtubule params
 			} else if(line.startsWith("microtubuleParams")) {
 				microtubuleParams.add(
 						new MicrotubuleParams(
@@ -247,7 +242,6 @@ public class SimulationParams {
 		return moleculeParams;
 	}
 
-	//am I understanding these getParams methods correctly?
 	public ArrayList<MoleculeParams> getNoiseMoleculeParams() {
 		ArrayList<MoleculeParams> noiseMParams = new ArrayList<MoleculeParams>();
 		for (MoleculeParams mp : moleculeParams){
