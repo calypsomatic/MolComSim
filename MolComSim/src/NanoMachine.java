@@ -242,6 +242,8 @@ public class NanoMachine {
 		private int countdown;
 		private boolean createMoleculesDelayed = false;
 		private Position molReleasePsn;
+		private boolean neverReceivedAnyInfoMols = true; // Prevent receiver from timing out and sending acknowledgements
+														// before receiving anything.
 
 		// To track communication status for adaptive change
 		private int lastCommunicationStatus = NO_PREVIOUS_COMMUNICATION;
@@ -274,7 +276,7 @@ public class NanoMachine {
 			if(createMoleculesDelayed) {
 				createMolecules();
 				createMoleculesDelayed = false;
-			} else if(simulation.isUsingAcknowledgements() && 
+			} else if(simulation.isUsingAcknowledgements() && !neverReceivedAnyInfoMols && 
 			((countdown-- <= 0) && (retransmissionsLeft-- > 0))){
 				lastCommunicationStatus = LAST_COMMUNICATION_FAILURE;
 				createMolecules();
@@ -288,6 +290,7 @@ public class NanoMachine {
 		 * @param m Molecule being received
 		 */
 		public void receiveMolecule(Molecule m) {
+			neverReceivedAnyInfoMols = false; // we have received at least one information molecule
 			if(m.getMsgId() == currMsgId + 1){
 				currMsgId++;		
 				lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;

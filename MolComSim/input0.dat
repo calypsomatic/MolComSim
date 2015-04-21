@@ -38,26 +38,21 @@ receiver (45, 0, 0) 2 (45, 0, 0)
 ** intermediateNode (0, 0, 0) 3 (0, 1, 0) (0, -1, 0)
 
 ************Information about Messages**************
-numMessages 5
+numMessages 10
 numRetransmissions 5
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
-stepLengthX 3
+stepLengthX 5
 stepLengthY 1
 stepLengthZ 1
-<<<<<<< HEAD
-moleculeParams 10 INFO ACTIVE
-moleculeParams 10 ACK ACTIVE
-=======
-** last mol param is optional, adaptive change number.  Changes num mols to send out based on comm scucess/failure.
-moleculeParams 10 INFO PASSIVE 1
-moleculeParams 10 ACK PASSIVE 1
->>>>>>> branch 'master' of https://github.com/calypsomatic/MolComSim.git
-moleculeParams 0 NOISE
+** last mol param is optional, adaptive change number.  Changes num mols to send out based on comm success/failure.
+moleculeParams 100 INFO PASSIVE 1
+moleculeParams 100 ACK PASSIVE 1
+moleculeParams 1000 NOISE
  
 *********Below parameters are for active propagation
-velRail 2
+velRail 7
 probDRail 0.01
 useCollisions 1
 useAcknowledgements 1

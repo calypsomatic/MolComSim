@@ -175,7 +175,7 @@ public class MolComSim {
 		mtPos.add(start);
 		Position end = tempMT.getEndPoint();
 		//Determine the direction the microtubule is pointed in, using doubles
-		DoublePosition direction = tempMT.getDirectionVector();
+		DoublePosition direction = tempMT.getUnitVector();
 		DoublePosition currentPos = direction.toDouble(start);
 		//Add positions to position set, until we reach the end of the microtubule
 		while (!mtPos.contains(end)){		
