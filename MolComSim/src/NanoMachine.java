@@ -12,7 +12,7 @@ import java.util.*;
 public class NanoMachine {
 	
 	private Position position;
-	private double radius;
+	private int radius;
 	private MolComSim simulation;
 	private Receiver rx;
 	private Transmitter tx;
@@ -21,7 +21,7 @@ public class NanoMachine {
 	public static final int LAST_COMMUNICATION_FAILURE = -1;
 	public static final int NO_PREVIOUS_COMMUNICATION = 0;
 
-	private NanoMachine(Position psn, double r) {
+	private NanoMachine(Position psn, int r) {
 		this.position = psn;
 		this.radius = r;
 	}
@@ -35,7 +35,7 @@ public class NanoMachine {
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting transmitter-only nanomachine
 	 */
-	public static NanoMachine createTransmitter(Position position, double radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+	public static NanoMachine createTransmitter(Position position, int radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
 		retVal.tx = new Transmitter(retVal, molReleasePsn, mpl, sim);
 		retVal.rx = null;
@@ -51,7 +51,7 @@ public class NanoMachine {
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting receiver-only nanomachine
 	 */
-	public static NanoMachine createReceiver(Position position, double radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
+	public static NanoMachine createReceiver(Position position, int radius, Position molReleasePsn, ArrayList<MoleculeParams> mpl, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
 		retVal.rx = new Receiver(retVal, molReleasePsn, mpl, sim);
 		retVal.tx = null;
@@ -69,7 +69,7 @@ public class NanoMachine {
 	 * @param sim The simulation in which this is taking place
 	 * @return The resulting transmitter-receiver nanomachine
 	 */
-	public static NanoMachine createIntermediateNode(Position position, double radius, 
+	public static NanoMachine createIntermediateNode(Position position, int radius, 
 			Position infoMolReleasePsn, Position ackMolReleasePsn, ArrayList<MoleculeParams> mpl, 
 			ArrayList<MoleculeParams> ackParams, MolComSim sim) {
 		NanoMachine retVal = new NanoMachine(position, radius);
@@ -119,7 +119,7 @@ public class NanoMachine {
 		return position;
 	}
 
-	public double getRadius() {
+	public int getRadius() {
 		return radius;
 	}
 
@@ -139,6 +139,14 @@ public class NanoMachine {
 		return -1;
 	}
 	
+
+	public boolean hasReceiver() {
+		return rx != null;
+	}
+
+	public boolean hasTransmitter() {
+		return tx != null;
+	}
 
 	/**
 	 * Inner class that enables NanoMachine to transmit

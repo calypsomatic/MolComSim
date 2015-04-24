@@ -138,24 +138,50 @@ public class MolComSim {
 		ArrayList<MoleculeParams> infoParams = simParams.getInformationMoleculeParams();
 		for (NanoMachineParam nmp : simParams.getTransmitterParams()){
 			NanoMachine nm = NanoMachine.createTransmitter(nmp.getCenter(), nmp.getRadius(), nmp.getMolReleasePoint(), infoParams, this);
+			growNanoMachine(nm); // adds NanoMachine to medium's grid
 			nm.createInfoMolecules();
 			transmitters.add(nm);
 			nanoMachines.add(nm);
 		}
 		for (NanoMachineParam nmp : simParams.getReceiverParams()) {
 			NanoMachine nm = NanoMachine.createReceiver(nmp.getCenter(), nmp.getRadius(), nmp.getMolReleasePoint(), ackParams, this);
+			growNanoMachine(nm); // adds NanoMachine to medium's grid
 			receivers.add(nm);
 			nanoMachines.add(nm);			
 		}
 		for (IntermediateNodeParam inp : simParams.getIntermediateNodeParams()) {
 			NanoMachine nm = NanoMachine.createIntermediateNode(inp.getCenter(), inp.getRadius(), 
 					inp.getInfoMolReleasePoint(), inp.getAckMolReleasePoint(), infoParams, ackParams, this);
+			growNanoMachine(nm); // adds NanoMachine to medium's grid
 			transmitters.add(nm);
 			receivers.add(nm);
 			nanoMachines.add(nm);			
 		}
 	}
 
+	// Adds nanoMachine to medium's grid throughout its entire volume. 
+	private void growNanoMachine(NanoMachine nm) {
+		Position center = nm.getPosition();
+		int radius = nm.getRadius();
+		// doubly nested loop to go over positions for all three dimensions.
+		// note that the center position is included, so we subtract one 
+		// from the radius, and go from -(radius - 1) to +(radius - 1) units 
+		// around the center point in all directions.
+		int startX = center.getX() - (radius - 1);
+		int endX = center.getX() + (radius - 1);
+		int startY = center.getY() - (radius - 1);
+		int endY = center.getY() + (radius - 1);
+		int startZ = center.getZ() - (radius - 1);
+		int endZ = center.getZ() + (radius - 1);
+		for(int x = startX; x <= endX; x++) {
+			for(int y = startY; y <= endY; y++) {
+				for(int z = startZ; z <= endZ; z++) {
+					addObject(nm, new Position(x, y, z));
+				}
+			}
+		}
+	}
+	
 	private void createMicrotubules() {
 		//		get microtubule params from simParams
 		for(MicrotubuleParams mtps : simParams.getMicrotubuleParams()) {

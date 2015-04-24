@@ -8,9 +8,9 @@ import java.util.Scanner;
 public class NanoMachineParam {
 	private Position center;
 	private Position molReleasePt;
-	private double radius;
+	private int radius;
 	
-	public NanoMachineParam(Position cntr, double r, Position moleculeReleasePoint) {
+	public NanoMachineParam(Position cntr, int r, Position moleculeReleasePoint) {
 		center = cntr;
 		radius = r;
 		molReleasePt = moleculeReleasePoint;
@@ -19,9 +19,9 @@ public class NanoMachineParam {
 	public NanoMachineParam(Scanner readParams) {
 		center = new Position(readParams);
 		if(readParams.hasNextDouble()) {
-			radius = readParams.nextDouble();
+			radius = readParams.nextInt();
 		} else {
-			radius = 1.0;
+			radius = 1;
 		}
 		if(readParams.hasNext()) {
 			molReleasePt = new Position(readParams);
@@ -38,7 +38,7 @@ public class NanoMachineParam {
 		return molReleasePt;
 	}
 	
-	public double getRadius(){
+	public int getRadius(){
 		return radius;
 	}
 

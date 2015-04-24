@@ -149,6 +149,40 @@ public class Medium {
 	public void collectGarbage(){
 		grid.put(garbageSpot, new ArrayList<Object>());
 	}
+
+	// gets first nanomachine with a receiver at this position.
+	// returns it if found, else returns null.
+	public NanoMachine getRxNanoMachineAtPos(Position pos) {
+		if (!grid.containsKey(pos) || grid.get(pos).isEmpty())
+			return null;
+		else {
+			for (Object o : grid.get(pos)){
+				if (o instanceof NanoMachine ) {
+					NanoMachine nm = (NanoMachine)o;
+					if(nm.hasReceiver())
+						return nm;
+				}
+			}
+		}
+		return null;
+	}
+
+	// gets first nanomachine with a transmitter at this position.
+	// returns it if found, else returns null.
+	public NanoMachine getTxNanoMachineAtPos(Position pos) {
+		if ( pos.equals(garbageSpot) || !grid.containsKey(pos) || grid.get(pos).isEmpty())
+			return null;
+		else {
+			for (Object o : grid.get(pos)){
+				if (o instanceof NanoMachine ) {
+					NanoMachine nm = (NanoMachine)o;
+					if(nm.hasTransmitter())
+						return nm;
+				}
+			}
+		}
+		return null;
+	}
 	
 	//This is for testing purposes only, remove from program
 	/*public HashMap<Position, ArrayList<Object>> getGrid(){

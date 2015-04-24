@@ -9,7 +9,7 @@ public class IntermediateNodeParam extends NanoMachineParam {
 	private Position infoMolReleasePoint;
 	private Position ackMolReleasePoint;
 	
-	public IntermediateNodeParam(Position cntr, double r, Position infoPoint, Position ackPoint) {
+	public IntermediateNodeParam(Position cntr, int r, Position infoPoint, Position ackPoint) {
 		super(cntr, r, cntr);
 		infoMolReleasePoint = infoPoint;
 		ackMolReleasePoint = ackPoint;
