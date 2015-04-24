@@ -75,6 +75,8 @@ public class NanoMachine {
 		NanoMachine retVal = new NanoMachine(position, radius);
 		retVal.rx = new Receiver(retVal, ackMolReleasePsn, mpl, sim);
 		retVal.tx = new Transmitter(retVal, infoMolReleasePsn, mpl, sim);
+		retVal.tx.setNumRetransmissions(0);
+		retVal.rx.setNumRetransmissions(0);
 		return retVal;	
 	}
 
@@ -107,7 +109,13 @@ public class NanoMachine {
 	 * @param m Molecule being received
 	 */
 	public void receiveMolecule(Molecule m) {
-		if(m instanceof InformationMolecule && rx != null) {
+		if(rx != null && tx != null) { // intermediate node, can receive any molecule, but uses special routines to do so.
+			if(m instanceof InformationMolecule) {
+				tx.retransmit(m);
+			} else if(m instanceof AcknowledgementMolecule) {
+				rx.retransmit(m);
+			}
+		} else if(m instanceof InformationMolecule && rx != null) {
 			rx.receiveMolecule(m);
 		} 
 		else if(m instanceof AcknowledgementMolecule && tx != null) {
@@ -164,6 +172,10 @@ public class NanoMachine {
 		private boolean createMoleculesDelayed = false;
 		private Position molReleasePsn;
 		
+		// for intermediate nodes, track the messages we have retransmitted so we 
+		// do not retransmit the same message multiple times.
+		private ArrayList<Integer> msgsRetransmitted = new ArrayList<>();
+		
 		// To track communication status for adaptive change
 		private int lastCommunicationStatus = NO_PREVIOUS_COMMUNICATION; // TODO: should really be an enumerated type
 
@@ -173,6 +185,11 @@ public class NanoMachine {
 			this.simulation = sim;
 			this.moleculeCreator = new MoleculeCreator(mpl, this.simulation, this.nanoMachine, this.molReleasePsn);
 			this.retransmissionsLeft =  this.simulation.getNumRetransmissions();
+		}
+
+		// in order to have intermediate nodes no retransmit multiple times for each molecule.
+		public void setNumRetransmissions(int retransmission) {
+			retransmissionsLeft = retransmission;
 		}
 
 		/**
@@ -216,6 +233,22 @@ public class NanoMachine {
 			} 
 		}
 
+		// Receives and retransmits a molecule for multi-hop/signal boosted communications.
+		// Only called for intermediate nodes.
+		public void retransmit(Molecule m) {
+			// don't change communication status because we always want to send out the same number
+			// of molecules from an intermediate node.
+			if(!simulation.isLastMsgCompleted()) {
+				currMsgId = m.getMsgId();
+				if(msgsRetransmitted.contains(currMsgId))
+					return; // don't retransmit the same message again.
+				msgsRetransmitted.add(currMsgId);
+				createMoleculesDelayed = true;  
+				// Need to remove received molecules from the simulation.
+				simulation.moveObject(m, m.getPosition(), simulation.getMedium().garbageSpot());			
+			}
+		}
+		
 		/**
 		 * Receive molecule and tell simulation this message has been received,
 		 * create more molecules if needed
@@ -265,6 +298,10 @@ public class NanoMachine {
 		private boolean neverReceivedAnyInfoMols = true; // Prevent receiver from timing out and sending acknowledgements
 														// before receiving anything.
 
+		// for intermediate nodes, track the messages we have retransmitted so we 
+		// do not retransmit the same message multiple times.
+		private ArrayList<Integer> msgsRetransmitted = new ArrayList<>();
+
 		// To track communication status for adaptive change
 		private int lastCommunicationStatus = NO_PREVIOUS_COMMUNICATION;
 
@@ -278,6 +315,11 @@ public class NanoMachine {
 				currMsgId = 0;
 				retransmissionsLeft =  this.simulation.getNumRetransmissions();
 			}
+		}
+
+		// in order to have intermediate nodes no retransmit multiple times for each molecule.
+		public void setNumRetransmissions(int retransmission) {
+			retransmissionsLeft = retransmission;
 		}
 
 		/**
@@ -330,6 +372,22 @@ public class NanoMachine {
 			simulation.moveObject(m, m.getPosition(), simulation.getMedium().garbageSpot());
 		}
 
+		// Receives and retransmits a molecule for multi-hop/signal boosted communications.
+		// Only called for intermediate nodes.
+		public void retransmit(Molecule m) {
+			// don't change communication status because we always want to send out the same number
+			// of molecules from an intermediate node.
+			if(!simulation.isLastMsgCompleted()) {
+				currMsgId = m.getMsgId();
+				if(msgsRetransmitted.contains(currMsgId))
+					return; // don't retransmit the same message again.
+				msgsRetransmitted.add(currMsgId);
+				createMoleculesDelayed = true;  
+				// Need to remove received molecules from the simulation.
+				simulation.moveObject(m, m.getPosition(), simulation.getMedium().garbageSpot());			
+			}
+		}
+		
 		public NanoMachine getNanoMachine() {
 			return nanoMachine;
 		}
