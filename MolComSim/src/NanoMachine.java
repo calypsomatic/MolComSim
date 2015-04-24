@@ -6,6 +6,7 @@
  * 
  */
 
+import java.io.IOException;
 import java.util.*;
 
 public class NanoMachine {
@@ -187,10 +188,21 @@ public class NanoMachine {
 					if(retransmissionsLeft-- > 0) {
 						createMolecules();
 					} 
-				} else {
+				} else { // time to send out new molecules, not using acknowledgements,
+					    // so start new message.
 					lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;
-					if (currMsgId < simulation.getNumMessages())
+					if (currMsgId < simulation.getNumMessages()) {
 						++currMsgId;
+						String newMessageMessage = "Starting new message: " + currMsgId + " at step: " + 
+								getSimulation().getSimStep() + "\n";
+						System.out.print(newMessageMessage);
+						try {
+							getSimulation().getOutputFile().write(newMessageMessage);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					createMolecules();
 				}
 			} 

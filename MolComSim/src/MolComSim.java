@@ -168,7 +168,7 @@ public class MolComSim {
 	}
 
 	//Adds microtubule to medium's grid all along its length
-	private void growMicrotubule(Microtubule tempMT){
+	private void growMicrotubule(Microtubule tempMT){  
 		//Collect all positions the microtubule occupies
 		HashSet<Position> mtPos = new HashSet<Position>();
 		Position start = tempMT.getStartPoint();
@@ -320,6 +320,10 @@ public class MolComSim {
 		for (Object o : garbage){
 			molecules.remove(o);
 		}
+	}
+	
+	public FileWriter getOutputFile() {
+		return outputFile;
 	}
 
 
