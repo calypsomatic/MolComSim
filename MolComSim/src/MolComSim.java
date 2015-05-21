@@ -14,7 +14,7 @@ public class MolComSim {
 	private ArrayList<NanoMachine> nanoMachines;
 	private ArrayList<NanoMachine> transmitters;
 	private ArrayList<NanoMachine> receivers;
-	private ArrayList<Molecule> molecules; 
+	private ArrayList<Molecule> movingMolecules; 
 
 	//The medium in which the simulation takes place
 	private Medium medium;
@@ -60,7 +60,7 @@ public class MolComSim {
 		nanoMachines = new ArrayList<NanoMachine>();
 		transmitters = new ArrayList<NanoMachine>();
 		receivers = new ArrayList<NanoMachine>();
-		molecules = new ArrayList<Molecule>();
+		movingMolecules = new ArrayList<Molecule>();
 		createMedium();
 		createMicrotubules(); 
 		createNanoMachines();	
@@ -93,7 +93,7 @@ public class MolComSim {
 			for(NanoMachine nm : nanoMachines){
 				nm.nextStep();
 			}
-			for(Molecule m : molecules){
+			for(Molecule m : movingMolecules){
 				m.move();
 			}
 			collectGarbage();
@@ -242,8 +242,11 @@ public class MolComSim {
 	 * @param mols List of molecules to add to simulation list
 	 */
 	public void addMolecules(ArrayList<Molecule> mols) {
-		this.molecules.addAll(mols);
 		for (Molecule mol : mols){
+			// Only add the molecules to the movingMolecules list if they do, in fact, move.
+			if(!(mol.getMovementController() instanceof NullMovementController)) {
+				movingMolecules.add(mol);
+			}
 			addObject(mol, mol.getPosition());
 		}
 	}
@@ -275,8 +278,8 @@ public class MolComSim {
 		return simParams;
 	}
 
-	public ArrayList<Molecule> getMolecules() {
-		return molecules;
+	public ArrayList<Molecule> getMovingMolecules() {
+		return movingMolecules;
 	}
 
 	public ArrayList<Microtubule> getMicrotubules() {
@@ -344,7 +347,7 @@ public class MolComSim {
 		ArrayList<Object> garbage = medium.getObjectsAtPos(medium.garbageSpot());
 		medium.collectGarbage();
 		for (Object o : garbage){
-			molecules.remove(o);
+			movingMolecules.remove(o);
 		}
 	}
 	
