@@ -218,14 +218,16 @@ public class NanoMachine {
 					lastCommunicationStatus = LAST_COMMUNICATION_SUCCESS;
 					if (currMsgId < simulation.getNumMessages()) {
 						++currMsgId;
-						String newMessageMessage = "Starting new message: " + currMsgId + " at step: " + 
-								getSimulation().getSimStep() + "\n";
-						System.out.print(newMessageMessage);
-						try {
-							getSimulation().getOutputFile().write(newMessageMessage);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						if(!getSimulation().getSimParams().isBatchRun()) {
+							String newMessageMessage = "Starting new message: " + currMsgId + " at step: " + 
+									getSimulation().getSimStep() + "\n";
+							System.out.print(newMessageMessage);
+							try {
+								getSimulation().getOutputFile().write(newMessageMessage);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 					createMolecules();

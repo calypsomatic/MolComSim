@@ -33,6 +33,8 @@ public class SimulationParams {
 	private int molRandMoveZ;
 	private int velRail; 
 	private double probDRail;
+	private boolean batchRun; // store single result (last simulation step used) in batch file, append to file if already there.
+	
 	private static final int ARQ_CODE_LENGTH = 2;
 	// movement defaults to be used if movement type not specified in the params file.
 	private static HashMap<MoleculeType, MoleculeMovementType> movementDefaults = 
@@ -95,6 +97,8 @@ public class SimulationParams {
 				MoleculeType mt = MoleculeType.getMoleculeType(args[++i]);
 				MoleculeMovementType mmt = MoleculeMovementType.getMovementType(args[++i]);
 				movementDefaults.put(mt, mmt);
+			} else if(args[i].equals("-batchRun")) {
+				setBatchRun(true);
 			} else {
 				throw new IllegalArgumentException("Invalid argument: " + args[i] + 
 						" as command line argument.");
@@ -335,6 +339,14 @@ public class SimulationParams {
 
 	public int getNumMessages() {
 		return numMessages;
+	}
+
+	public boolean isBatchRun() {
+		return batchRun;
+	}
+
+	public void setBatchRun(boolean batchRun) {
+		this.batchRun = batchRun;
 	}
 
 }

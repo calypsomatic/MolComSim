@@ -55,7 +55,7 @@ public class MolComSim {
 		simStep = 0;
 		lastMsgCompleted = false;
 		simParams = new SimulationParams(args);
-		if(simParams.getOutputFileName() != null) {
+		if((simParams.getOutputFileName() != null) && (!simParams.isBatchRun())) {
 			outputFile = new FileWriter(simParams.getOutputFileName());
 		}
 		microtubules = new ArrayList<Microtubule>();
@@ -224,8 +224,10 @@ public class MolComSim {
 			endMessage += "All " + simParams.getNumMessages() + " messages completed.\n";
 		}
 		
-		System.out.print(endMessage);
-		if(outputFile != null) {
+		if(!simParams.isBatchRun()) {
+			System.out.print(endMessage);
+		}
+		if((outputFile != null) && (!simParams.isBatchRun())) {
 			try {
 				outputFile.write(endMessage);
 			} catch (IOException e) {
@@ -234,16 +236,15 @@ public class MolComSim {
 			}
 		}
 
-		if(outputFile != null) {
-			// Append batch file result to batch file:
-			if(simParams.isBatchRun()) {
-				FileWriter batchWriter = new FileWriter("batch_" + simParams.getOutputFileName(), APPEND_TO_FILE);
-				if(batchWriter != null) {
-					batchWriter.append(simStep + "\n");
-					batchWriter.close();
-				}
-			}
+		if((outputFile != null) && (!simParams.isBatchRun())) {
 			outputFile.close();
+		} else if(simParams.isBatchRun()) {		// Append batch file result to batch file:		
+			FileWriter batchWriter = new FileWriter("batch_" + simParams.getOutputFileName(), APPEND_TO_FILE);
+			if(batchWriter != null) {
+				batchWriter.append(simStep + "\n");
+				System.out.println(simStep);
+				batchWriter.close();
+			}
 		}
 	}
 
@@ -269,8 +270,10 @@ public class MolComSim {
 			lastMsgCompleted = true;
 			completedMessage += "Last message completed.\n";
 		}
-		System.out.print(completedMessage);
-		if(outputFile != null) {
+		if(!simParams.isBatchRun()) { 
+			System.out.print(completedMessage);
+		}
+		if((outputFile != null)  && (!simParams.isBatchRun())) {
 			try {
 				outputFile.write(completedMessage);
 			} catch (IOException e) {
