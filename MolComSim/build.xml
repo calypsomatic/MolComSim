@@ -26,16 +26,28 @@
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
 
-    <!-- Put everything in ${build} into the CreditCard.jar file -->
+    <!-- Put everything in ${build} into the MolComSim.jar file -->
     <jar jarfile="${dist}/lib/MolComSim.jar" basedir="${build}">
-    <manifest>
-      <attribute name="Main-Class" value="MolComSim"/>
-    </manifest>
-  </jar>
+    	<manifest>
+      		<attribute name="Main-Class" value="MolComSim"/>
+    	</manifest>
+  	</jar>
+  	
+  	<!-- and make the BatchFileCollator.jar file -->
+    <jar jarfile="${dist}/lib/BatchFileCollator.jar" basedir="${build}">
+    	<manifest>
+      		<attribute name="Main-Class" value="batchfilecollator.BatchFileCollator"/>
+    	</manifest>
+  	</jar>
+  	
   </target>
 
   <target name="run" depends = "clean, dist">
     <java jar="dist/lib/MolComSim.jar" fork="true"/>
+  </target>
+
+  <target name="run-collator" depends = "clean, dist">
+    <java jar="dist/lib/BatchFileCollator.jar" fork="true"/>
   </target>
 
   <target name="clean"
