@@ -8,6 +8,8 @@ public class MolComSim {
 	private FileReader paramsFile;
 	private SimulationParams simParams;
 	private FileWriter outputFile = null;
+	private static final boolean APPEND_TO_FILE = true; // used to set the append field for FileWriter to write out to the
+							// same file as other simulations during a batch run.
 	
 	//Collections of all the actors in this simulation
 	private ArrayList<Microtubule> microtubules;
@@ -233,6 +235,14 @@ public class MolComSim {
 		}
 
 		if(outputFile != null) {
+			// Append batch file result to batch file:
+			if(simParams.isBatchRun()) {
+				FileWriter batchWriter = new FileWriter("batch_" + simParams.getOutputFileName(), APPEND_TO_FILE);
+				if(batchWriter != null) {
+					batchWriter.append(simStep + "\n");
+					batchWriter.close();
+				}
+			}
 			outputFile.close();
 		}
 	}
