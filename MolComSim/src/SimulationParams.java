@@ -12,27 +12,27 @@ import java.util.*;
 
 public class SimulationParams {
 	private String paramsFileName = "input0.dat";
-	private int mediumLength;
-	private int mediumWidth;
-	private int mediumHeight;
+	private int mediumLength = 100;
+	private int mediumWidth = 100;
+	private int mediumHeight = 100;
 	private String outputFileName = null;
 	private ArrayList<NanoMachineParam> transmitterParams = new ArrayList<>();
 	private ArrayList<NanoMachineParam> receiverParams = new ArrayList<>();
 	private ArrayList<IntermediateNodeParam> intermediateNodeParams = new ArrayList<>();
 	private ArrayList<MicrotubuleParams> microtubuleParams = new ArrayList<MicrotubuleParams>();
-	private int numMessages;
-	private int maxNumSteps;
-	private int numRetransmissions;
-	private int retransmitWaitTime;
-	private boolean useCollisions;
-	private boolean decomposing;
-	private boolean useAcknowledgements;
+	private int numMessages = 1;
+	private int maxNumSteps = 100000;
+	private int numRetransmissions = 0;
+	private int retransmitWaitTime = 100;
+	private boolean useCollisions = true;
+	private boolean decomposing = false;
+	private boolean useAcknowledgements = true;
 	private ArrayList<MoleculeParams> moleculeParams = new ArrayList<MoleculeParams>();
-	private int molRandMoveX;
-	private int molRandMoveY;
-	private int molRandMoveZ;
-	private int velRail; 
-	private double probDRail;
+	private int molRandMoveX = 1;
+	private int molRandMoveY = 1;
+	private int molRandMoveZ = 1;
+	private int velRail = 1; 
+	private double probDRail = 0.0;
 	private boolean batchRun; // store single result (last simulation step used) in batch file, append to file if already there.
 	
 	private static final int ARQ_CODE_LENGTH = 2;

@@ -2,32 +2,39 @@
 **********Please don't change the name of the variable anywhere in this file. Just modify the values.********
  
 **********Information about Medium******************
-**********mediumDimension* # means, range of our co-ordinate system in * dimension is [-#/2,#/2]************
+**********mediumDimension* # means, range of our co-ordinate system in * dimension is [-#/2,#/2] (ints, rounded down) ************
 **********Please enter below the appropriate value of # in x,y,z direction *********************
+***** No object can be placed outside of the diensions of the medium, and no object can move outside of these dimensions. 
  
-mediumDimensionX 100
-mediumDimensionY 100
-mediumDimensionZ 100
+mediumDimensionX 150
+mediumDimensionY 150
+mediumDimensionZ 150
  
-*********Specify the length of simulation for a molecule************
-*********maxSimulationStep # means, the simulation will generate a maximum of # no. of steps for each molecule, unless it reaches its destination**********
-*********maxSimulationTime # means, the simulation will generate no. of steps for each molecule till # nano seconds, unless it reaches its destination**********
-*********if maxSimulationStep<=0 then only maxSimulationTime is considered by the program.******************
-*********Please enter below the appropriate value of maxSimulationStep or maxSimulationTime****************
+***** Specify the length of simulation ************
+***** maxSimulationStep # means, the simulation will end at that step, unless it completed all the messages specified to be used 
+***** before then (see below), in which case the simulation will end when the last message completes
+***** Please enter below the appropriate value of maxSimulationStep ****************
  
-maxSimulationStep 100000
+maxSimulationStep 150000
 
-***** Specify transmitters by: *********************************************************************
+***** Specify transmitters by: **********************************************************************
 *****  1) center position (x, y, z) *****************************************************************
 *****  2) size/radius (optional, defaults to 1) *****************************************************
 *****  3) molecule release position (x, y, z) (optional, defaults to same position as center) *******
-transmitter (-45, 0, 0) 2 (-45, 0, 0)
+***** Note: all positions use ints.  Size/radius for nanomachines is also an int, and is used as ****
+***** follows: The "radius" is half the length of a side, and nanomachines are defined as a cube, ***
+***** but note that the "radius" will include the center point, so the nanomachine will extend for **
+***** radius - 1 units in every direction.  If, for example, you wish to make a 5x5x5 nanomachine ***
+***** you would need to specify a radius of 3. ******************************************************
+***** Molecule release position should be within the volume of the nanomachine, and represents the
+***** location from which molecules will be released.
+transmitter (-45, 0, 0) 3 (-45, 0, 0)
 
-***** Specify receivers by: *********************************************************************
+***** Specify receivers by: *************************************************************************
 *****  1) center position (x, y, z) *****************************************************************
 *****  2) size/radius (optional, defaults to 1) *****************************************************
 *****  3) molecule release position (x, y, z) (optional, defaults to same position as center) *******
-receiver (45, 0, 0) 2 (45, 0, 0)
+receiver (45, 0, 0) 3 (45, 0, 0)
 
 ***** Specify intermediate nodes by: ********************************************************************************
 *****  1) center position (x, y, z) **********************************************************************************
@@ -35,32 +42,67 @@ receiver (45, 0, 0) 2 (45, 0, 0)
 *****  3) Information molecule release position (x, y, z) (optional, defaults to same position as center) ************
 *****  4) Acknowledgement molecule release position (x, y, z) (optional, defaults to same position as center) ********
 *****  Either both or neither release positions must be specified ****************************************************
-** intermediateNode (0, 0, 0) 3 (0, 1, 0) (0, -1, 0)
+**intermediateNode (0, 0, 0) 3 (0, 1, 0) (0, -1, 0)
 
 ************Information about Messages**************
-numMessages 10
+***** numMessages is the maximum number of messages to be used in the simulation, when the final message is completed
+***** the simulation will end, even if this is before the maxSimulationStep
+numMessages 1
+
+***** If using acknowledgements numRetransmissions represents the number of times a message will be
+***** retransmitted before giving up (for both Tx and Rx nanomachines).  
 numRetransmissions 5
+
+***** retransmitWaitTime represents the time to wait before retransmitting a message (if no ack mols reach a Tx or no Info mols reach
+***** an Rx during this time.  If they do, and they have the correct message ID, a new message is generated or the simulation ends.
+***** If they do not have the correct message ID the current message is retransmitted and the retransmitWaitTime is reset.
+***** If not using acknowledgements, retransmitwaitTime is simply the amount of time to wait between new message transmissions.
 retransmitWaitTime 1000
  
 *********Information about Molecules******************
-stepLengthX 5
+
+***** stepLength (independent for each direction) represents the maximum amount a molecule using diffusive motion can travel in one step.
+***** Actual amount of travel will vary randomly, for each direction, between -stepLength and +stepLength.
+***** Must be ints.
+stepLengthX 1
 stepLengthY 1
 stepLengthZ 1
-** last mol param is optional, adaptive change number.  Changes num mols to send out based on comm success/failure.
-moleculeParams 100 INFO PASSIVE 1
-moleculeParams 100 ACK PASSIVE 1
-moleculeParams 1000 NOISE
+
+** moleculeParams require the number of molecules to be released each time, the type of molecule (INFO|ACK|NOISE), the movement type for
+** non-noise molecules (PASSIVE|ACTIVE), and an optional, adaptive change number.  Adaptive change changes num mols to send out based on 
+** comm success/failure.
+moleculeParams 30 INFO ACTIVE 0
+moleculeParams 30 ACK PASSIVE 0
+moleculeParams 100000 NOISE
  
 *********Below parameters are for active propagation
-velRail 7
-probDRail 0.01
+***** velrail is the number of units a molecule travels along a microtubule using active propagation in a single step.
+***** must be int.
+velRail 1
+
+***** probDRail is the fractional probability [0.0, 1.0] (double) that a molecule using active propagation along a microtubule
+***** will derail during each step. 
+probDRail 0.5
+
+***** useCollisions determines whether or not collisions can occur.  If so, all molecule types can collide with each other when one would
+***** move into the space occupied by another.  If not, no molecules can collide and they may occuppy the same space simultaneously.
+***** Note: molecules are represented as 1x1x1 cubes.
 useCollisions 1
 useAcknowledgements 1
-decomposing 1
+decomposing 0
 
 ********Information about microtubule cylindrical tracks************
-***NOTE: make sure FIRST parameter is where the TRANSMITTER is and the SECOND is where the RECEIVER is
+***** Microtubules allow direct, one-way transport of molecules using active movement at velRail velocity.
+***** They are defined using two positions ((x, y, z), all ints).  The first position is the start of the microtubule, the second
+***** position is the end.  Movement along microtubules is from start to end.
+***** Microtubules are generally 2 units by 2 unit blocks stretching from start to end point.
+***** If you wish to use active movement, you need to definie a microtubule from one nanomachine to the other.  If you wish to use active
+***** movement in both directions you need to define two microtubules, one with the start point at the same point as the Tx's molecule 
+***** release position, but with end point at least 3 units from the Rx's molecule release position (but sitll within the volume of the Rx.
+***** The other with start point at the Rx's molecule release position, but with end point at least 3 units from the Tx's release position
+***** (but still within the volume of the Tx).   
 microtubuleParams (-45, 0, 0) (45, 0, 0)
-**microtubuleParams (-45, 30, 0) (-45, -30, 30)
+**microtubuleParams (15, 3, 3) (-15, 0, 0)
 
-outputFile output.dat
+***** Name of the file to output results to.   
+outputFile TxRx90_ARQ30-30_Act-Pass_100000Noise.txt
