@@ -287,8 +287,8 @@
 	Note that the .pptx is somewhat out of date, and the .ncp file is also slightly out of date, although mostly accurate.
 	There is also pseudocode for the new design (also somewhat out of date) in "MolComSim Design.docx".
 	
-10) If you have any further questions, feel free to contact me at j.mitzman@comcast.net (Jon Mitzman). <Bria, Omar, 
-	you might or might not want to put your names and email addresses here too>  
+10) If you have any further questions, feel free to contact Jon Mitzman (j.mitzman 'at' comcast 'dot' net), 
+	Bria Morgan (Bria.Morgan001 'at' umb 'dot' edu), or T. Omar Soro (tsoros 'at' gmail 'dot' com). 
   			
 			 
 			
